@@ -16,10 +16,7 @@
 SSHキーの読み込みについては、ソースの修正に必須なので、別途共有します。  
 [(ここ)](https://tracpath.com/bootcamp/learning_git_sourcetree.html#id4)まで来たら、別手順に。  
 Bitbacketからソースをクローンして、ローカルPCにソースのコピーを作ります。
-BitbacketのInBrainプロジェクトページの右上に、クローンボタンを押した後に表示されるダイアログで  
-Sourcetreeでクローンの表示を押す。
+Sourcetreeのタブを追加して、Remoteを押して、InBrainが表示されたらCloneを押す。
 このコピーがUnityのプロジェクトの実態です。ここに修正を加えていきます。  
 加えられた修正は、Sourcetreeが把握します。開発者はSourcetreeを使って、修正内容を、Bitbacketのソースに反映させます。
-   
-   
-  
+
