@@ -1,4 +1,4 @@
-# In Brain（Unity）のソース管理 
+# InBrain（Unity）のソース管理 
 
 ## ローカルにクローンする方法
 
@@ -15,8 +15,9 @@
 [(インストール手順は、このページがわかりやすそう)](https://tracpath.com/bootcamp/learning_git_sourcetree.html)    
 SSHキーの読み込みについては、ソースの修正に必須なので、別途共有します。  
 [(ここ)](https://tracpath.com/bootcamp/learning_git_sourcetree.html#id4)まで来たら、別手順に。  
-Bitbacketからソースをクローンして、ローカルPCにソースのコピーを作ります。  
-*TODO Bitbacketからソースをクローンする手順を説明する*  
+Bitbacketからソースをクローンして、ローカルPCにソースのコピーを作ります。
+BitbacketのInBrainプロジェクトページの右上に、クローンボタンを押した後に表示されるダイアログで  
+Sourcetreeでクローンの表示を押す。
 このコピーがUnityのプロジェクトの実態です。ここに修正を加えていきます。  
 加えられた修正は、Sourcetreeが把握します。開発者はSourcetreeを使って、修正内容を、Bitbacketのソースに反映させます。
    
