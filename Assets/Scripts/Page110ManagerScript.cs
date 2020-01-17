@@ -558,17 +558,37 @@ public class Page110ManagerScript : MonoBehaviour
         //係数アルファは既存データから最小値最大値を0-100に調整する
 
         //TMT-Aタッチ総数
-        int tmtA_TouchCount = Page70GameManagerScript.GetPushDownTask1();
+        int tmtA_TouchCount = 0;
+        tmtA_TouchCount = Page70GameManagerScript.GetPushDownTask1();
+        if (tmtA_TouchCount == 0)
+        {
+            csa = 0;
+            return csa;
+        }
+
+
 
         //TMT-Bタッチ総数
-        int tmtB_TouchCount = Page90GameManagerScript.GetPushDownTask1();
+        int tmtB_TouchCount = 0;
+        tmtB_TouchCount = Page90GameManagerScript.GetPushDownTask1();
+        if (tmtB_TouchCount==0)
+        {
+            csa = 0;
+            return csa;
+        }
 
         //TMT-A正答タッチ数
-        int tmtA_rightPushTask1 = Page70GameManagerScript.GetRightPushTask1();
-
+        int tmtA_rightPushTask1 = 0;
+        tmtA_rightPushTask1 = Page70GameManagerScript.GetRightPushTask1();
+        if (tmtA_rightPushTask1==0)
+        {
+            csa = 0;
+            return csa;
+        }
 
         //係数AT
         int sp = 1;
+
 
         csa = (tmtB_TouchCount / tmtA_TouchCount) * tmtA_rightPushTask1 * sp;
         if (csa > 100) csa = 100;
