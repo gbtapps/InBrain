@@ -31,13 +31,14 @@ public class Page20ManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        //BluetoothMgr.Instance.Bluetooth(); //- Start BLE scan
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void ChangeScene()
@@ -54,7 +55,5 @@ public class Page20ManagerScript : MonoBehaviour
 
         SceneManager.LoadScene("30.センサー接続説明");
     }
-
-
 
 }
