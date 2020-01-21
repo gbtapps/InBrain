@@ -6598,30 +6598,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6acdff925c9e220419a478c2cbda4da1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  test1_1: {fileID: 648202813}
-  test1_2: {fileID: 769973325}
-  test1_3: {fileID: 1143394537}
-  test1_4: {fileID: 296947864}
-  test1_5: {fileID: 674199542}
-  test1_6: {fileID: 193204925}
-  test1_7: {fileID: 1908712285}
-  test1_8: {fileID: 76162329}
-  test1_9: {fileID: 2099377275}
-  test1_10: {fileID: 1246941172}
-  test1_11: {fileID: 2029424855}
-  test1_12: {fileID: 1188427438}
-  test2_1: {fileID: 232317335}
-  test2_2: {fileID: 1942955767}
-  test2_3: {fileID: 617667360}
-  test2_4: {fileID: 10160269}
-  test2_5: {fileID: 1321685163}
-  test2_6: {fileID: 908657311}
-  test2_7: {fileID: 1013039131}
-  test2_8: {fileID: 270405992}
-  test2_9: {fileID: 1746193557}
-  test2_10: {fileID: 1652616498}
-  test2_11: {fileID: 1082412801}
-  test2_12: {fileID: 1873011454}
 --- !u!1 &428018432
 GameObject:
   m_ObjectHideFlags: 0
@@ -12069,7 +12045,7 @@ GameObject:
   - component: {fileID: 860407304}
   - component: {fileID: 860407305}
   m_Layer: 5
-  m_Name: Toggle
+  m_Name: ToggleA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12141,7 +12117,18 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1577047334}
+        m_MethodName: TmtAOnOff
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_IsOn: 1
@@ -17041,30 +17028,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6acdff925c9e220419a478c2cbda4da1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  test1_1: {fileID: 1722326889}
-  test1_2: {fileID: 1715268288}
-  test1_3: {fileID: 1412112209}
-  test1_4: {fileID: 1941148222}
-  test1_5: {fileID: 1616940284}
-  test1_6: {fileID: 347604458}
-  test1_7: {fileID: 1831150605}
-  test1_8: {fileID: 1045882017}
-  test1_9: {fileID: 267638317}
-  test1_10: {fileID: 1144550393}
-  test1_11: {fileID: 1616719194}
-  test1_12: {fileID: 1611983218}
-  test2_1: {fileID: 1055651327}
-  test2_2: {fileID: 1831730473}
-  test2_3: {fileID: 373978886}
-  test2_4: {fileID: 1985706722}
-  test2_5: {fileID: 411432442}
-  test2_6: {fileID: 2016763770}
-  test2_7: {fileID: 1510349377}
-  test2_8: {fileID: 1015758486}
-  test2_9: {fileID: 566358012}
-  test2_10: {fileID: 475616621}
-  test2_11: {fileID: 1028301121}
-  test2_12: {fileID: 80560347}
 --- !u!114 &1230900517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20802,6 +20765,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aacbd753f72e0d744bcbfea9e53a965b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tmtA: {fileID: 1935722979}
+  tmtB: {fileID: 1341955456}
+  tmtAToggle: {fileID: 860407305}
+  tmtBToggle: {fileID: 1619989208}
+  tmtA_1: {fileID: 648202813}
+  tmtA_2: {fileID: 769973325}
+  tmtA_3: {fileID: 1143394537}
+  tmtA_4: {fileID: 296947864}
+  tmtA_5: {fileID: 674199542}
+  tmtA_6: {fileID: 193204925}
+  tmtA_7: {fileID: 1908712285}
+  tmtA_8: {fileID: 76162329}
+  tmtA_9: {fileID: 2099377275}
+  tmtA_10: {fileID: 1246941172}
+  tmtA_11: {fileID: 2029424855}
+  tmtA_12: {fileID: 1188427438}
+  tmtB_1: {fileID: 232317335}
+  tmtB_2: {fileID: 1942955767}
+  tmtB_3: {fileID: 617667360}
+  tmtB_4: {fileID: 10160269}
+  tmtB_5: {fileID: 1321685163}
+  tmtB_6: {fileID: 908657311}
+  tmtB_7: {fileID: 1013039131}
+  tmtB_8: {fileID: 270405992}
+  tmtB_9: {fileID: 1746193557}
+  tmtB_10: {fileID: 1652616498}
+  tmtB_11: {fileID: 1082412801}
+  tmtB_12: {fileID: 1873011454}
   explanationPanelPage110: {fileID: 1813893207}
   textResultSpeed: {fileID: 966682784}
   textResultAttention: {fileID: 2125747402}
@@ -21690,7 +21681,7 @@ GameObject:
   - component: {fileID: 1619989207}
   - component: {fileID: 1619989208}
   m_Layer: 5
-  m_Name: Toggle (1)
+  m_Name: ToggleB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21762,7 +21753,18 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1577047334}
+        m_MethodName: TmtBOnOff
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_IsOn: 1

@@ -13,6 +13,100 @@ using System.Text;
 public class Page110ManagerScript : MonoBehaviour
 {
 
+
+    //グラフの表示非表示用
+    public GameObject tmtA;
+    public GameObject tmtB;
+    public Toggle tmtAToggle;
+    public Toggle tmtBToggle;
+
+
+
+    //グラフ各カラムインスタンス
+    public GameObject tmtA_1;
+    public GameObject tmtA_2;
+    public GameObject tmtA_3;
+    public GameObject tmtA_4;
+    public GameObject tmtA_5;
+    public GameObject tmtA_6;
+    public GameObject tmtA_7;
+    public GameObject tmtA_8;
+    public GameObject tmtA_9;
+    public GameObject tmtA_10;
+    public GameObject tmtA_11;
+    public GameObject tmtA_12;
+
+    public GameObject tmtB_1;
+    public GameObject tmtB_2;
+    public GameObject tmtB_3;
+    public GameObject tmtB_4;
+    public GameObject tmtB_5;
+    public GameObject tmtB_6;
+    public GameObject tmtB_7;
+    public GameObject tmtB_8;
+    public GameObject tmtB_9;
+    public GameObject tmtB_10;
+    public GameObject tmtB_11;
+    public GameObject tmtB_12;
+
+    //脳活動スコア格納変数
+    float TmtaBrainAct1 = 0f;
+    float TmtaBrainAct2 = 0f;
+    float TmtaBrainAct3 = 0f;
+    float TmtaBrainAct4 = 0f;
+    float TmtaBrainAct5 = 0f;
+    float TmtaBrainAct6 = 0f;
+    float TmtaBrainAct7 = 0f;
+    float TmtaBrainAct8 = 0f;
+    float TmtaBrainAct9 = 0f;
+    float TmtaBrainAct10 = 0f;
+    float TmtaBrainAct11 = 0f;
+    float TmtaBrainAct12 = 0f;
+
+    float TmtbBrainAct1 = 0f;
+    float TmtbBrainAct2 = 0f;
+    float TmtbBrainAct3 = 0f;
+    float TmtbBrainAct4 = 0f;
+    float TmtbBrainAct5 = 0f;
+    float TmtbBrainAct6 = 0f;
+    float TmtbBrainAct7 = 0f;
+    float TmtbBrainAct8 = 0f;
+    float TmtbBrainAct9 = 0f;
+    float TmtbBrainAct10 = 0f;
+    float TmtbBrainAct11 = 0f;
+    float TmtbBrainAct12 = 0f;
+
+    //アニメーション速度変数
+    float spanTime = 2.0f;
+
+    //アニメーション用テンポラリ変数
+    float tmta1temp = 0f;
+    float tmta2temp = 0f;
+    float tmta3temp = 0f;
+    float tmta4temp = 0f;
+    float tmta5temp = 0f;
+    float tmta6temp = 0f;
+    float tmta7temp = 0f;
+    float tmta8temp = 0f;
+    float tmta9temp = 0f;
+    float tmta10temp = 0f;
+    float tmta11temp = 0f;
+    float tmta12temp = 0f;
+
+    float tmtb1temp = 0f;
+    float tmtb2temp = 0f;
+    float tmtb3temp = 0f;
+    float tmtb4temp = 0f;
+    float tmtb5temp = 0f;
+    float tmtb6temp = 0f;
+    float tmtb7temp = 0f;
+    float tmtb8temp = 0f;
+    float tmtb9temp = 0f;
+    float tmtb10temp = 0f;
+    float tmtb11temp = 0f;
+    float tmtb12temp = 0f;
+
+
     public GameObject explanationPanelPage110;
 
     public GameObject textResultSpeed;
@@ -50,18 +144,68 @@ public class Page110ManagerScript : MonoBehaviour
     String rDeclines;
 
 
+
+    public void TmtAOnOff()
+    {
+        if (tmtAToggle.isOn == false)
+        {
+            tmtA.SetActive(false);
+        }
+
+        if (tmtAToggle.isOn == true)
+        {
+            tmtA.SetActive(true);
+        }
+    }
+
+    public void TmtBOnOff()
+    {
+        if (tmtBToggle.isOn == false)
+        {
+            tmtB.SetActive(false);
+        }
+
+        if (tmtBToggle.isOn == true)
+        {
+            tmtB.SetActive(true);
+        }
+    }
+
+
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("=====   page110 start() start   =====================");
 
 
-        /*広域変数に変更
-        Text ResultSpeed = textResultSpeed.GetComponent<Text>();
-        Text ResultAttention = textResultAttention.GetComponent<Text>();
-        Text ResultBrain = textResultBrain.GetComponent<Text>();
-        Text ResultDeclines = textResultDeclines.GetComponent<Text>();
-        */
+        //左グラフ各カラムにセットしたい値を格納する変数
+        TmtaBrainAct1 = 10f;
+        TmtaBrainAct2 = 20f;
+        TmtaBrainAct3 = 30f;
+        TmtaBrainAct4 = 40f;
+        TmtaBrainAct5 = 50f;
+        TmtaBrainAct6 = 60f;
+        TmtaBrainAct7 = 70f;
+        TmtaBrainAct8 = 60f;
+        TmtaBrainAct9 = 50f;
+        TmtaBrainAct10 = 50f;
+        TmtaBrainAct11 = 60f;
+        TmtaBrainAct12 = 40f;
+
+        TmtbBrainAct1 = 30f;
+        TmtbBrainAct2 = 40f;
+        TmtbBrainAct3 = 50f;
+        TmtbBrainAct4 = 60f;
+        TmtbBrainAct5 = 80f;
+        TmtbBrainAct6 = 90f;
+        TmtbBrainAct7 = 90f;
+        TmtbBrainAct8 = 70f;
+        TmtbBrainAct9 = 50f;
+        TmtbBrainAct10 = 50f;
+        TmtbBrainAct11 = 30f;
+        TmtbBrainAct12 = 30f;
+
+
+
         ResultSpeed = textResultSpeed.GetComponent<Text>();
         ResultAttention = textResultAttention.GetComponent<Text>();
         ResultBrain = textResultBrain.GetComponent<Text>();
@@ -516,11 +660,7 @@ public class Page110ManagerScript : MonoBehaviour
         ageBrain = calc_age_brain;
         classBrain = str_hantei_brain;
 
-
-
-
-        Debug.Log("=====   page110 start() end   =====================");
-
+        
     }
 
 
@@ -661,7 +801,156 @@ public class Page110ManagerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
+
+        if (tmta1temp <= TmtaBrainAct1)
+        {
+            tmta1temp += spanTime;
+            tmtA_1.GetComponent<Slider>().value = tmta1temp;
+        }
+
+        if (tmta2temp <= TmtaBrainAct2)
+        {
+            tmta2temp += spanTime;
+            tmtA_2.GetComponent<Slider>().value = tmta2temp;
+        }
+
+        if (tmta3temp <= TmtaBrainAct3)
+        {
+            tmta3temp += spanTime;
+            tmtA_3.GetComponent<Slider>().value = tmta3temp;
+        }
+
+        if (tmta4temp <= TmtaBrainAct4)
+        {
+            tmta4temp += spanTime;
+            tmtA_4.GetComponent<Slider>().value = tmta4temp;
+        }
+
+
+        if (tmta5temp <= TmtaBrainAct5)
+        {
+            tmta5temp += spanTime;
+            tmtA_5.GetComponent<Slider>().value = tmta5temp;
+        }
+
+        if (tmta6temp <= TmtaBrainAct6)
+        {
+            tmta6temp += spanTime;
+            tmtA_6.GetComponent<Slider>().value = tmta6temp;
+        }
+
+
+        if (tmta7temp <= TmtaBrainAct7)
+        {
+            tmta7temp += spanTime;
+            tmtA_7.GetComponent<Slider>().value = tmta7temp;
+        }
+
+        if (tmta8temp <= TmtaBrainAct8)
+        {
+            tmta8temp += spanTime;
+            tmtA_8.GetComponent<Slider>().value = tmta1temp;
+        }
+
+        if (tmta9temp <= TmtaBrainAct9)
+        {
+            tmta9temp += spanTime;
+            tmtA_9.GetComponent<Slider>().value = tmta1temp;
+        }
+
+
+        if (tmta10temp <= TmtaBrainAct10)
+        {
+            tmta10temp += spanTime;
+            tmtA_10.GetComponent<Slider>().value = tmta10temp;
+        }
+
+        if (tmta11temp <= TmtaBrainAct11)
+        {
+            tmta11temp += spanTime;
+            tmtA_11.GetComponent<Slider>().value = tmta11temp;
+        }
+
+        if (tmta12temp <= TmtaBrainAct12)
+        {
+            tmta12temp += spanTime;
+            tmtA_12.GetComponent<Slider>().value = tmta12temp;
+        }
+
+        if (tmtb1temp <= TmtbBrainAct1)
+        {
+            tmtb1temp += spanTime;
+            tmtB_1.GetComponent<Slider>().value = tmtb1temp;
+        }
+
+
+        if (tmtb2temp <= TmtbBrainAct2)
+        {
+            tmtb2temp += spanTime;
+            tmtB_2.GetComponent<Slider>().value = tmtb2temp;
+        }
+
+        if (tmtb3temp <= TmtbBrainAct3)
+        {
+            tmtb3temp += spanTime;
+            tmtB_3.GetComponent<Slider>().value = tmtb3temp;
+        }
+
+        if (tmtb4temp <= TmtbBrainAct4)
+        {
+            tmtb4temp += spanTime;
+            tmtB_4.GetComponent<Slider>().value = tmtb4temp;
+        }
+
+        if (tmtb5temp <= TmtbBrainAct5)
+        {
+            tmtb5temp += spanTime;
+            tmtB_5.GetComponent<Slider>().value = tmtb5temp;
+        }
+
+        if (tmtb6temp <= TmtbBrainAct6)
+        {
+            tmtb6temp += spanTime;
+            tmtB_6.GetComponent<Slider>().value = tmtb6temp;
+        }
+
+        if (tmtb7temp <= TmtbBrainAct7)
+        {
+            tmtb7temp += spanTime;
+            tmtB_7.GetComponent<Slider>().value = tmtb7temp;
+        }
+
+        if (tmtb8temp <= TmtbBrainAct8)
+        {
+            tmtb8temp += spanTime;
+            tmtB_8.GetComponent<Slider>().value = tmtb8temp;
+        }
+
+        if (tmtb9temp <= TmtbBrainAct9)
+        {
+            tmtb9temp += spanTime;
+            tmtB_9.GetComponent<Slider>().value = tmtb9temp;
+        }
+
+        if (tmtb10temp <= TmtbBrainAct10)
+        {
+            tmtb10temp += spanTime;
+            tmtB_10.GetComponent<Slider>().value = tmtb10temp;
+        }
+
+        if (tmtb11temp <= TmtbBrainAct11)
+        {
+            tmtb11temp += spanTime;
+            tmtB_11.GetComponent<Slider>().value = tmtb11temp;
+        }
+
+        if (tmtb12temp <= TmtbBrainAct12)
+        {
+            tmtb12temp += spanTime;
+            tmtB_12.GetComponent<Slider>().value = tmtb12temp;
+        }
+
     }
 
 
