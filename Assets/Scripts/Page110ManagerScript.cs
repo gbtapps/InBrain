@@ -35,6 +35,17 @@ public class Page110ManagerScript : MonoBehaviour
     public GameObject tmtA_10;
     public GameObject tmtA_11;
     public GameObject tmtA_12;
+    public GameObject tmtA_13;
+    public GameObject tmtA_14;
+    public GameObject tmtA_15;
+    public GameObject tmtA_16;
+    public GameObject tmtA_17;
+    public GameObject tmtA_18;
+    public GameObject tmtA_19;
+    public GameObject tmtA_20;
+    public GameObject tmtA_21;
+    public GameObject tmtA_22;
+    public GameObject tmtA_23;
 
     public GameObject tmtB_1;
     public GameObject tmtB_2;
@@ -48,6 +59,17 @@ public class Page110ManagerScript : MonoBehaviour
     public GameObject tmtB_10;
     public GameObject tmtB_11;
     public GameObject tmtB_12;
+    public GameObject tmtB_13;
+    public GameObject tmtB_14;
+    public GameObject tmtB_15;
+    public GameObject tmtB_16;
+    public GameObject tmtB_17;
+    public GameObject tmtB_18;
+    public GameObject tmtB_19;
+    public GameObject tmtB_20;
+    public GameObject tmtB_21;
+    public GameObject tmtB_22;
+    public GameObject tmtB_23;
 
     //脳活動スコア格納変数
     float TmtaBrainAct1 = 0f;
@@ -62,6 +84,17 @@ public class Page110ManagerScript : MonoBehaviour
     float TmtaBrainAct10 = 0f;
     float TmtaBrainAct11 = 0f;
     float TmtaBrainAct12 = 0f;
+    float TmtaBrainAct13 = 0f;
+    float TmtaBrainAct14 = 0f;
+    float TmtaBrainAct15 = 0f;
+    float TmtaBrainAct16 = 0f;
+    float TmtaBrainAct17 = 0f;
+    float TmtaBrainAct18 = 0f;
+    float TmtaBrainAct19 = 0f;
+    float TmtaBrainAct20 = 0f;
+    float TmtaBrainAct21 = 0f;
+    float TmtaBrainAct22 = 0f;
+    float TmtaBrainAct23 = 0f;
 
     float TmtbBrainAct1 = 0f;
     float TmtbBrainAct2 = 0f;
@@ -75,6 +108,18 @@ public class Page110ManagerScript : MonoBehaviour
     float TmtbBrainAct10 = 0f;
     float TmtbBrainAct11 = 0f;
     float TmtbBrainAct12 = 0f;
+    float TmtbBrainAct13 = 0f;
+    float TmtbBrainAct14 = 0f;
+    float TmtbBrainAct15 = 0f;
+    float TmtbBrainAct16 = 0f;
+    float TmtbBrainAct17 = 0f;
+    float TmtbBrainAct18 = 0f;
+    float TmtbBrainAct19 = 0f;
+    float TmtbBrainAct20 = 0f;
+    float TmtbBrainAct21 = 0f;
+    float TmtbBrainAct22 = 0f;
+    float TmtbBrainAct23 = 0f;
+
 
     //アニメーション速度変数
     float spanTime = 2.0f;
@@ -92,6 +137,17 @@ public class Page110ManagerScript : MonoBehaviour
     float tmta10temp = 0f;
     float tmta11temp = 0f;
     float tmta12temp = 0f;
+    float tmta13temp = 0f;
+    float tmta14temp = 0f;
+    float tmta15temp = 0f;
+    float tmta16temp = 0f;
+    float tmta17temp = 0f;
+    float tmta18temp = 0f;
+    float tmta19temp = 0f;
+    float tmta20temp = 0f;
+    float tmta21temp = 0f;
+    float tmta22temp = 0f;
+    float tmta23temp = 0f;
 
     float tmtb1temp = 0f;
     float tmtb2temp = 0f;
@@ -105,6 +161,17 @@ public class Page110ManagerScript : MonoBehaviour
     float tmtb10temp = 0f;
     float tmtb11temp = 0f;
     float tmtb12temp = 0f;
+    float tmtb13temp = 0f;
+    float tmtb14temp = 0f;
+    float tmtb15temp = 0f;
+    float tmtb16temp = 0f;
+    float tmtb17temp = 0f;
+    float tmtb18temp = 0f;
+    float tmtb19temp = 0f;
+    float tmtb20temp = 0f;
+    float tmtb21temp = 0f;
+    float tmtb22temp = 0f;
+    float tmtb23temp = 0f;
 
 
     public GameObject explanationPanelPage110;
@@ -190,6 +257,17 @@ public class Page110ManagerScript : MonoBehaviour
         TmtaBrainAct10 = 50f;
         TmtaBrainAct11 = 60f;
         TmtaBrainAct12 = 40f;
+        TmtaBrainAct13 = 30f;
+        TmtaBrainAct14 = 20f;
+        TmtaBrainAct15 = 20f;
+        TmtaBrainAct16 = 30f;
+        TmtaBrainAct17 = 40f;
+        TmtaBrainAct18 = 50f;
+        TmtaBrainAct19 = 60f;
+        TmtaBrainAct20 = 60f;
+        TmtaBrainAct21 = 70f;
+        TmtaBrainAct22 = 70f;
+        TmtaBrainAct23 = 60f;
 
         TmtbBrainAct1 = 30f;
         TmtbBrainAct2 = 40f;
@@ -201,8 +279,19 @@ public class Page110ManagerScript : MonoBehaviour
         TmtbBrainAct8 = 70f;
         TmtbBrainAct9 = 50f;
         TmtbBrainAct10 = 50f;
-        TmtbBrainAct11 = 30f;
+        TmtbBrainAct11 = 40f;
         TmtbBrainAct12 = 30f;
+        TmtbBrainAct13 = 40f;
+        TmtbBrainAct14 = 40f;
+        TmtbBrainAct15 = 30f;
+        TmtbBrainAct16 = 30f;
+        TmtbBrainAct17 = 40f;
+        TmtbBrainAct18 = 50f;
+        TmtbBrainAct19 = 60f;
+        TmtbBrainAct20 = 70f;
+        TmtbBrainAct21 = 70f;
+        TmtbBrainAct22 = 80f;
+        TmtbBrainAct23 = 90f;
 
 
 
@@ -878,6 +967,76 @@ public class Page110ManagerScript : MonoBehaviour
             tmtA_12.GetComponent<Slider>().value = tmta12temp;
         }
 
+        if (tmta13temp <= TmtaBrainAct13)
+        {
+            tmta13temp += spanTime;
+            tmtA_13.GetComponent<Slider>().value = tmta13temp;
+        }
+
+        if (tmta14temp <= TmtaBrainAct14)
+        {
+            tmta14temp += spanTime;
+            tmtA_14.GetComponent<Slider>().value = tmta14temp;
+        }
+
+        if (tmta15temp <= TmtaBrainAct15)
+        {
+            tmta15temp += spanTime;
+            tmtA_15.GetComponent<Slider>().value = tmta15temp;
+        }
+
+        if (tmta16temp <= TmtaBrainAct16)
+        {
+            tmta16temp += spanTime;
+            tmtA_16.GetComponent<Slider>().value = tmta16temp;
+        }
+
+        if (tmta17temp <= TmtaBrainAct17)
+        {
+            tmta17temp += spanTime;
+            tmtA_17.GetComponent<Slider>().value = tmta17temp;
+        }
+
+        if (tmta18temp <= TmtaBrainAct18)
+        {
+            tmta18temp += spanTime;
+            tmtA_18.GetComponent<Slider>().value = tmta18temp;
+        }
+
+        if (tmta19temp <= TmtaBrainAct19)
+        {
+            tmta19temp += spanTime;
+            tmtA_19.GetComponent<Slider>().value = tmta19temp;
+        }
+
+        if (tmta20temp <= TmtaBrainAct20)
+        {
+            tmta20temp += spanTime;
+            tmtA_20.GetComponent<Slider>().value = tmta20temp;
+        }
+
+        if (tmta21temp <= TmtaBrainAct21)
+        {
+            tmta21temp += spanTime;
+            tmtA_21.GetComponent<Slider>().value = tmta21temp;
+        }
+
+        if (tmta22temp <= TmtaBrainAct22)
+        {
+            tmta22temp += spanTime;
+            tmtA_22.GetComponent<Slider>().value = tmta22temp;
+        }
+
+        if (tmta23temp <= TmtaBrainAct23)
+        {
+            tmta23temp += spanTime;
+            tmtA_23.GetComponent<Slider>().value = tmta23temp;
+        }
+
+
+
+
+
         if (tmtb1temp <= TmtbBrainAct1)
         {
             tmtb1temp += spanTime;
@@ -950,6 +1109,74 @@ public class Page110ManagerScript : MonoBehaviour
             tmtb12temp += spanTime;
             tmtB_12.GetComponent<Slider>().value = tmtb12temp;
         }
+
+        if (tmtb13temp <= TmtbBrainAct13)
+        {
+            tmtb13temp += spanTime;
+            tmtB_13.GetComponent<Slider>().value = tmtb13temp;
+        }
+
+        if (tmtb14temp <= TmtbBrainAct14)
+        {
+            tmtb14temp += spanTime;
+            tmtB_14.GetComponent<Slider>().value = tmtb14temp;
+        }
+
+        if (tmtb15temp <= TmtbBrainAct15)
+        {
+            tmtb15temp += spanTime;
+            tmtB_15.GetComponent<Slider>().value = tmtb15temp;
+        }
+
+        if (tmtb16temp <= TmtbBrainAct16)
+        {
+            tmtb16temp += spanTime;
+            tmtB_16.GetComponent<Slider>().value = tmtb16temp;
+        }
+
+        if (tmtb17temp <= TmtbBrainAct17)
+        {
+            tmtb17temp += spanTime;
+            tmtB_17.GetComponent<Slider>().value = tmtb17temp;
+        }
+
+        if (tmtb18temp <= TmtbBrainAct18)
+        {
+            tmtb18temp += spanTime;
+            tmtB_18.GetComponent<Slider>().value = tmtb18temp;
+        }
+
+        if (tmtb19temp <= TmtbBrainAct19)
+        {
+            tmtb19temp += spanTime;
+            tmtB_19.GetComponent<Slider>().value = tmtb19temp;
+        }
+
+        if (tmtb20temp <= TmtbBrainAct20)
+        {
+            tmtb20temp += spanTime;
+            tmtB_20.GetComponent<Slider>().value = tmtb20temp;
+        }
+
+        if (tmtb21temp <= TmtbBrainAct21)
+        {
+            tmtb21temp += spanTime;
+            tmtB_21.GetComponent<Slider>().value = tmtb21temp;
+        }
+
+        if (tmtb22temp <= TmtbBrainAct22)
+        {
+            tmtb22temp += spanTime;
+            tmtB_22.GetComponent<Slider>().value = tmtb22temp;
+        }
+
+        if (tmtb23temp <= TmtbBrainAct23)
+        {
+            tmtb23temp += spanTime;
+            tmtB_23.GetComponent<Slider>().value = tmtb23temp;
+        }
+        
+
 
     }
 
