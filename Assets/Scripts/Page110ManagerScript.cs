@@ -71,7 +71,7 @@ public class Page110ManagerScript : MonoBehaviour
     public GameObject tmtB_22;
     public GameObject tmtB_23;
 
-    //脳活動スコア格納変数
+    //脳活動スコア格納変数の初期化
     float TmtaBrainAct1 = 0f;
     float TmtaBrainAct2 = 0f;
     float TmtaBrainAct3 = 0f;

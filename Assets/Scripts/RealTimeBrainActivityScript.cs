@@ -92,6 +92,7 @@ public class RealTimeBrainActivityScript : MonoBehaviour
 
 //            Debug.Log("time:" + DateTime.Now);
 
+            //この値を更新すればグラフが約1秒ごとに書き換わる
             float currentBrainActivityValue = 0f;
 
 
