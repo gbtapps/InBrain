@@ -9,6 +9,7 @@ using UnityEngine.UI;
 class BluetoothMgr : SingletonMonoBehaviour<BluetoothMgr>
 {
     string permission = "android.permission.ACCESS_COARSE_LOCATION";
+    string permission2 = "android.permission.WRITE_EXTERNAL_STORAGE";
     public const string cLastConnectSaveKey = "BM_LastConnect";
     Sprite[] m_BlueToothButtonSprite = new Sprite[3];
     Button m_BlueToothButton;
@@ -28,7 +29,7 @@ class BluetoothMgr : SingletonMonoBehaviour<BluetoothMgr>
         //m_BlueToothButtonSprite[1] = Resources.Load("Texture/btn_connect02", typeof(Sprite)) as Sprite;
         //m_BlueToothButtonSprite[2] = Resources.Load("Texture/BtnLOFF", typeof(Sprite)) as Sprite;        
 
-        TextBLEAddress.text = PlayerPrefs.GetString(ConstData.BLE_address);
+        TextBLEAddress.text = PlayerPrefs.GetString(ConstData.BLE_address);               
 
     }
 
@@ -155,6 +156,12 @@ class BluetoothMgr : SingletonMonoBehaviour<BluetoothMgr>
                 */
         }
 
+        /*
+        if (Hot2gApplication.Instance.datastore == null)
+        {
+            Hot2gApplication.Instance.datastore = new DataStore();
+        }*/
+
         if (Hot2gApplication.Instance.datastore.stability.Count > 1)
         {
             TextLoggingWindow.text = "Ac1chRec: [ " + Hot2gApplication.Instance.mode.ToString() +
@@ -169,6 +176,7 @@ class BluetoothMgr : SingletonMonoBehaviour<BluetoothMgr>
 
     public void Bluetooth()
     {
+        #region get permissions
 #if UNITY_ANDROID && !UNITY_EDITOR
         LocationService l = new LocationService();
         if (!l.isEnabledByUser)
@@ -196,9 +204,22 @@ class BluetoothMgr : SingletonMonoBehaviour<BluetoothMgr>
             //            SetMode(eMode.AutoConnect);
             BLEConnect();
         }
+
+        if (!l.isEnabledByUser)
+        {
+            if (RuntimePermissionHelper.HasPermission(permission2))
+            {
+                RuntimePermissionHelper.CallIntent();
+            }
+            else
+            {
+                RuntimePermissionHelper.RequestPermission(new string[] { permission2 });
+            }
+        }        
 #else
         BLEConnect();
 #endif
+        #endregion
     }
 
     public void BTDisconnect()

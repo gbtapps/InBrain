@@ -51,6 +51,8 @@ public class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
                 " アタッチされているGameObjectは " + Instance.gameObject.name + " です.");
             return;
         }
+
+        DontDestroyOnLoad(this.gameObject);//- シーンマタギ 2020-0126 TK
     }
 
     virtual protected void OnDestroy()

@@ -32,7 +32,7 @@ public class DataStore
     /** R3用AC内飽和データ個数 */
     List<int> r3Sa;
     /** 心拍bpm */
-    List<double> heartRate;
+    public List<double> heartRate;
 	/** 心拍 脈波振幅関連係数 */
 	List<Hot2gMeasDataHRElement> pulseAmplitudeCoeff;
 	List<double> pulseAmplitudeCoeffIndex1;

@@ -405,8 +405,8 @@ GameObject:
   - component: {fileID: 8400076688298894181}
   - component: {fileID: 8400076688298894187}
   - component: {fileID: 8400076688298894180}
-  - component: {fileID: 8400076688298894186}
   - component: {fileID: 8400076688298894185}
+  - component: {fileID: 8400076688298894186}
   - component: {fileID: 8400076688298894184}
   m_Layer: 5
   m_Name: BLEManager
@@ -476,22 +476,6 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
---- !u!114 &8400076688298894186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8400076688298894182}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98fefda2f1533854788e422ff3aedd00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TextBLEAddress: {fileID: 8400076688221190684}
-  TextMesseges: {fileID: 8400076688911538607}
-  TextLoggingWindow: {fileID: 8400076688059518663}
-  ButtonStart: {fileID: 8400076689025498329}
 --- !u!114 &8400076688298894185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -509,6 +493,22 @@ MonoBehaviour:
   afterMGC_counter: 0
   state2: 1
   statusOnHead_buffer: 
+--- !u!114 &8400076688298894186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8400076688298894182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98fefda2f1533854788e422ff3aedd00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextBLEAddress: {fileID: 8400076688221190684}
+  TextMesseges: {fileID: 8400076688911538607}
+  TextLoggingWindow: {fileID: 8400076688059518663}
+  ButtonStart: {fileID: 8400076689025498329}
 --- !u!114 &8400076688298894184
 MonoBehaviour:
   m_ObjectHideFlags: 0

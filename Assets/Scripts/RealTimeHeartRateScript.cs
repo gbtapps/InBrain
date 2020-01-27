@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Linq;
 
 
 public class RealTimeHeartRateScript : MonoBehaviour
@@ -95,8 +96,15 @@ public class RealTimeHeartRateScript : MonoBehaviour
             float currentheartRateValue = 0f;
 
 
-            float cos = Mathf.Cos(Time.time);
-            currentheartRateValue = (cos + 1.0f) * 50;
+            //float cos = Mathf.Cos(Time.time);
+            //currentheartRateValue = (cos + 1.0f) * 50;
+
+
+            if (Hot2gApplication.Instance.datastore.heartRate.Count > 10)
+            {
+                currentheartRateValue = (float)Hot2gApplication.Instance.datastore.
+                    heartRate.GetRange(Hot2gApplication.Instance.datastore.heartRate.Count - 10, 10).Average();
+            }
 
 //            Debug.Log("currentheartRateValue" + currentheartRateValue);
 

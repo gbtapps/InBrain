@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
-
+using System.Linq;
 
 public class RealTimeBrainActivityScript : MonoBehaviour
 {
@@ -96,8 +96,16 @@ public class RealTimeBrainActivityScript : MonoBehaviour
             float currentBrainActivityValue = 0f;
 
 
-            float sin = Mathf.Sin(Time.time);
-            currentBrainActivityValue = (sin + 1.0f) * 50;
+            //float sin = Mathf.Sin(Time.time);
+            //currentBrainActivityValue = (sin + 1.0f) * 50;
+
+
+            if (Hot2gApplication.Instance.datastore.left.Count > 10)
+            {
+                currentBrainActivityValue = 
+                    (float)Hot2gApplication.Instance.datastore.left.GetRange(Hot2gApplication.Instance.datastore.left.Count,10).Average();
+            }
+            
 
 //            Debug.Log("currentBrainActivityValue" + currentBrainActivityValue);
 

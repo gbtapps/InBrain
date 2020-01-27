@@ -23,11 +23,10 @@ public class Page40ManagerScript : MonoBehaviour
          *              ChangeScene1();
          *       }
          */
-        Invoke("ChangeScene", 5.0f);
+        //Invoke("ChangeScene", 5.0f);
+
     }
-
-
-
+       
     // Update is called once per frame
     void Update()
     {

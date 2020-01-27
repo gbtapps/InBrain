@@ -127,6 +127,8 @@ public class Hot2gApplication : SingletonMonoBehaviour<Hot2gApplication>
         m_API.initAPI(false);
         m_Mode = eMode.None;
 
+        dataStore = new DataStore();
+
     }
     private void Start()
     {
