@@ -75,20 +75,22 @@ public class RealTimeHeartRateScript : MonoBehaviour
 
 
     int timer;
-
+    float timerf;
 
     // Update is called once per frame
     void Update()
     {
 
         timer++;
+        timerf += Time.deltaTime;
 
         //60フレーム毎に動く処理
         //Updateのたびに変数を加算して変数が○のときに処理を実行する。
         //その際は変数をゼロにする。
 
 
-        if (timer > 60)
+        //if (timer > 60)
+        if (timerf>1)
         {
 
 //            Debug.Log("time:" + DateTime.Now);
@@ -137,7 +139,7 @@ public class RealTimeHeartRateScript : MonoBehaviour
 
 
                 timer = 0;
-
+            timerf = 0;
             }
 
 
