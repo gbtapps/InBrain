@@ -57,7 +57,6 @@ public class BLEMgr : SingletonMonoBehaviour<BLEMgr>
         }
     }
 
-
     float m_ModeTimer = 0;
     ReceiveCallback m_ReceiveCallback = null;
     StatusChangedCallback m_StatusChangedCallback = null;
@@ -373,6 +372,14 @@ public class BLEMgr : SingletonMonoBehaviour<BLEMgr>
         }
     }
 
+    protected override void Awake()
+    {
+        base.Awake();
+        if (teststr == null)  teststr = Random.value.ToString();
+    }
+
+    public string teststr;
+
     private void Update()
     {
         switch (m_Mode)
@@ -399,8 +406,7 @@ public class BLEMgr : SingletonMonoBehaviour<BLEMgr>
 						{
 							m_ScanAndConnectSuccess();
 						}
-					}
-					
+					}					
 				}
 			break;
 
@@ -413,11 +419,7 @@ public class BLEMgr : SingletonMonoBehaviour<BLEMgr>
                 }
             break;
         }
-
-
     }
-
-
 
 	protected string BytesToString(byte[] bytes)
 	{
@@ -429,7 +431,6 @@ public class BLEMgr : SingletonMonoBehaviour<BLEMgr>
 		return result;
 	}
 
-
 	public void ExecStartSensing()
 	{
 		byte[] data = createSendMessage(new byte[] { /*0x40, 0x01*/0x44, 0x01, 0x02, 0x03, 0x03, 0x07, 0x02, 0x07, 0x02, 0xFF, 0xFF });
@@ -439,5 +440,4 @@ public class BLEMgr : SingletonMonoBehaviour<BLEMgr>
 
 		});
 	}
-
 }

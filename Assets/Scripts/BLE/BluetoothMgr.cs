@@ -22,14 +22,15 @@ class BluetoothMgr : SingletonMonoBehaviour<BluetoothMgr>
     string textMessage2 = "脳センサーを探してしています・・・";//- Others
     string textMessage3 = "脳センサーを確認する";//- Waiting
 
+    string m_BLEAddress;
 
+
+    protected override void Awake()
+    {
+        base.Awake();
+    }
     private void Start()
     {
-        //m_BlueToothButtonSprite[0] = Resources.Load("Texture/btn_connect01", typeof(Sprite)) as Sprite;
-        //m_BlueToothButtonSprite[1] = Resources.Load("Texture/btn_connect02", typeof(Sprite)) as Sprite;
-        //m_BlueToothButtonSprite[2] = Resources.Load("Texture/BtnLOFF", typeof(Sprite)) as Sprite;        
-
-        TextBLEAddress.text = PlayerPrefs.GetString(ConstData.BLE_address);               
 
     }
 
@@ -40,9 +41,6 @@ class BluetoothMgr : SingletonMonoBehaviour<BluetoothMgr>
 
     private void Update()
     {
-        UpdateTextMessage(Hot2gApplication.Instance.mode.ToString());// +(testtimer+=Time.deltaTime).ToString());
-
- 
         switch (Hot2gApplication.Instance.mode)
         {            
             case Hot2gApplication.eMode.None:
@@ -64,25 +62,24 @@ class BluetoothMgr : SingletonMonoBehaviour<BluetoothMgr>
                 }
                 break;
 
-            case Hot2gApplication.eMode.Waiting:
-                ButtonStart.interactable = true;
+            case Hot2gApplication.eMode.Waiting:                
                 break;
 
             case Hot2gApplication.eMode.ScanOK:  
 
                 List<string> DeviceList = Hot2gApplication.Instance.GetScanDeviceList();
 
-                Debug.Log("Found ADR** " + DeviceList[0].ToString() + "--- Target: " + PlayerPrefs.GetString(ConstData.BLE_address)+
-                    "Is member?? "+DeviceList.IndexOf(PlayerPrefs.GetString(ConstData.BLE_address)));
+                Debug.Log("Found ADR** " + DeviceList[0].ToString() + "--- Target: " + m_BLEAddress+
+                    "Is member?? "+DeviceList.IndexOf(m_BLEAddress));
 
                 if (DeviceList.Count > 0)
                 {
                     //TextBLEAddress.text = DeviceList.ToString();
 
                     // 見つかったひとつは登録デバイスと同じ
-                    if (DeviceList.IndexOf(PlayerPrefs.GetString(ConstData.BLE_address)) != -1)
+                    if (DeviceList.IndexOf(m_BLEAddress) != -1)
                     {
-                        Hot2gApplication.Instance.Connecting(PlayerPrefs.GetString(ConstData.BLE_address), () => { }, () => { }, () => { });
+                        Hot2gApplication.Instance.Connecting(m_BLEAddress, () => { }, () => { }, () => { });
                     }
                     // 見つかったひとつは前回と違う
                     else
@@ -120,8 +117,8 @@ class BluetoothMgr : SingletonMonoBehaviour<BluetoothMgr>
                 }
                 */
                 break;
-                
-                
+
+                #region old code
                 /*
                 // Bletooth接続ボタンの制御
             case Hot2gApplication.eMode.Scan:            
@@ -154,6 +151,7 @@ class BluetoothMgr : SingletonMonoBehaviour<BluetoothMgr>
                 m_timer = 0;
                 break;
                 */
+                #endregion
         }
 
         /*
@@ -161,17 +159,6 @@ class BluetoothMgr : SingletonMonoBehaviour<BluetoothMgr>
         {
             Hot2gApplication.Instance.datastore = new DataStore();
         }*/
-
-        if (Hot2gApplication.Instance.datastore.stability.Count > 1)
-        {
-            TextLoggingWindow.text = "Ac1chRec: [ " + Hot2gApplication.Instance.mode.ToString() +
-            " ]/[ " + Hot2gApplication.Instance.datastore.stability[Hot2gApplication.Instance.datastore.stability.Count - 1] +
-            " ]/[: " + Hot2gApplication.Instance.state2.ToString() +
-            " ]/[Raw 1: " + Hot2gApplication.Instance.datastore.l1Ac[Hot2gApplication.Instance.datastore.l1Ac.Count - 1] +
-            " ]/[Raw 3: " + Hot2gApplication.Instance.datastore.l3Ac[Hot2gApplication.Instance.datastore.l3Ac.Count - 1] +
-            " ]/ after MGC: " + Hot2gApplication.Instance.afterMGC_counter.ToString()
-            ;
-        }
     }
 
     public void Bluetooth()
@@ -267,29 +254,14 @@ class BluetoothMgr : SingletonMonoBehaviour<BluetoothMgr>
 #endif
     }
 
-    //-------------------------------------------------------------------
-    public Text TextBLEAddress;
-    public Text TextMesseges;
-    public Text TextLoggingWindow;
-    public Button ButtonStart;
-
-    private void UpdateTextMessage(string str)
-    {
-        TextMesseges.text = str;
-    }
-    public void OnBLEAddressInputChanged(string value)
-    {        
-    }
-
-    public void OnStartButton()
+    public void StartBLE()
     {
         Hot2gApplication.Instance.StartRecieve();
     }
 
-    public void OnConnectButton()
+    public void Connect(string BLEAddress)
     {
+        m_BLEAddress = BLEAddress;
         Bluetooth();
-        PlayerPrefs.SetString(ConstData.BLE_address, TextBLEAddress.text);
-        PlayerPrefs.Save();
     }
 }

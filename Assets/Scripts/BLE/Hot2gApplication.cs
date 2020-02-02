@@ -123,11 +123,14 @@ public class Hot2gApplication : SingletonMonoBehaviour<Hot2gApplication>
 
         Debug.Log("Top: HOT2gApplication Awake() called.");
 
-        m_API = new Hot2gApi();
-        m_API.initAPI(false);
-        m_Mode = eMode.None;
+        if (m_API == null)
+        {
+            m_API = new Hot2gApi();
+            m_API.initAPI(false);
+            m_Mode = eMode.None;
+        }
 
-        dataStore = new DataStore();
+        if (dataStore  == null)  dataStore = new DataStore();
 
     }
     private void Start()
@@ -137,6 +140,8 @@ public class Hot2gApplication : SingletonMonoBehaviour<Hot2gApplication>
         m_API = new Hot2gApi();
         m_API.initAPI(false);
         m_Mode = eMode.None;
+
+        DontDestroyOnLoad(this);
 
     }
 
@@ -310,7 +315,7 @@ public class Hot2gApplication : SingletonMonoBehaviour<Hot2gApplication>
     // 受信開始
     public void StartRecieve()
     {
-        dataStore = new DataStore();
+        //dataStore = new DataStore();
         m_nfb = new NeuroFeedbacker(dataStore);
         m_nfb.start();
 

@@ -35,6 +35,8 @@ public class RealTimeBrainActivityScript : MonoBehaviour
     public GameObject brainActivityValue25;
     public GameObject brainActivityValue26;
 
+    public Text textvalue;
+
 
     // Start is called before the first frame update
     void Start()
@@ -74,20 +76,22 @@ public class RealTimeBrainActivityScript : MonoBehaviour
 
 
     int timer;
-
+    float timerf;
 
     // Update is called once per frame
     void Update()
     {
 
         timer++;
+        timerf += Time.deltaTime;
 
         //60フレーム毎に動く処理
         //Updateのたびに変数を加算して変数が○のときに処理を実行する。
         //その際は変数をゼロにする。
 
 
-        if (timer > 60)
+        //if (timer > 60)
+        if (timerf>1.0)
         {
 
 //            Debug.Log("time:" + DateTime.Now);
@@ -99,13 +103,22 @@ public class RealTimeBrainActivityScript : MonoBehaviour
             //float sin = Mathf.Sin(Time.time);
             //currentBrainActivityValue = (sin + 1.0f) * 50;
 
+            textvalue.text = Hot2gApplication.Instance.mode.ToString()+" ("+Hot2gApplication.Instance.datastore.l1Ac.Count+")";
+            //Debug.Log("RTB: "+)
+            /*+
+            " ]/[ " + Hot2gApplication.Instance.datastore.stability[Hot2gApplication.Instance.datastore.stability.Count - 1] +
+            " ]/[: " + Hot2gApplication.Instance.state2.ToString() +
+            " ]/[Raw 1: " + Hot2gApplication.Instance.datastore.l1Ac[Hot2gApplication.Instance.datastore.l1Ac.Count - 1]
+            ;*/
 
-            if (Hot2gApplication.Instance.datastore.left.Count > 10)
+
+            if (Hot2gApplication.Instance.datastore.l1Ac.Count > 10)
             {
-                currentBrainActivityValue = 
-                    (float)Hot2gApplication.Instance.datastore.left.GetRange(Hot2gApplication.Instance.datastore.left.Count,10).Average();
-            }
-            
+                currentBrainActivityValue =
+                  Mathf.Abs(  (float)Hot2gApplication.Instance.datastore.left.GetRange(Hot2gApplication.Instance.datastore.left.Count-1,10).Average() * 20);
+                  //Mathf.Abs((float)Hot2gApplication.Instance.datastore.l1Ac.GetRange(Hot2gApplication.Instance.datastore.left.Count - 1, 9).Average() * 20);
+                textvalue.text = currentBrainActivityValue.ToString();
+            }           
 
 //            Debug.Log("currentBrainActivityValue" + currentBrainActivityValue);
 
@@ -136,13 +149,8 @@ public class RealTimeBrainActivityScript : MonoBehaviour
             brainActivityValue25.GetComponent<Slider>().value = brainActivityValue26.GetComponent<Slider>().value;
             brainActivityValue26.GetComponent<Slider>().value = currentBrainActivityValue;
 
-
                 timer = 0;
-
+            timerf = 0;
             }
-
-
-
-
         }
     }

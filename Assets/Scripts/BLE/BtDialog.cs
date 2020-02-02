@@ -6,6 +6,60 @@ using UnityEngine.UI;
 
 public class BtDialog : MonoBehaviour
 {
+    public Text TextAddress;
+    public Text TextStatus;
+    public Text TextBLELog;
+
+    public Button BtnConnect;
+    public Button BtnStart;
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
+
+    public float test = 0;
+    private void Start()
+    {
+
+        test = Random.value;
+    }
+
+    private void Update()
+    {
+        
+        Debug.Log("BTDLG: 1"+ Hot2gApplication.Instance.mode.ToString());
+        TextStatus.text=Hot2gApplication.Instance.mode.ToString();// +(testtimer+=Time.deltaTime).ToString());
+        Debug.Log("BTDLG: 2");
+        if (Hot2gApplication.Instance.mode == Hot2gApplication.eMode.Waiting && BtnStart.interactable == false) BtnStart.interactable = true;//- Enable Start button
+        Debug.Log("BTDLG: 3");
+        if (Hot2gApplication.Instance.datastore.stability.Count > 1)
+        {
+            TextBLELog.text = "Ac1chRec: [ " + Hot2gApplication.Instance.mode.ToString() +
+            " ]/[ " + Hot2gApplication.Instance.datastore.stability[Hot2gApplication.Instance.datastore.stability.Count - 1] +
+            " ]/[: " + Hot2gApplication.Instance.state2.ToString() +
+            " ]/[Raw 1: " + Hot2gApplication.Instance.datastore.l1Ac[Hot2gApplication.Instance.datastore.l1Ac.Count - 1] +
+            " ]/[Raw 3: " + Hot2gApplication.Instance.datastore.l3Ac[Hot2gApplication.Instance.datastore.l3Ac.Count - 1] +
+            " ]/ after MGC: " + Hot2gApplication.Instance.afterMGC_counter.ToString()
+            ;
+        }
+        Debug.Log("BTDLG: 4");
+        
+    }
+
+    public void BLEStart()
+    {
+        BluetoothMgr.Instance.StartBLE();
+    }
+
+    public void BLEConnect()
+    {
+        if (TextAddress.text != "")
+            BluetoothMgr.Instance.Connect(TextAddress.text);        
+    }
+
+    #region old code
+    /*
     List<Toggle> m_toggleList = new List<Toggle>();
 
     // Start is called before the first frame update
@@ -106,4 +160,6 @@ public class BtDialog : MonoBehaviour
     {
         
     }
+    */
+    #endregion
 }
