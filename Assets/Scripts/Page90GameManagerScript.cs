@@ -543,6 +543,7 @@ public class Page90GameManagerScript : MonoBehaviour
         //エディタでアタッチしたテキストを扱えるようにする
         Text target_text_text = target_text.GetComponent<Text>();
 
+        /*
         float gamensizex = 1280.0f;
         float gamensizey = 800.0f;
         float hoseix = 640.0f;
@@ -550,9 +551,25 @@ public class Page90GameManagerScript : MonoBehaviour
 
         float marginx = 150.0f;
         float marginy = 150.0f;
+        */
 
-//        float marginx = 100.0f;
-//        float marginy = 100.0f;
+
+        //画面サイズ
+        float gamensizex = 360.0f;
+        float gamensizey = 640.0f;
+
+
+        float hoseix = 180.0f;
+        float hoseiy = 320.0f;
+
+        //上下左右のマージン
+        float marginx = 50.0f;
+        float marginy = 50.0f;
+
+
+
+        //        float marginx = 100.0f;
+        //        float marginy = 100.0f;
 
 
         //iはこれから作るボタンの番号
@@ -563,7 +580,7 @@ public class Page90GameManagerScript : MonoBehaviour
  
             //オブジェクトの座標
             float x = UnityEngine.Random.Range(-hoseix + marginx, gamensizex - hoseix - marginx);
-            float y = UnityEngine.Random.Range(-hoseiy + marginy, gamensizey - hoseiy - marginy - 200.0f);
+            float y = UnityEngine.Random.Range(-hoseiy + marginy, gamensizey - hoseiy - marginy - 100.0f);
 
             posixy[0, i] = x;
             posixy[1, i] = y;
@@ -581,10 +598,12 @@ public class Page90GameManagerScript : MonoBehaviour
                 float kyorixy = Mathf.Sqrt(squaredefx + squaredefy);
 
 
-                if (kyorixy < 100.0f)
+
+                //ボタン間の距離を設定
+                if (kyorixy < 60.0f)
                 {
-                    //200より近いものがあればフラグONしてブレイク
-                    p++;
+                        //100より近いものがあればフラグONしてブレイク
+                        p++;
                     //直下のFor文から抜ける
                     break;
                 }

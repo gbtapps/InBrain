@@ -303,10 +303,10 @@ public class Page110ManagerScript : MonoBehaviour
 
         //初期化処理
         //Start()の中で計算して描画関数で値を更新
-        ResultSpeed.text = "計算中. . .";
-        ResultAttention.text = "計算中. . .";
-        ResultBrain.text = "計算中. . .";
-        ResultDeclines.text = "調査中. . .";
+        ResultSpeed.text = "Calculating. . .";
+        ResultAttention.text = "Calculating. . .";
+        ResultBrain.text = "Calculating. . .";
+        ResultDeclines.text = "Calculating. . .";
 
 
         /*  
@@ -565,8 +565,10 @@ public class Page110ManagerScript : MonoBehaviour
         string str_calc_ten_speed = calc_ten_speed.ToString();
         string str_calc_age_speed = calc_age_speed.ToString();
 
-        result_speed.Append( str_calc_ten_speed + "点　");
-        result_speed.Append( str_calc_age_speed + "歳　");
+//        result_speed.Append( str_calc_ten_speed + "点　");
+//        result_speed.Append( str_calc_age_speed + "歳　");
+        result_speed.Append(str_calc_ten_speed + "　　　");
+        result_speed.Append(str_calc_age_speed + "　　　");
         result_speed.Append( str_hantei_speed);
 
         //以下の結果をInvokeで描画関数で実行してタメをもたせる
@@ -632,8 +634,10 @@ public class Page110ManagerScript : MonoBehaviour
         string str_calc_ten_attention = calc_ten_attention.ToString();
         string str_calc_age_attention = calc_age_attention.ToString();
 
-        result_attention.Append(str_calc_ten_attention + "点　");
-        result_attention.Append(str_calc_age_attention + "歳　");
+//        result_attention.Append(str_calc_ten_attention + "点　");
+//        result_attention.Append(str_calc_age_attention + "歳　");
+        result_attention.Append(str_calc_ten_attention + "　　　");
+        result_attention.Append(str_calc_age_attention + "　　　");
         result_attention.Append(str_hantei_attention);
 
         //以下の結果をInvokeで描画関数で実行してタメをもたせる
@@ -690,8 +694,10 @@ public class Page110ManagerScript : MonoBehaviour
         string str_calc_ten_brain = calc_ten_brain.ToString();
         string str_calc_age_brain = calc_age_brain.ToString();
 
-        result_brain.Append(str_calc_ten_brain + "点　");
-        result_brain.Append(str_calc_age_brain + "歳　");
+//        result_brain.Append(str_calc_ten_brain + "点　");
+//        result_brain.Append(str_calc_age_brain + "歳　");
+        result_brain.Append(str_calc_ten_brain + "　　　");
+        result_brain.Append(str_calc_age_brain + "　　　");
         result_brain.Append(str_hantei_brain);
 
         //以下の結果をInvokeで描画関数で実行してタメをもたせる

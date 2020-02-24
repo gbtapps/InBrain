@@ -3,8 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class P01SignInControllerScript : MonoBehaviour
+public class P05NoticeBrainAnalysisController : MonoBehaviour
 {
+
+    public void MoveToXb01Setting()
+    {
+        SceneManager.LoadScene("40.センサー接続");
+    }
+
+    public void MoveToResultAnalysis()
+    {
+        SceneManager.LoadScene("110.検査結果");
+
+    }
+
+
 
 
     // Start is called before the first frame update
@@ -18,19 +31,4 @@ public class P01SignInControllerScript : MonoBehaviour
     {
         
     }
-
-    public void MoveToSignUp()
-    {
-
-        SceneManager.LoadScene("02.SignUp");
-    }
-
-    public void SignIn()
-    {
-
-        SceneManager.LoadScene("05.NoticeBrainAnalysis");
-    }
-
-
-
 }

@@ -24,7 +24,7 @@ public class GlobalFooterScript : MonoBehaviour
 
     public void MoveToAnalysis()
     {
-        SceneManager.LoadScene("04.ConnectSensor");
+        SceneManager.LoadScene("05.NoticeBrainAnalysis");
     }
     public void MoveToBrainEx()
     {

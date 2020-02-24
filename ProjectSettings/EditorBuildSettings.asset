@@ -87,13 +87,13 @@ EditorBuildSettings:
     path: "Assets/Scenes/110.\u691C\u67FB\u7D50\u679C.unity"
     guid: ea8f9280745f2014d995d520db833074
   - enabled: 1
-    path: "Assets/Scenes/120.\u8A73\u7D301\uFF0D\u8A8D\u77E5\u901F\u5EA6.unity"
+    path: "Assets/Scenes/120.\u8A73\u7D301\u8A8D\u77E5\u901F\u5EA6.unity"
     guid: 6b209c5876e1d8b43a428e9519c96a59
   - enabled: 1
-    path: "Assets/Scenes/130.\u8A73\u7D302\uFF0D\u6CE8\u610F\u529B.unity"
+    path: "Assets/Scenes/130.\u8A73\u7D302\u6CE8\u610F\u529B.unity"
     guid: 7cabf50d708682b48812909530a13a86
   - enabled: 1
-    path: "Assets/Scenes/140.\u8A73\u7D303\uFF0D\u8133\u6D3B\u52D5.unity"
+    path: "Assets/Scenes/140.\u8A73\u7D303\u8133\u6D3B\u52D5.unity"
     guid: 58ddcc44d3a6e7c4fbde5c3878a4a161
   - enabled: 1
     path: "Assets/Scenes/150.\u5BFE\u7B56\u6848.unity"
