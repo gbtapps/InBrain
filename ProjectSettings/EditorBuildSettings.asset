@@ -5,9 +5,6 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: "Assets/Scenes/10.\u30B9\u30D7\u30E9\u30C3\u30B7\u30E5.unity"
-    guid: 22e1e6fd27beec840a865aa03b5678a1
   - enabled: 1
     path: Assets/Scenes/01.SignIn.unity
     guid: 152ddb0fd60a696419ca290f0b364dfa
@@ -15,32 +12,17 @@ EditorBuildSettings:
     path: Assets/Scenes/02.SignUp.unity
     guid: 14374490f88139245bcebb1dfa1dcc71
   - enabled: 1
-    path: Assets/Scenes/02.SignUp2.unity
-    guid: c8c99fe06047305498f5517b828c8302
-  - enabled: 1
     path: Assets/Scenes/03.Home.unity
     guid: 3f113a4399ea5ec4e91c7fad992a1142
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/04.ConnectSensor.unity
     guid: 3a327e8ea8f13ec4d9dc58ff7675e798
   - enabled: 1
     path: Assets/Scenes/05.NoticeBrainAnalysis.unity
     guid: 7295f76364ea3ef4e9beb7e6196c2aa2
-  - enabled: 1
-    path: Assets/Scenes/06.DoBrainAnalysis.unity
-    guid: 78880f8cccc86c549aa6d4b84757d1c6
-  - enabled: 1
-    path: Assets/Scenes/07.ResultActivityBrainAnalysis.unity
-    guid: 61f3fa66b02d3264385ee479335d0290
-  - enabled: 1
-    path: Assets/Scenes/07.ResultAttentionBrainAnalysis.unity
-    guid: b37582073f10de74299100f380ddabee
-  - enabled: 1
-    path: Assets/Scenes/07.ResultBrainAnalysis.unity
+  - enabled: 0
+    path: Assets/Scenes/07.ResultBrainAnalysisDesignSample.unity
     guid: b9a062e2809193242bf55fc8f6753c2c
-  - enabled: 1
-    path: Assets/Scenes/07.ResultSpeedBrainAnalysis.unity
-    guid: 68d6f69147e01f940b9d1629a7bfa52d
   - enabled: 1
     path: Assets/Scenes/20.BrainExMenu.unity
     guid: c735a566290dc1c469253cf66caf9c41
@@ -54,20 +36,8 @@ EditorBuildSettings:
     path: "Assets/Scenes/20.\u6027\u5225\u5E74\u9F62\u9078\u629E.unity"
     guid: dddf4a6e8feba43438bf8ee3d02b2afe
   - enabled: 1
-    path: "Assets/Scenes/30.\u30BB\u30F3\u30B5\u30FC\u63A5\u7D9A\u8AAC\u660E.unity"
-    guid: 7cd64e31675c6bc45a4925c8dbe235bb
-  - enabled: 1
     path: "Assets/Scenes/40.\u30BB\u30F3\u30B5\u30FC\u63A5\u7D9A.unity"
     guid: b3d65fa25d2bbdc4580615fedc6bffe7
-  - enabled: 1
-    path: "Assets/Scenes/41.\u30BB\u30F3\u30B5\u30FC\u63A5\u7D9A2.unity"
-    guid: 052e27d482601bb408cffa72aa195f28
-  - enabled: 1
-    path: "Assets/Scenes/42.\u30BB\u30F3\u30B5\u30FC\u63A5\u7D9A3.unity"
-    guid: dd7713831633a314da9f08d5175accf4
-  - enabled: 1
-    path: "Assets/Scenes/50.\u691C\u67FB\u8AAC\u660E.unity"
-    guid: b1ed6bcc6c9e5204b8b53acac18b497d
   - enabled: 1
     path: "Assets/Scenes/60.\u30A4\u30F3\u30BF\u30FC\u30D0\u30EB.unity"
     guid: b0c90af97f391484d8ce6804a492431a
@@ -95,10 +65,4 @@ EditorBuildSettings:
   - enabled: 1
     path: "Assets/Scenes/140.\u8A73\u7D303\u8133\u6D3B\u52D5.unity"
     guid: 58ddcc44d3a6e7c4fbde5c3878a4a161
-  - enabled: 1
-    path: "Assets/Scenes/150.\u5BFE\u7B56\u6848.unity"
-    guid: 18fa1e938ccb5a64398463ac7c70e245
-  - enabled: 1
-    path: "Assets/Scenes/160.\u7D42\u4E86\u30DA\u30FC\u30B8.unity"
-    guid: e1840cc678cff8948bec728418c5f292
   m_configObjects: {}
