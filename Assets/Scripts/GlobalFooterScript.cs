@@ -19,24 +19,24 @@ public class GlobalFooterScript : MonoBehaviour
 
     public void MoveToHome()
     {
-        SceneManager.LoadScene("03.Home");        
+        SceneManager.LoadScene("S100Home");        
     }
 
     public void MoveToAnalysis()
     {
-        SceneManager.LoadScene("05.NoticeBrainAnalysis");
+        SceneManager.LoadScene("S500NoticeBrainAnalysis");
     }
     public void MoveToBrainEx()
     {
-        SceneManager.LoadScene("20.BrainExMenu");
+        SceneManager.LoadScene("S200BrainExMenu");
     }
     public void MoveToInfo()
     {
-        SceneManager.LoadScene("30.Info");
+        SceneManager.LoadScene("S300Info");
     }
     public void MoveToMyPage()
     {
-        SceneManager.LoadScene("40.MyPage");
+        SceneManager.LoadScene("S400MyPage");
     }
 
 

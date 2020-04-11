@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
+
 
 public class GameAnswerButtonScript : MonoBehaviour
 {
@@ -42,7 +45,7 @@ public class GameAnswerButtonScript : MonoBehaviour
     //正誤エフェクト○×
     public GameObject CorrectAnswerMark;
     public GameObject WrongAnswerMark;
-
+    private float Count;
 
 
 
@@ -67,14 +70,19 @@ public class GameAnswerButtonScript : MonoBehaviour
     void MakeOneDigitNumericalQuestion()
     {
 
+
         Answerdigit = 1;
 
-        while (Answer > 9 || Answer < 1)
-        {
-            FirstMember = Random.Range(0, 10);
-            SecondMember = Random.Range(0, 10);
 
-            if(Random.Range(0,1) == 0)
+        //10以下＝1桁に答えを調整
+        Answer = 10;
+
+        while (Answer > 9 || Answer < 0 )
+        {
+            FirstMember = UnityEngine.Random.Range(0, 10);
+            SecondMember = UnityEngine.Random.Range(0, 10);
+
+            if(UnityEngine.Random.Range(0,1) == 0)
             {
                 //引算
                 FormulaText.text = FirstMember + " - " + SecondMember + " = □";                
@@ -88,6 +96,8 @@ public class GameAnswerButtonScript : MonoBehaviour
             }
 
         }
+
+
 
         Debug.Log("FirstMember: " + FirstMember);
         Debug.Log("SecondMember: " + SecondMember);
@@ -103,6 +113,26 @@ public class GameAnswerButtonScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (CorrectAnswerMark.activeSelf || WrongAnswerMark.activeSelf)
+        {
+            //○秒でマークの色と回答文字を消し新しい設問
+
+            Count += Time.deltaTime;
+            if (Count >= 0.5f)
+            {
+                Count = 0.0f;
+                CorrectAnswerMark.SetActive(false);
+                WrongAnswerMark.SetActive(false);
+                AnswerText.text = "";
+                MakeOneDigitNumericalQuestion();
+            }
+
+
+
+        }
+
+
     }
 
     void CheckCorrectAnswer()
@@ -114,8 +144,11 @@ public class GameAnswerButtonScript : MonoBehaviour
     {
         string BtnName = AnswerByButton.currentSelectedGameObject.gameObject.name;
 
-        //回答桁数
 
+        //解答欄クリア
+        AnswerText.text = null;
+        CorrectAnswerMark.SetActive(false);
+        WrongAnswerMark.SetActive(false);
 
         //ボタン押下
         if (BtnName == "Btn1") AnswerText.text += "1";
@@ -138,42 +171,17 @@ public class GameAnswerButtonScript : MonoBehaviour
   
         if (Answerdigit == (AnswerText.text).Length)
         {
-            /*
-                        string FormulaString = FormulaText.text.ToString();
-                        string AnswerString = AnswerText.text.ToString();
-                        Debug.Log("FormulaString: "+FormulaString);
-                        Debug.Log("AnswerString: " + AnswerString);
-                        */
-            //            if (FormulaString == AnswerString)
-
-
 
             if (Answer.ToString() == AnswerText.text)
             {
-
                 //○を表示
                 CorrectAnswerMark.SetActive(true);
 
-                //0.2秒たったら○を消して次の問題を生成
-
-                //次の設問を生成
-                MakeOneDigitNumericalQuestion();
-
-
-                //○を消す
-//                CorrectAnswerMark.SetActive(false);
             }
             else
             {
                 //×を表示
                 WrongAnswerMark.SetActive(true);
-
-
-                //解答欄をクリア
-//                AnswerText.text = "";
-                //×を消す
-//                WrongAnswerMark.SetActive(false);
-
 
             }
         }

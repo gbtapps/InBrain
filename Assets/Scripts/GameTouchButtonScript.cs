@@ -9,15 +9,37 @@ public class GameTouchButtonScript : MonoBehaviour
     public GameObject ThisButton;
     Text ButtonNumber;
 
-//    public Page211BrainExST1ControllerScript _GetPage211BrainExST1ControllerScript;
+    GameObject GameController1;
+    GameObject GameController2;
+    GameObject GameController3;
+    GameObject GameController4;
 
-    GameObject GameController;
+    S211BexSpeedTouchId1ControllerScript GameControllerScript1;
+    S212BexSpeedTouchId2ControllerScript GameControllerScript2;
+    S213BexSpeedTouchId3ControllerScript GameControllerScript3;
+    S214BexSpeedTouchId4ControllerScript GameControllerScript4;
+
+    bool Yn1;
+    bool Yn2;
+    bool Yn3;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        GameController = GameObject.Find("Page211BrainExST1Controller");
+        GameController1 = GameObject.Find("S211BexSpeedTouchId1Controller");
+        GameController2 = GameObject.Find("S212BexSpeedTouchId2Controller");
+        GameController3 = GameObject.Find("S213BexSpeedTouchId3Controller");
+        GameController4 = GameObject.Find("S214BexSpeedTouchId4Controller");
+
+
+        Debug.Log(GameController1);
+        Debug.Log(GameController2);
+        Debug.Log(GameController3);
+        Debug.Log(GameController4);
+
+
+
     }
 
 
@@ -39,36 +61,93 @@ public class GameTouchButtonScript : MonoBehaviour
         }
 
         // 別のオブジェクト(Sphere)のスクリプトを参照する場合
-        Page211BrainExST1ControllerScript GameControllerScript = GameController.GetComponent<Page211BrainExST1ControllerScript>();
-
-        string StrNumber = ButtonNumber.text;
-        bool Yn = false;
-        Yn = GameControllerScript.TouchButton( StrNumber);
-
-        Debug.Log(Yn);
-
-
-        if(Yn == true)
+        if (GameController1 != null)
         {
-            //ボタンの色を変える場合はスプライトを変更する処理
+            GameControllerScript1 = GameController1.GetComponent<S211BexSpeedTouchId1ControllerScript>();
+            string StrNumber = ButtonNumber.text;
+            bool Yn1 = false;
+            Yn1 = GameControllerScript1.TouchButton(StrNumber);
+            if (Yn1 == true)
+            {
+                //ボタンの色を変える場合はスプライトを変更する処理
 
-            //ボタンを消す１
-            //            ThisButton.SetActive(false);
+                //ボタンを消す１
+                //            ThisButton.SetActive(false);
+                //ボタンを消す２
+                GameObject.Destroy(this.gameObject);
+            }
 
-            //ボタンを消す２
-            GameObject.Destroy(this.gameObject);
+        }
+        if (GameController2 != null)
+        {
+            GameControllerScript2 = GameController2.GetComponent<S212BexSpeedTouchId2ControllerScript>();
+            string StrNumber = ButtonNumber.text;
+            bool Yn2 = false;
+            Yn2 = GameControllerScript2.TouchButton(StrNumber);
+            if (Yn2 == true)
+            {
+                //ボタンの色を変える場合はスプライトを変更する処理
+
+                //ボタンを消す１
+                //            ThisButton.SetActive(false);
+                //ボタンを消す２
+                GameObject.Destroy(this.gameObject);
+            }
+
+        }
+        if (GameController3 != null)
+        {
+            GameControllerScript3 = GameController3.GetComponent<S213BexSpeedTouchId3ControllerScript>();
+            string StrNumber = ButtonNumber.text;
+            bool Yn3 = false;
+            Yn3 = GameControllerScript3.TouchButton(StrNumber);
+            if (Yn3 == true)
+            {
+                //ボタンの色を変える場合はスプライトを変更する処理
+
+                //ボタンを消す１
+                //            ThisButton.SetActive(false);
+                //ボタンを消す２
+                GameObject.Destroy(this.gameObject);
+            }
+
+        }
+        if (GameController4 != null)
+        {
+            GameControllerScript4 = GameController4.GetComponent<S214BexSpeedTouchId4ControllerScript>();
+            string StrNumber = ButtonNumber.text;
+            bool Yn4 = false;
+            Yn4 = GameControllerScript4.TouchButton(StrNumber);
+            if (Yn4 == true)
+            {
+                //ボタンの色を変える場合はスプライトを変更する処理
+
+                //ボタンを消す１
+                //            ThisButton.SetActive(false);
+                //ボタンを消す２
+                GameObject.Destroy(this.gameObject);
+            }
+
         }
 
 
 
+
+
+
+
+
+
+
+
     }
-    
-    
-    
+
+
+
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

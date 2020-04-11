@@ -11,7 +11,16 @@ public class TMT2TouchManagerScript : MonoBehaviour
 {
 
     //タッチカウンタ
-    public Page90GameManagerScript InstancePage90GameManagerScript;
+//    public S524Test2GameManagerScript InstanceS524Test2GameManagerScript;
+    
+    //
+    //S524TestGameManagerの関数を使う
+    //
+
+    private GameObject S524Test2GameManager;
+    private S524Test2GameManagerScript InstanceS524Test2GameManagerScript;
+
+
 
     //複製対象ボタンテキスト
     public GameObject target_text = null; // Textオブジェクト
@@ -27,7 +36,12 @@ public class TMT2TouchManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        limitCount = InstancePage90GameManagerScript.GetNumOfTargets();
+
+        //S524Test2GameManagerの機能を使う
+        S524Test2GameManager = GameObject.Find("S524Test2GameManager");
+        InstanceS524Test2GameManagerScript = S524Test2GameManager.GetComponent<S524Test2GameManagerScript>();
+
+        limitCount = InstanceS524Test2GameManagerScript.GetNumOfTargets();
  //       Debug.Log("limitCount= " + limitCount);
 
     }
@@ -41,11 +55,11 @@ public class TMT2TouchManagerScript : MonoBehaviour
     public void OnClick()
     {
 
-        InstancePage90GameManagerScript.PushDown();
+        InstanceS524Test2GameManagerScript.PushDown();
 
         //ボタンタップのカウンタbCountを作成
         int bCount;
-        bCount = InstancePage90GameManagerScript.GetButtonCount();
+        bCount = InstanceS524Test2GameManagerScript.GetButtonCount();
         Debug.Log("bCount= " + bCount);
 
         //1から順ではないと押せない処理
@@ -102,36 +116,36 @@ public class TMT2TouchManagerScript : MonoBehaviour
 
             //正解したので正解数字をカウントアップ
             bCount++;
-//            Debug.Log("bCount++= " + bCount);
+            //            Debug.Log("bCount++= " + bCount);
             //実際にカウントアップする関数
-            InstancePage90GameManagerScript.SetButtonCount(bCount);
+            InstanceS524Test2GameManagerScript.SetButtonCount(bCount);
 
-            InstancePage90GameManagerScript.RightPush();
+            InstanceS524Test2GameManagerScript.RightPush();
 
         }
         else
         {
-            InstancePage90GameManagerScript.WrongPush();
+            InstanceS524Test2GameManagerScript.WrongPush();
         }
 
 
         //ボタンすべて押し切った
         if ( bCount-1 == limitCount )
         {
-//            Debug.Log("ボタンすべて押し切った");
-//            Debug.Log("limitCount= " + limitCount);
-//            Debug.Log("bCount++= " + bCount);
+            //            Debug.Log("ボタンすべて押し切った");
+            //            Debug.Log("limitCount= " + limitCount);
+            //            Debug.Log("bCount++= " + bCount);
 
             //すべてのボタンを消す
-            InstancePage90GameManagerScript.DropButtons();
-//            Debug.Log("Done DropButtons()");
+            InstanceS524Test2GameManagerScript.DropButtons();
+            //            Debug.Log("Done DropButtons()");
 
             //カウントアップ変数を1に戻す
-            InstancePage90GameManagerScript.SetButtonCount(1);
+            InstanceS524Test2GameManagerScript.SetButtonCount(1);
 
 
             //新しいセットを作成する
-            InstancePage90GameManagerScript.ReCreateTargets();
+            InstanceS524Test2GameManagerScript.ReCreateTargets();
 //            Debug.Log("CreateTargets(limitCount)");
 
         }

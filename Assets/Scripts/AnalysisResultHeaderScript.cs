@@ -19,20 +19,20 @@ public class AnalysisResultHeaderScript : MonoBehaviour
 
     public void MoveToSummary()
     {
-        SceneManager.LoadScene("110.検査結果");        
+        SceneManager.LoadScene("S526TestResultSummary");        
     }
 
     public void MoveToSpeed()
     {
-        SceneManager.LoadScene("120.詳細1認知速度");
+        SceneManager.LoadScene("S527TestResultSpeed");
     }
     public void MoveToAttention()
     {
-        SceneManager.LoadScene("130.詳細2注意力");
+        SceneManager.LoadScene("S528TestResultAttention");
     }
     public void MoveToActivity()
     {
-        SceneManager.LoadScene("140.詳細3脳活動");
+        SceneManager.LoadScene("S529TestResultBrain");
     }
 
 
