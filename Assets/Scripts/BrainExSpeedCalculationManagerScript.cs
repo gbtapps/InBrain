@@ -24,11 +24,11 @@ public class BrainExSpeedCalculationManagerScript : MonoBehaviour
     //
 
     //ゲームタイトル
-    [SerializeField] string GameTitleString = "Speed Calculation";
+    [SerializeField] string GameTitleString = "Game Title";
 
     //ゲーム説明
     [SerializeField] string GameDescription =
-    "【Speed Touch】You top the button to answer correctly as quick as you can within the time limit.";
+    "【Game Title】Game Description included how to play simply.";
 
     //スコアキー
     [SerializeField] string ScoreKeyName = "SpeedCalculationId1";
@@ -38,7 +38,11 @@ public class BrainExSpeedCalculationManagerScript : MonoBehaviour
     [SerializeField] string GameGroupName = "S220SpeedCalculation";
 
 
-    //----- 回答 ------
+    //----- Additional Function ------
+    [SerializeField] bool ChangePanel = false;
+
+
+    //----- Answering ------
 
 
     //回答のMax桁数の指定
@@ -370,13 +374,23 @@ public class BrainExSpeedCalculationManagerScript : MonoBehaviour
 
 
         //ゲームスタート時の音
-        //        InstanceCommonSFXControllerScript.DoSoundSetQuestions();
+//        InstanceCommonSFXControllerScript.DoSoundSetQuestions();
 
 
         //本ゲームスタート時のボタン生成
         MakeQuestion();
         Debug.Log("MakeQuestion()");
         DebugText.text += ">MakeQuestion()";
+
+
+    }
+
+
+
+    void ChangePanelFunc()
+    {
+
+
 
 
     }

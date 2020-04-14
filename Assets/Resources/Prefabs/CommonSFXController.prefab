@@ -44,10 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a441b3b580c5404d8997ae6809fdd00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SoundCorrectAnswer: {fileID: 8300000, guid: addff982819d0174e8b00cdb59d69501, type: 3}
-  SoundWrongAnswer: {fileID: 8300000, guid: 2900eb93b72898a4a859257083a8ee23, type: 3}
-  SoundStartCountdown: {fileID: 8300000, guid: 8fbec234218a6e6488442932e467da2a, type: 3}
-  SoundTimeupCountdown: {fileID: 8300000, guid: e54d800ac2be83147a72d1225edadd88,
+  SoundCorrectAnswer: {fileID: 8300000, guid: 8fbec234218a6e6488442932e467da2a, type: 3}
+  SoundWrongAnswer: {fileID: 8300000, guid: e54d800ac2be83147a72d1225edadd88, type: 3}
+  SoundStartCountdown: {fileID: 8300000, guid: addff982819d0174e8b00cdb59d69501, type: 3}
+  SoundTimeupCountdown: {fileID: 8300000, guid: 2900eb93b72898a4a859257083a8ee23,
     type: 3}
   SoundGoodResponse: {fileID: 0}
   SoundSetQuestions: {fileID: 8300000, guid: ed155d648cf23ea4d989f58cd56d9f9e, type: 3}
