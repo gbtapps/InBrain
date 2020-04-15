@@ -20,31 +20,26 @@ public class BrainExChangePanelManagerScript : MonoBehaviour
     //Button作成エリア
     [SerializeField] GameObject drawArea;
 
-    //複製したButton
-    private GameObject Button;
 
+    float[,] BtnPos = new float[10,3]
+        {
+            { -80f, 107f, 0f }, //1st row 1st colomn //00,01,02
+            {   0f, 107f, 0f }, //1st row 2nd colomn //10,11,12
+            {  80f, 107f, 0f }, //1st row 3rd colomn 
 
-    float position1x = -80f;
-    float position1y = 107f;
+            { -80f,  44f, 0f }, //2nd row 1st colomn 
+            {   0f,  44f, 0f }, //2nd row 2nd colomn 
+            {  80f,  44f, 0f }, //2nd row 3rd colomn 
 
-    /*
-1btn -80 107
-2btn 0 107
-3btn 80 107
-4btn -80 44
-5btn 0 44
-6btn 80 44
-7btn -80 19
-8btn 0 19
-9btn 80 19
-0btn 0 -82
-*/
+            { -80f, -19f, 0f }, //3rd row 1st colomn 
+            {   0f, -19f, 0f }, //3rd row 2nd colomn 
+            {  80f, -19f, 0f }, //3rd row 3rd colomn 
 
-    int[] BtnOrder = new int[10];
-    bool duplicated = false;
+            {   0f, -82f, 0f }  //4th row 2nd colomn 
+        };
+ 
 
-
-    void ChangeBtnPositionFunc()
+    public void ChangeBtnPositionFunc()
     {
         // This calls when answering in spite of correct or not 
         // if change panel flg on.
@@ -66,74 +61,41 @@ public class BrainExChangePanelManagerScript : MonoBehaviour
             ary[n] = tmp;
         }
 
+        /*
         foreach(object obj in ary)
         {
             Debug.Log(obj); 
         }
-
-
+        */
         /*
-        Transform myTransform = ary[0].transform;
-
-        // 座標を取得
-        Vector3 pos = myTransform.position;
-        pos.x = -80f;    // x座標へ0.01加算
-        pos.y = 107f;    // y座標へ0.01加算
-        pos.z = 0f;    // z座標へ0.01加算
-        myTransform.position = pos;
+        foreach (object obj in BtnPos)
+        {
+            Debug.Log(obj);
+        }
         */
 
-
-//        ary[0].transform.position = new Vector3(0.0f, 0f, 0f);
-
-//        ary[0].transform.Translate(new Vector2(0f, 0f));
-//        ary[0].transform.position = new Vector2(0f, 0f);
+        RectTransform[] btnposition = new RectTransform[10];
+        for(int i=0; i < 10; i++)
+        {
+            btnposition[i] = ary[i].GetComponent<RectTransform>();
+            btnposition[i].localPosition = new Vector3(BtnPos[i, 0], BtnPos[i, 1], BtnPos[i, 2]);
+        }
 
         /*
-        GameObject.Destroy(Btn1);
-        GameObject.Destroy(Btn2);
-        GameObject.Destroy(Btn3);
-        GameObject.Destroy(Btn4);
-        GameObject.Destroy(Btn5);
-        GameObject.Destroy(Btn6);
-        GameObject.Destroy(Btn7);
-        GameObject.Destroy(Btn8);
-        GameObject.Destroy(Btn9);
-        GameObject.Destroy(Btn0);
-        */
+        // Object position can be changed by RectTransform.localPositon
+        // 
+        RectTransform btnpos1;
+        btnpos1 = ary[0].GetComponent<RectTransform>();
+        btnpos1.localPosition = new Vector3( BtnPos[0,0], BtnPos[0,1], BtnPos[0,2]);
 
+        RectTransform btnpos2;
+        btnpos2 = ary[1].GetComponent<RectTransform>();
+        btnpos2.localPosition = new Vector3(BtnPos[1, 0], BtnPos[1, 1], BtnPos[1, 2]);
 
-        Button = Instantiate(ary[0], new Vector3(-80f, 107f, 0), Quaternion.identity);
-        Button.transform.SetParent(drawArea.transform, false);
-
-        Button = Instantiate(ary[1], new Vector3(0, 107, 0), Quaternion.identity);
-        Button.transform.SetParent(drawArea.transform, false);
-
-        Button = Instantiate(ary[2], new Vector3(80, 107, 0), Quaternion.identity);
-        Button.transform.SetParent(drawArea.transform, false);
-
-        Button = Instantiate(ary[3], new Vector3(-80, 44, 0), Quaternion.identity);
-        Button.transform.SetParent(drawArea.transform, false);
-
-        Button = Instantiate(ary[4], new Vector3(0, 44, 0), Quaternion.identity);
-        Button.transform.SetParent(drawArea.transform, false);
-
-        Button = Instantiate(ary[5], new Vector3(80, 44, 0), Quaternion.identity);
-        Button.transform.SetParent(drawArea.transform, false);
-
-        Button = Instantiate(ary[6], new Vector3(-80, 19, 0), Quaternion.identity);
-        Button.transform.SetParent(drawArea.transform, false);
-
-        Button = Instantiate(ary[7], new Vector3(0, 19, 0), Quaternion.identity);
-        Button.transform.SetParent(drawArea.transform, false);
-
-        Button = Instantiate(ary[8], new Vector3(80, 19, 0), Quaternion.identity);
-        Button.transform.SetParent(drawArea.transform, false);
-
-        Button = Instantiate(ary[9], new Vector3(0, -82, 0), Quaternion.identity);
-        Button.transform.SetParent(drawArea.transform, false);
-
-
+        RectTransform btnpos3;
+        btnpos3 = ary[2].GetComponent<RectTransform>();
+        btnpos3.localPosition = new Vector3(BtnPos[2, 0], BtnPos[2, 1], BtnPos[2, 2]);
+        */        
 
 
     }

@@ -240,6 +240,9 @@ public class BrainExSpeedCalculationManagerScript : MonoBehaviour
     private GameObject CommonSFXControllerObject;
     private CommonSFXControllerScript InstanceCommonSFXControllerScript;
 
+    //ChangePanel Script & Object
+    private GameObject BrainExChangePanelManagerObject;
+    private BrainExChangePanelManagerScript InstanceBrainExChangePanelManagerScript;
 
 
     // Start is called before the first frame update
@@ -258,6 +261,10 @@ public class BrainExSpeedCalculationManagerScript : MonoBehaviour
         //共通サウンドオブジェクト＆インスタンス取得
         CommonSFXControllerObject = GameObject.Find("CommonSFXController");
         InstanceCommonSFXControllerScript = CommonSFXControllerObject.GetComponent<CommonSFXControllerScript>();
+
+        //共通サウンドオブジェクト＆インスタンス取得
+        BrainExChangePanelManagerObject = GameObject.Find("BrainExChangePanelManager");
+        InstanceBrainExChangePanelManagerScript = BrainExChangePanelManagerObject.GetComponent<BrainExChangePanelManagerScript>();
 
 
         //ゲームタイトルをランキングにセット
@@ -374,7 +381,11 @@ public class BrainExSpeedCalculationManagerScript : MonoBehaviour
 
 
         //ゲームスタート時の音
-//        InstanceCommonSFXControllerScript.DoSoundSetQuestions();
+        //        InstanceCommonSFXControllerScript.DoSoundSetQuestions();
+
+
+        //スタート時間の記録
+        StartDateTime = DateTime.Now;
 
 
         //本ゲームスタート時のボタン生成
@@ -385,15 +396,7 @@ public class BrainExSpeedCalculationManagerScript : MonoBehaviour
 
     }
 
-
-
-    void ChangePanelFunc()
-    {
-
-
-
-
-    }
+    
 
 
 
@@ -411,8 +414,9 @@ public class BrainExSpeedCalculationManagerScript : MonoBehaviour
         //最初の設問提示
         MakeOneDigitNumericalQuestion();
 
-        //スタート時間の記録
-        StartDateTime = DateTime.Now;
+        //This changes buttons position.
+        InstanceBrainExChangePanelManagerScript.ChangeBtnPositionFunc();
+
 
     }
 

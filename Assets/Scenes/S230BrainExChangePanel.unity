@@ -995,7 +995,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 737346874}
-        m_MethodName: MoveToS223BexSpeedCalculationId3
+        m_MethodName: MoveToS233BexChangePanelId3
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1491,7 +1491,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 737346874}
-        m_MethodName: MoveToS222BexSpeedCalculationId2
+        m_MethodName: MoveToS232BexChangePanelId2
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5424,7 +5424,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 737346874}
-        m_MethodName: MoveToS221BexSpeedCalculationId1
+        m_MethodName: MoveToS231BexChangePanelId1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5869,7 +5869,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2762742749458067365
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6258,7 +6258,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Speed Calculation
+  m_Text: Change Panel
 --- !u!222 &2762742750447385701
 CanvasRenderer:
   m_ObjectHideFlags: 0

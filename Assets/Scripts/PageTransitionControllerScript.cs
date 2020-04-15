@@ -112,7 +112,23 @@ public class PageTransitionControllerScript : MonoBehaviour
 
     }
 
+    public void MoveToS231BexChangePanelId1()
+    {
+        SceneManager.LoadScene("S231BexChangePanelId1");
 
+    }
+
+    public void MoveToS232BexChangePanelId2()
+    {
+        SceneManager.LoadScene("S232BexChangePanelId2");
+
+    }
+
+    public void MoveToS233BexChangePanelId3()
+    {
+        SceneManager.LoadScene("S233BexChangePanelId3");
+
+    }
 
 
 
