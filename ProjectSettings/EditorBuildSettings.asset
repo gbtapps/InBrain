@@ -53,4 +53,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/S231BexChangePanelId1.unity
     guid: 8b84a59a143f1f2458b7c45ca61ebc0d
+  - enabled: 1
+    path: Assets/Scenes/S232BexChangePanelId2.unity
+    guid: e9b15b2ed4c0cf443ab77a7e58830331
+  - enabled: 1
+    path: Assets/Scenes/S233BexChangePanelId3.unity
+    guid: 66815ee34fd9c7b4d95d0f79849fdd76
   m_configObjects: {}

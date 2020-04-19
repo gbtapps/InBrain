@@ -262,10 +262,13 @@ public class BrainExSpeedCalculationManagerScript : MonoBehaviour
         CommonSFXControllerObject = GameObject.Find("CommonSFXController");
         InstanceCommonSFXControllerScript = CommonSFXControllerObject.GetComponent<CommonSFXControllerScript>();
 
-        //共通サウンドオブジェクト＆インスタンス取得
-        BrainExChangePanelManagerObject = GameObject.Find("BrainExChangePanelManager");
-        InstanceBrainExChangePanelManagerScript = BrainExChangePanelManagerObject.GetComponent<BrainExChangePanelManagerScript>();
 
+        if (ChangePanel == true)
+        {
+            //共通サウンドオブジェクト＆インスタンス取得
+            BrainExChangePanelManagerObject = GameObject.Find("BrainExChangePanelManager");
+            InstanceBrainExChangePanelManagerScript = BrainExChangePanelManagerObject.GetComponent<BrainExChangePanelManagerScript>();
+        }
 
         //ゲームタイトルをランキングにセット
         InstanceCommonGameCanvasManagerScript.SetThisGameTitleText(GameTitleString);
@@ -414,9 +417,11 @@ public class BrainExSpeedCalculationManagerScript : MonoBehaviour
         //最初の設問提示
         MakeOneDigitNumericalQuestion();
 
-        //This changes buttons position.
-        InstanceBrainExChangePanelManagerScript.ChangeBtnPositionFunc();
-
+        if (ChangePanel == true)
+        {
+            //This changes buttons position.
+            InstanceBrainExChangePanelManagerScript.ChangeBtnPositionFunc();
+        }
 
     }
 
@@ -653,21 +658,27 @@ public class BrainExSpeedCalculationManagerScript : MonoBehaviour
             if (FirstMemberMaxValue == 0 || SecondMemberMaxValue == 0)
             {
 
-                Debug.Log("FirstMemberRange == 0 || SecondMemberRange == 0 is true");
+                Debug.Log("FirstMemberMaxValue == 0 || SecondMemberMaxValue == 0 is true");
                 FirstMember = UnityEngine.Random.Range(0, AnswerRange);
                 SecondMember = UnityEngine.Random.Range(0, AnswerRange);
 
             }
             else
             {
-                Debug.Log("FirstMemberRange == 0 || SecondMemberRange == 0 is false");
+                Debug.Log("FirstMemberMaxValue == 0 || SecondMemberMaxValue == 0 is false");
                 FirstMember = UnityEngine.Random.Range(0, FirstMemberMaxValue);
                 SecondMember = UnityEngine.Random.Range(0, SecondMemberMaxValue);
 
             }
 
 
-            if (UnityEngine.Random.Range(0,1) == 0)
+            int plusorminus = UnityEngine.Random.Range(0, 10);
+            Debug.Log("plusorminus: " + plusorminus);
+            plusorminus %= 2; 
+            Debug.Log("plusorminus %=2: " + plusorminus);
+
+//            if (UnityEngine.Random.Range(0,1) == 0)
+            if (plusorminus == 0)
             {
                 //引算
                 FormulaText.text = FirstMember + " - " + SecondMember + " = □";                
@@ -680,6 +691,9 @@ public class BrainExSpeedCalculationManagerScript : MonoBehaviour
                 FormulaText.text = FirstMember + " + " + SecondMember + " = □";
                 Answer = FirstMember + SecondMember;
             }
+
+            Debug.Log(FormulaText.text);
+
 
         }
 

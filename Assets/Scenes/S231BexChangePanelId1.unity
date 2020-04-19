@@ -265,7 +265,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &159910278
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -330,28 +330,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &228062742
+--- !u!1 &228062742 stripped
 GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 6412369405271457092, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+    type: 3}
+  m_PrefabInstance: {fileID: 6412369405180529490}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 228062744}
-  - component: {fileID: 228062743}
-  m_Layer: 0
-  m_Name: BrainExSpeedCalculationManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &228062743
+--- !u!114 &228062743 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 6412369405271457093, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+    type: 3}
+  m_PrefabInstance: {fileID: 6412369405180529490}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 228062742}
   m_Enabled: 1
@@ -359,46 +348,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb44c907e672e8f47b1dfafac3dbf172, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DebugText: {fileID: 1166803255}
-  GameTitleString: Speed Calculation
-  GameDescription: "\u3010Speed Touch\u3011You top the button to answer correctly
-    as quick as you can within the time limit."
-  ScoreKeyName: SpeedCalculationId7
-  GameGroupName: S220SpeedCalculation
-  ChangePanel: 1
-  Answerdigit: 1
-  FirstMemberMaxValue: 9
-  SecondMemberMaxValue: 9
-  SecondsForReady: 5
-  GameSeconds: 30
-  NextQuestionTimeMargin: 0.5
-  QuickResponseBonusTime: 0.5
-  RestTimeText: {fileID: 1684863336}
-  ElapsedSecondsCount: 0
-  DeltaTimeCount: 0
-  CountdownPanel: {fileID: 458394523}
-  CountdownText: {fileID: 458394522}
-  TimeupPanel: {fileID: 2021710672}
-  AnswerByButton: {fileID: 2102777028}
-  Score: {fileID: 2021710673}
-  AnswerText: {fileID: 573931801}
-  FormulaText: {fileID: 1049753731}
-  CorrectAnswerMark: {fileID: 1650244915}
-  WrongAnswerMark: {fileID: 1520401355}
---- !u!4 &228062744
+--- !u!4 &228062744 stripped
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 6412369405271457098, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+    type: 3}
+  m_PrefabInstance: {fileID: 6412369405180529490}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 228062742}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 180, y: 250, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &272148345
 GameObject:
   m_ObjectHideFlags: 0
@@ -1793,28 +1748,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 897400191}
   m_CullTransparentMesh: 0
---- !u!1 &955510983
+--- !u!1 &955510983 stripped
 GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 2346711985847738752, guid: 6431b2390d828354fa8c8586b5f67370,
+    type: 3}
+  m_PrefabInstance: {fileID: 2346711985710223687}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 955510985}
-  - component: {fileID: 955510984}
-  m_Layer: 0
-  m_Name: BrainExChangePanelManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &955510984
+--- !u!114 &955510984 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 2346711985847738767, guid: 6431b2390d828354fa8c8586b5f67370,
+    type: 3}
+  m_PrefabInstance: {fileID: 2346711985710223687}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 955510983}
   m_Enabled: 1
@@ -1822,31 +1766,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bd87c61062902949949c3149976802e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Btn1: {fileID: 2057855956}
-  Btn2: {fileID: 1818494606}
-  Btn3: {fileID: 479955794}
-  Btn4: {fileID: 738831657}
-  Btn5: {fileID: 272148345}
-  Btn6: {fileID: 387022836}
-  Btn7: {fileID: 41014547}
-  Btn8: {fileID: 681902385}
-  Btn9: {fileID: 1241235961}
-  Btn0: {fileID: 513171961}
-  drawArea: {fileID: 419409213}
---- !u!4 &955510985
+--- !u!4 &955510985 stripped
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 2346711985847738766, guid: 6431b2390d828354fa8c8586b5f67370,
+    type: 3}
+  m_PrefabInstance: {fileID: 2346711985710223687}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 955510983}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 169.702, y: 227.61955, z: -0.09375}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1049753730
 GameObject:
   m_ObjectHideFlags: 0
@@ -2013,7 +1938,7 @@ PrefabInstance:
     - target: {fileID: 2092158403014878868, guid: 292befdfd81d6e54db72078e1968f866,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6162655732359654736, guid: 292befdfd81d6e54db72078e1968f866,
         type: 3}
@@ -16889,3 +16814,273 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2127915966}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2346711985710223687
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2346711985847738752, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: m_Name
+      value: BrainExChangePanelManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346711985847738766, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 169.702
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346711985847738766, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 227.61955
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346711985847738766, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.09375
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346711985847738766, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346711985847738766, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346711985847738766, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346711985847738766, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346711985847738766, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346711985847738766, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346711985847738766, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346711985847738766, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346711985847738767, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: Btn1
+      value: 
+      objectReference: {fileID: 2057855956}
+    - target: {fileID: 2346711985847738767, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: Btn2
+      value: 
+      objectReference: {fileID: 1818494606}
+    - target: {fileID: 2346711985847738767, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: Btn3
+      value: 
+      objectReference: {fileID: 479955794}
+    - target: {fileID: 2346711985847738767, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: Btn4
+      value: 
+      objectReference: {fileID: 738831657}
+    - target: {fileID: 2346711985847738767, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: Btn5
+      value: 
+      objectReference: {fileID: 272148345}
+    - target: {fileID: 2346711985847738767, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: Btn6
+      value: 
+      objectReference: {fileID: 387022836}
+    - target: {fileID: 2346711985847738767, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: Btn7
+      value: 
+      objectReference: {fileID: 41014547}
+    - target: {fileID: 2346711985847738767, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: Btn8
+      value: 
+      objectReference: {fileID: 681902385}
+    - target: {fileID: 2346711985847738767, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: Btn9
+      value: 
+      objectReference: {fileID: 1241235961}
+    - target: {fileID: 2346711985847738767, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: Btn0
+      value: 
+      objectReference: {fileID: 513171961}
+    - target: {fileID: 2346711985847738767, guid: 6431b2390d828354fa8c8586b5f67370,
+        type: 3}
+      propertyPath: drawArea
+      value: 
+      objectReference: {fileID: 419409213}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6431b2390d828354fa8c8586b5f67370, type: 3}
+--- !u!1001 &6412369405180529490
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6412369405271457092, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: m_Name
+      value: BrainExSpeedCalculationManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 6412369405271457093, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: DebugText
+      value: 
+      objectReference: {fileID: 1166803255}
+    - target: {fileID: 6412369405271457093, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: RestTimeText
+      value: 
+      objectReference: {fileID: 1684863336}
+    - target: {fileID: 6412369405271457093, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: CountdownPanel
+      value: 
+      objectReference: {fileID: 458394523}
+    - target: {fileID: 6412369405271457093, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: CountdownText
+      value: 
+      objectReference: {fileID: 458394522}
+    - target: {fileID: 6412369405271457093, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: TimeupPanel
+      value: 
+      objectReference: {fileID: 2021710672}
+    - target: {fileID: 6412369405271457093, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: AnswerByButton
+      value: 
+      objectReference: {fileID: 2102777028}
+    - target: {fileID: 6412369405271457093, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: Score
+      value: 
+      objectReference: {fileID: 2021710673}
+    - target: {fileID: 6412369405271457093, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: AnswerText
+      value: 
+      objectReference: {fileID: 573931801}
+    - target: {fileID: 6412369405271457093, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: FormulaText
+      value: 
+      objectReference: {fileID: 1049753731}
+    - target: {fileID: 6412369405271457093, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: CorrectAnswerMark
+      value: 
+      objectReference: {fileID: 1650244915}
+    - target: {fileID: 6412369405271457093, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: WrongAnswerMark
+      value: 
+      objectReference: {fileID: 1520401355}
+    - target: {fileID: 6412369405271457093, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: GameTitleString
+      value: Change Panel
+      objectReference: {fileID: 0}
+    - target: {fileID: 6412369405271457093, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: ScoreKeyName
+      value: ChangePanelId1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6412369405271457093, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: GameGroupName
+      value: S230BrainExChangePanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 6412369405271457093, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: GameDescription
+      value: "\u3010Change Panel\u3011You top the button to answer correctly with
+        the buttons changes each position every answer as quick as you can within
+        the time limit."
+      objectReference: {fileID: 0}
+    - target: {fileID: 6412369405271457098, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 6412369405271457098, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 6412369405271457098, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6412369405271457098, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6412369405271457098, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6412369405271457098, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6412369405271457098, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6412369405271457098, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6412369405271457098, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6412369405271457098, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6412369405271457098, guid: e2e3b148a5e334f4fbafa6dfd64b38f1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e2e3b148a5e334f4fbafa6dfd64b38f1, type: 3}

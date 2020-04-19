@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6412369405271457092
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6412369405271457098}
+  - component: {fileID: 6412369405271457093}
+  m_Layer: 0
+  m_Name: BrainExSpeedCalculationManager 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6412369405271457098
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6412369405271457092}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 180, y: 250, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6412369405271457093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6412369405271457092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb44c907e672e8f47b1dfafac3dbf172, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DebugText: {fileID: 0}
+  GameTitleString: Speed Calculation
+  GameDescription: "\u3010Speed Touch\u3011You top the button to answer correctly
+    as quick as you can within the time limit."
+  ScoreKeyName: SpeedCalculationId7
+  GameGroupName: S220SpeedCalculation
+  ChangePanel: 1
+  Answerdigit: 1
+  FirstMemberMaxValue: 9
+  SecondMemberMaxValue: 9
+  SecondsForReady: 5
+  GameSeconds: 30
+  NextQuestionTimeMargin: 0.5
+  QuickResponseBonusTime: 0.5
+  RestTimeText: {fileID: 0}
+  ElapsedSecondsCount: 0
+  DeltaTimeCount: 0
+  CountdownPanel: {fileID: 0}
+  CountdownText: {fileID: 0}
+  TimeupPanel: {fileID: 0}
+  AnswerByButton: {fileID: 0}
+  Score: {fileID: 0}
+  AnswerText: {fileID: 0}
+  FormulaText: {fileID: 0}
+  CorrectAnswerMark: {fileID: 0}
+  WrongAnswerMark: {fileID: 0}
