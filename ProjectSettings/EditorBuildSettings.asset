@@ -6,6 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/S010SignIn.unity
+    guid: 152ddb0fd60a696419ca290f0b364dfa
+  - enabled: 1
+    path: Assets/Scenes/S020SignUp.unity
+    guid: 14374490f88139245bcebb1dfa1dcc71
+  - enabled: 1
+    path: Assets/Scenes/S100Home.unity
+    guid: 3f113a4399ea5ec4e91c7fad992a1142
+  - enabled: 1
     path: Assets/Scenes/S200BrainExMenu.unity
     guid: c735a566290dc1c469253cf66caf9c41
   - enabled: 1
@@ -23,6 +32,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/S214BexSpeedTouchId4.unity
     guid: 433eaaa02da4b9f41a608551d7862106
+  - enabled: 1
+    path: Assets/Scenes/S214BexSpeedTouchId5.unity
+    guid: 1c48753afe1d70c47874b95384a09f47
   - enabled: 1
     path: Assets/Scenes/S220BrainExSpeedCalculation.unity
     guid: 29a4b4b2b6d3aa0439c5fa067b37e92a
@@ -59,4 +71,43 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/S233BexChangePanelId3.unity
     guid: 66815ee34fd9c7b4d95d0f79849fdd76
+  - enabled: 1
+    path: Assets/Scenes/S300Info.unity
+    guid: f4d061f06da48444b9e8e78f4bc7b26f
+  - enabled: 1
+    path: Assets/Scenes/S400MyPage.unity
+    guid: f7e92a23d7d400649ba91af725159785
+  - enabled: 1
+    path: Assets/Scenes/S500NoticeBrainAnalysis.unity
+    guid: 7295f76364ea3ef4e9beb7e6196c2aa2
+  - enabled: 1
+    path: Assets/Scenes/S510ConnectingSensor.unity
+    guid: b3d65fa25d2bbdc4580615fedc6bffe7
+  - enabled: 1
+    path: Assets/Scenes/S521Interval1.unity
+    guid: b0c90af97f391484d8ce6804a492431a
+  - enabled: 1
+    path: Assets/Scenes/S522Test1.unity
+    guid: 28a1e1997d4221249926cfda56062fc4
+  - enabled: 1
+    path: Assets/Scenes/S523Interval2.unity
+    guid: d311fa75653d86a439371008d08e3aa2
+  - enabled: 1
+    path: Assets/Scenes/S524Test2.unity
+    guid: ae1ad10ad3dc65b4b9e71afac72cdc63
+  - enabled: 1
+    path: Assets/Scenes/S525Interval3.unity
+    guid: 95893760449f15242ada60385e0783df
+  - enabled: 1
+    path: Assets/Scenes/S526TestResultSummary.unity
+    guid: ea8f9280745f2014d995d520db833074
+  - enabled: 1
+    path: Assets/Scenes/S527TestResultSpeed.unity
+    guid: 6b209c5876e1d8b43a428e9519c96a59
+  - enabled: 1
+    path: Assets/Scenes/S528TestResultAttention.unity
+    guid: 7cabf50d708682b48812909530a13a86
+  - enabled: 1
+    path: Assets/Scenes/S529TestResultBrain.unity
+    guid: 58ddcc44d3a6e7c4fbde5c3878a4a161
   m_configObjects: {}

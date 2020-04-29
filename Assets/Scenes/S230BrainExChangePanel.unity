@@ -5815,7 +5815,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2762742749106854621}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 737346874}
+        m_MethodName: MoveToS233BexChangePanelId3
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2762742749106854621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5869,7 +5880,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2762742749458067365
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6143,8 +6154,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 344996427}
-        m_MethodName: MoveToS221BexSpeedCalculationId1
+      - m_Target: {fileID: 737346874}
+        m_MethodName: MoveToS231BexChangePanelId1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6420,7 +6431,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2762742750912484951}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 737346874}
+        m_MethodName: MoveToS232BexChangePanelId2
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2762742750912484951
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -20,7 +20,7 @@ public class S400MypageControllerScript : MonoBehaviour
     void Start()
     {
 
-        CloseAllPanel();
+//        CloseAllPanel();
 
 
     }
