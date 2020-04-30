@@ -103,7 +103,12 @@ public class RealTimeBrainActivityScript : MonoBehaviour
             //float sin = Mathf.Sin(Time.time);
             //currentBrainActivityValue = (sin + 1.0f) * 50;
 
-            textvalue.text = Hot2gApplication.Instance.mode.ToString()+" ("+Hot2gApplication.Instance.datastore.l1Ac.Count+")";
+
+            //moritomi
+//            textvalue.text = Hot2gApplication.Instance.mode.ToString()+" ("+Hot2gApplication.Instance.datastore.l1Ac.Count+")";
+
+            
+            
             //Debug.Log("RTB: "+)
             /*+
             " ]/[ " + Hot2gApplication.Instance.datastore.stability[Hot2gApplication.Instance.datastore.stability.Count - 1] +
@@ -111,7 +116,7 @@ public class RealTimeBrainActivityScript : MonoBehaviour
             " ]/[Raw 1: " + Hot2gApplication.Instance.datastore.l1Ac[Hot2gApplication.Instance.datastore.l1Ac.Count - 1]
             ;*/
 
-
+            /* moritomi
             if (Hot2gApplication.Instance.datastore.l1Ac.Count > 10)
             {
                 currentBrainActivityValue =
@@ -119,6 +124,9 @@ public class RealTimeBrainActivityScript : MonoBehaviour
                   //Mathf.Abs((float)Hot2gApplication.Instance.datastore.l1Ac.GetRange(Hot2gApplication.Instance.datastore.left.Count - 1, 9).Average() * 20);
                 textvalue.text = currentBrainActivityValue.ToString();
             }           
+            */
+
+
 
 //            Debug.Log("currentBrainActivityValue" + currentBrainActivityValue);
 
