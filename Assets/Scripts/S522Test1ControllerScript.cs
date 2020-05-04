@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 
@@ -8,12 +9,16 @@ public class S522Test1ControllerScript : MonoBehaviour
 {
 
     public float DeltaTimeCount = 0f;
-    public int CountdownInt;
+    [SerializeField] int CountdownInt;
+    [SerializeField] string ActiveSceneName;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
+        ActiveSceneName = SceneManager.GetActiveScene().name;
+
     }
 
 
@@ -21,10 +26,15 @@ public class S522Test1ControllerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(ActiveSceneName+" Update()");
+        Debug.Log(CountdownInt + " =CountDownInt");
+
+
         ////////////////////////////
         //1秒毎に処理させるここから
         //
         DeltaTimeCount += Time.deltaTime;
+        Debug.Log(DeltaTimeCount + " =DeltaTimeCount");
 
         if (DeltaTimeCount >= 1.0f)
         {
@@ -36,7 +46,20 @@ public class S522Test1ControllerScript : MonoBehaviour
 
             if (CountdownInt == 0)
             {
-                MoveToS523Interval2();
+
+                if (ActiveSceneName == "")
+                {
+
+
+                }
+                else
+                {
+                    MoveToS523Interval2();
+
+                }
+
+
+
             }
 
 
@@ -52,7 +75,6 @@ public class S522Test1ControllerScript : MonoBehaviour
     {
         SceneManager.LoadScene("S523Interval2");
     }
-
 
 
 

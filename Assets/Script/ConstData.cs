@@ -33,7 +33,15 @@ public class ConstData : MonoBehaviour
 
         Tr_TraningSetting,
 
+        // added by moritomi
+        Tr_TraningSetting2nd,
+        Tr_TraningSetting3rd,
+
         Tr_TrainingNeuro,
+
+        // added by moritomi
+        Tr_TrainingNeuro2nd,
+
         Tr_TrainingHeartRate,
         Tr_TrainingBreath,
 

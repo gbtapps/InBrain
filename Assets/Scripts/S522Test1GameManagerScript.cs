@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.SceneManagement;
 
 //StringBuilder用
 using System.Text;
@@ -15,6 +16,9 @@ public class S522Test1GameManagerScript : MonoBehaviour
     public GameObject touches = null;
     public GameObject corrects = null;
     public GameObject wrongs = null;
+
+    [SerializeField] Text ActiveSceneName;
+
 
 
     //複製対象ボタン
@@ -504,8 +508,17 @@ public class S522Test1GameManagerScript : MonoBehaviour
     void Start()
     {
 
-        //TMT1TouchMnagerの機能を使う
-        TMT1TouchManager = GameObject.Find("TMT1TouchManager");
+
+
+
+
+
+        ActiveSceneName.text = SceneManager.GetActiveScene().name;
+
+
+
+    //TMT1TouchMnagerの機能を使う
+    TMT1TouchManager = GameObject.Find("TMT1TouchManager");
         InstanceTMT1TouchManagerScript = TMT1TouchManager.GetComponent<TMT1TouchManagerScript>();
 
 

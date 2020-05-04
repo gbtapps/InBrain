@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//added by moritomi
+using UnityEngine.SceneManagement;
+
+
 public class Tr_TraningSetting : SceneBase
 {
     //実行するトレーニング
@@ -18,7 +22,6 @@ public class Tr_TraningSetting : SceneBase
         {
             CommonData.resultType = (int)R_ResultLog.ContentType.Neuro;
         }
-
 
     }
 
@@ -61,12 +64,25 @@ public class Tr_TraningSetting : SceneBase
 
     }
 
+
+
     /* added by moritomi from here*/
+
     // Parameters
     int CountTime;
     float SumDeltTime;
-    int IntervalSeconds = 5;
+    [SerializeField] int IntervalSeconds = 5;
     [SerializeField] Text CountDownText;
+    string ActiveSceneName;
+
+    //実行するトレーニング追加
+    static ConstData.EnumScene playTraining2nd;
+
+    private void Awake()
+    {
+        ActiveSceneName = SceneManager.GetActiveScene().name;
+
+    }
 
     // 10 seconds count down and start the function of change scene on the count of zero. 
     private void UpdateCountDownAndStartTest()
@@ -84,32 +100,51 @@ public class Tr_TraningSetting : SceneBase
 
             if (IntervalSeconds == 0)
             {
-                Debug.Log("Zero");
-                SceneFunc.ChangeScene(playTraining, false);
 
+
+
+                Debug.Log("Zero");
+
+                if (ActiveSceneName== "Tr_TraningSetting")
+                {
+                    SceneFunc.ChangeScene(playTraining, false);
+
+                }
+                else if (ActiveSceneName == "Tr_TraningSetting2nd")
+                {
+                    SceneFunc.ChangeScene(playTraining2nd, false);
+
+                }
+                else if (ActiveSceneName == "Tr_TraningSetting3rd")
+                {
+
+                    SceneManager.LoadScene("S526TestResultSummary");
+
+                }
 
             }
         }
 
+    }
 
-        /*
-        if(CountTime % 1 == 0)
+
+    public static void SetPlayTraining2nd(ConstData.EnumScene _playTraining2nd)
+    {
+        playTraining2nd = _playTraining2nd;
+
+        if (_playTraining2nd == ConstData.EnumScene.Tr_TrainingNeuro2nd)
         {
-            Debug.Log(CountTime);
-
+            CommonData.resultType = (int)R_ResultLog.ContentType.Neuro;
         }
-        */
-
-
-        /*
-        for (int i=MAXCOUNT; i>-1; i--)
-        {
-            
-        }
-        */
-
 
     }
+
+
+    public static ConstData.EnumScene GetPlaytraining2nd()
+    {
+        return playTraining2nd;
+    }
+
 
     /* added by moritomi until here*/
 
