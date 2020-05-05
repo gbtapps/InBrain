@@ -16,6 +16,9 @@ public class Tr_TraningSetting : SceneBase
 
     public static void SetPlayTraining(ConstData.EnumScene _playTraining)
     {
+
+        Debug.Log("SetPlayTraining");
+
         playTraining = _playTraining;
 
         if(_playTraining == ConstData.EnumScene.Tr_TrainingNeuro)
@@ -28,6 +31,8 @@ public class Tr_TraningSetting : SceneBase
 
     public static ConstData.EnumScene GetPlaytraining()
     {
+        Debug.Log("GetPlayTraining");
+
         return playTraining;
     }
 
@@ -107,11 +112,18 @@ public class Tr_TraningSetting : SceneBase
 
                 if (ActiveSceneName== "Tr_TraningSetting")
                 {
+
+                    Tr_TraningSetting.SetPlayTraining(ConstData.EnumScene.Tr_TrainingNeuro);
                     SceneFunc.ChangeScene(playTraining, false);
+
 
                 }
                 else if (ActiveSceneName == "Tr_TraningSetting2nd")
                 {
+                    Debug.Log("ActiveSceneName == Tr_TraningSetting2nd");
+                    Tr_TraningSetting.SetPlayTraining2nd(ConstData.EnumScene.Tr_TrainingNeuro2nd);
+
+                    Debug.Log("Before SceneFunc.ChangeScene(playTraining2nd, false)");
                     SceneFunc.ChangeScene(playTraining2nd, false);
 
                 }
@@ -130,18 +142,34 @@ public class Tr_TraningSetting : SceneBase
 
     public static void SetPlayTraining2nd(ConstData.EnumScene _playTraining2nd)
     {
+
+        Debug.Log("Called SetPlayTraining2nd");
         playTraining2nd = _playTraining2nd;
+
+        Debug.Log("Before _playTraining2nd == ConstData.EnumScene.Tr_TrainingNeuro2nd");
 
         if (_playTraining2nd == ConstData.EnumScene.Tr_TrainingNeuro2nd)
         {
+            Debug.Log("_playTraining2nd == ConstData.EnumScene.Tr_TrainingNeuro2nd");
+
             CommonData.resultType = (int)R_ResultLog.ContentType.Neuro;
         }
+
+
+        Debug.Log("_playTraining2nd == ConstData.EnumScene.Tr_TrainingNeuro2nd is false");
+
 
     }
 
 
+
+
+
+
     public static ConstData.EnumScene GetPlaytraining2nd()
     {
+        Debug.Log("GetPlayTraining2nd");
+
         return playTraining2nd;
     }
 

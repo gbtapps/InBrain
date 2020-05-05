@@ -116,7 +116,28 @@ public class ConstData : MonoBehaviour
             false
             )
         },
+        { EnumScene.Tr_TraningSetting2nd,new HeaderData(
+            "トレーニング時間",
+            EnumHeaderButton.Close,
+            EnumHeaderAlign.Left,
+            false
+            )
+        },
+        { EnumScene.Tr_TraningSetting3rd,new HeaderData(
+            "トレーニング時間",
+            EnumHeaderButton.Close,
+            EnumHeaderAlign.Left,
+            false
+            )
+        },
         { EnumScene.Tr_TrainingNeuro,new HeaderData(
+            "ブレインコントロール",
+            EnumHeaderButton.Close,
+            EnumHeaderAlign.Left,
+            false
+            )
+        },
+        { EnumScene.Tr_TrainingNeuro2nd,new HeaderData(
             "ブレインコントロール",
             EnumHeaderButton.Close,
             EnumHeaderAlign.Left,

@@ -26,15 +26,15 @@ public class S522Test1ControllerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(ActiveSceneName+" Update()");
-        Debug.Log(CountdownInt + " =CountDownInt");
+//        Debug.Log(ActiveSceneName+" Update()");
+//        Debug.Log(CountdownInt + " =CountDownInt");
 
 
         ////////////////////////////
         //1秒毎に処理させるここから
         //
         DeltaTimeCount += Time.deltaTime;
-        Debug.Log(DeltaTimeCount + " =DeltaTimeCount");
+//        Debug.Log(DeltaTimeCount + " =DeltaTimeCount");
 
         if (DeltaTimeCount >= 1.0f)
         {
@@ -47,9 +47,16 @@ public class S522Test1ControllerScript : MonoBehaviour
             if (CountdownInt == 0)
             {
 
-                if (ActiveSceneName == "")
+                if (ActiveSceneName == "Tr_TrainingNeuro")
                 {
+                    Debug.Log("SceneManager.LoadScene>Tr_TraningSetting2nd");
+                    SceneManager.LoadScene("Tr_TraningSetting2nd");
 
+                }
+                else if (ActiveSceneName == "Tr_TrainingNeuro2nd")
+                {
+                    Debug.Log("SceneManager.LoadScene>Tr_TraningSetting2nd");
+                    SceneManager.LoadScene("Tr_TraningSetting3rd");
 
                 }
                 else

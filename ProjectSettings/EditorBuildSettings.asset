@@ -18,8 +18,8 @@ EditorBuildSettings:
     path: Assets/Scenes/MFN/Tr_TraningSetting.unity
     guid: 787ed3308252d504abf5ef6f4f859b9e
   - enabled: 1
-    path: Assets/Scenes/MFN/BK_Tr_TraningSetting2nd.unity
-    guid: 61c158d0e7fcdfc46898f3c3bfd076ec
+    path: Assets/Scenes/MFN/Tr_TraningSetting2nd.unity
+    guid: 00130b52df86aab41974a0c4e6b179b2
   - enabled: 1
     path: Assets/Scenes/MFN/Tr_TraningSetting3rd.unity
     guid: 0b27dcf9e74f9f449a1fa2831da1a639
