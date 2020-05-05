@@ -152,8 +152,9 @@ public class PageTransitionControllerScript : MonoBehaviour
 
     public void MoveToS510ConnectingSensor()
     {
-        SceneManager.LoadScene("S510ConnectingSensor");
-
+//        SceneManager.LoadScene("S510ConnectingSensor");
+        
+        SceneManager.LoadScene("T_TitleSelect");
     }
 
     public void MoveToS500NoticeBrainAnalysis()

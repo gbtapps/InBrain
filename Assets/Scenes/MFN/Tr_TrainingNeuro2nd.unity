@@ -1634,7 +1634,7 @@ PrefabInstance:
     - target: {fileID: 4062956970190086083, guid: 74d64ec5606e1004ea50c341f143ed45,
         type: 3}
       propertyPath: CountdownInt
-      value: 10
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 4062956970190086084, guid: 74d64ec5606e1004ea50c341f143ed45,
         type: 3}
