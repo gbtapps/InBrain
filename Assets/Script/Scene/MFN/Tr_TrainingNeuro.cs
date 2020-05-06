@@ -139,7 +139,10 @@ public class Tr_TrainingNeuro : SceneBase
 
 
         //デルタタイムで5秒経過した処理
-        if (cnt >= 5)
+        //        if (cnt >= 5)
+
+        //デルタタイムで2秒経過した処理
+        if (cnt >= 2)
         {
 
             cntValue.text = cnt.ToString();

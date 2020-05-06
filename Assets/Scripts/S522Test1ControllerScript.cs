@@ -17,7 +17,9 @@ public class S522Test1ControllerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("NeuroExecTest:Start()");
         ActiveSceneName = SceneManager.GetActiveScene().name;
+        Debug.Log(ActiveSceneName+ " :ActiveSceneName");
 
     }
 
@@ -26,8 +28,10 @@ public class S522Test1ControllerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-//        Debug.Log(ActiveSceneName+" Update()");
-//        Debug.Log(CountdownInt + " =CountDownInt");
+
+//        Debug.Log("NeuroExecTest:Update()");
+        //        Debug.Log(ActiveSceneName+" Update()");
+        //        Debug.Log(CountdownInt + " =CountDownInt");
 
 
         ////////////////////////////
@@ -46,6 +50,9 @@ public class S522Test1ControllerScript : MonoBehaviour
 
             if (CountdownInt == 0)
             {
+
+                Debug.Log(CountdownInt + " :CountdownInt");
+
 
                 if (ActiveSceneName == "Tr_TrainingNeuro")
                 {

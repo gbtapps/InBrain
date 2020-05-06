@@ -2051,7 +2051,6 @@ MonoBehaviour:
     - Assembly-CSharp
     - Assembly-CSharp-firstpass
     showAdvancedSettings: 0
-  autoSaves: []
 --- !u!114 &256589204
 MonoBehaviour:
   m_ObjectHideFlags: 0
