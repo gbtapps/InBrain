@@ -30,10 +30,26 @@ public class Tr_TrainingNeuro : SceneBase
     Timer timer;
     */
 
+
+
+    int level = 0;
+    bool firstStart = true;
+
+
     //--------------------------------------------------------
     //脳波関連
     float debugXbValue = 0.2f; //よくわからんので仮脳波
     float avgXbValue = 0.2f;
+
+
+
+    /************************************************************************************/
+    //added by moritomi from here
+
+    //現在脳血流
+    float xbValue;
+    //現在脳血流と平均との差分
+    float _length;
 
 
     //タイムマネジメント
@@ -43,17 +59,32 @@ public class Tr_TrainingNeuro : SceneBase
 
     //取得データマネジメント
     List<float> BloodFlows = new List<float>();
-        //デバッグ
+    //デバッグ
     [SerializeField] Text DataCount;
     [SerializeField] Text BrainFlow;
     [SerializeField] Text XbValue;
     [SerializeField] Text AvgXbValue;
 
-    int level = 0;
-    bool firstStart = true;
 
+    // Chart making
+    const int BRAIN_VALUES_COUNT = 300;
+    [SerializeField] GameObject BrainValueBackgroudImage;
+    [SerializeField] GameObject target;
+    GameObject[] BrainValueColumnArray = new GameObject[BRAIN_VALUES_COUNT];
 
+    //Values
+    List<float> BrainValueList = new List<float>();
 
+    // Time controll
+    float SumDeltatime;
+    int p = 0;
+
+    // Debug
+    [SerializeField] Text BrainValueText;
+    [SerializeField] Text TestValueText;
+
+    //added by moritomi until here
+    /**********************************************************************/
 
 
     void Start()
@@ -80,6 +111,9 @@ public class Tr_TrainingNeuro : SceneBase
 
     private void Update()
     {
+
+        //added by moritomi
+        UpdateChart();
 
         switch (state)
         {
@@ -133,7 +167,7 @@ public class Tr_TrainingNeuro : SceneBase
         else//- NOT On the head
         {
             cnt = 0;//- counter reset because of unstable situation
-            
+
 
         }
 
@@ -141,7 +175,7 @@ public class Tr_TrainingNeuro : SceneBase
         //デルタタイムで5秒経過した処理
         //        if (cnt >= 5)
 
-        //デルタタイムで2秒経過した処理
+        //5秒は長いので2秒にした
         if (cnt >= 2)
         {
 
@@ -167,6 +201,11 @@ public class Tr_TrainingNeuro : SceneBase
     }
 
 
+    public float GetBrainValue()
+    {
+        return _length;
+    }
+
 
     void UpdateMove()
     {
@@ -178,10 +217,14 @@ public class Tr_TrainingNeuro : SceneBase
         {
             cnt = 0;
 
-            float xbValue = GetXBValue();
-            float _length = xbValue - avgXbValue;
+            //他の関数で変数値を使用したいためフィールド変数にした
+            //            float xbValue = GetXBValue();
+            //            float _length = xbValue - avgXbValue;
 
-            XbValue.text += xbValue.ToString()+"\n";
+            xbValue = GetXBValue();
+            _length = xbValue - avgXbValue;
+
+            XbValue.text += xbValue.ToString() + "\n";
             AvgXbValue.text += avgXbValue.ToString() + "\n";
 
 
@@ -215,7 +258,7 @@ public class Tr_TrainingNeuro : SceneBase
 
 
 
-            float GetXBValue()
+    float GetXBValue()
     {
 #if !BLUE_DEBUG
 
@@ -240,7 +283,66 @@ public class Tr_TrainingNeuro : SceneBase
         return _value;
     }
 
-    
+
+
+    void UpdateChart()
+    {
+
+
+        //        BrainValueText.text = bvalue.ToString()+"\n"+BrainValueText.text;
+
+
+
+
+        // Do once a second
+        SumDeltatime += Time.deltaTime;
+        if (SumDeltatime > 0.1f)
+        {
+
+            //            float bvalue = _Tr_TrainingNeuro._length;
+            //            BrainValueText.text = bvalue.ToString() + "\n" + BrainValueText.text;
+
+            float sin = Mathf.Sin(Time.time);
+            BrainValueList.Add(sin * 50 + 50);
+            TestValueText.text = (sin * 50 + 50).ToString() + "\n" + TestValueText.text;
+
+
+
+
+            if (p < BRAIN_VALUES_COUNT)
+            {
+
+                BrainValueColumnArray[p] = Instantiate(target, new Vector3(p + 30, 0, 0), Quaternion.identity);
+                BrainValueColumnArray[p].GetComponent<RectTransform>().sizeDelta = new Vector2(1, BrainValueList[p]);
+                BrainValueColumnArray[p].transform.SetParent(BrainValueBackgroudImage.transform, false);
+            }
+            else
+            {
+
+                for (int i = 0; i < BRAIN_VALUES_COUNT - 1; i++)
+                {
+                    BrainValueColumnArray[i].GetComponent<RectTransform>().sizeDelta = BrainValueColumnArray[i + 1].GetComponent<RectTransform>().sizeDelta;
+                }
+                BrainValueColumnArray[BRAIN_VALUES_COUNT - 1].GetComponent<RectTransform>().sizeDelta = new Vector2(1, BrainValueList[p]);
+
+                //                Debug.Log(BrainValueArray);
+
+
+            }
+
+
+
+
+            SumDeltatime = 0;
+            p++;
+
+            Debug.Log(p + " :p");
+
+        }
+
+
+    }
+
 
 
 

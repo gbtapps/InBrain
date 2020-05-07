@@ -7,7 +7,10 @@ public class T_TitleSelect : SceneBase
 {
     ExButton btnNeuro;          //ニューロフィードバック
 
-//    Image imgBrainMeter;
+    //added by moritomi
+    ExButton btnNeuroTest;          //ニューロフィードバック
+
+    //    Image imgBrainMeter;
 
     Button btnBlueTooth;
 
@@ -28,6 +31,10 @@ public class T_TitleSelect : SceneBase
         //ニューロフィードバック
         btnNeuro = gameObject.FindDescendant("btn_NeuroFeedback").AddComponent<ExButton>();
 
+        //added by moritomi
+        //ニューロフィードバック
+        btnNeuroTest = gameObject.FindDescendant("btn_NeuroFeedbackTest").AddComponent<ExButton>();
+
 
         //BlueTooth
         btnBlueTooth = transform.Find("btn_Connect").GetComponent<Button>();
@@ -43,7 +50,9 @@ public class T_TitleSelect : SceneBase
         textDebug = gameObject.FindDescendant("DebugText").GetComponent<Text>();
         textDebug.gameObject.SetActive(false);
 
+
         btnNeuro.SetColor(Color.gray);
+        btnNeuroTest.SetColor(Color.gray);
 
 
         /*             
@@ -51,7 +60,7 @@ public class T_TitleSelect : SceneBase
         txt_Title.text = ConstData.HeaderType[ConstData.EnumScene.Tr_TrainingNeuro].title; ;
         */
 
-                
+
     }
 
     private void Update()
@@ -64,7 +73,14 @@ public class T_TitleSelect : SceneBase
             Tr_TraningSetting.SetPlayTraining(ConstData.EnumScene.Tr_TrainingNeuro);
             SceneFunc.ChangeScene(ConstData.EnumScene.Tr_TraningSetting, true);
         }
-        
+
+        //added by moritomi
+        //ニューロフィードバック
+        if (btnNeuroTest.lastHit2 && bleConnected)
+        {
+            Tr_TraningSetting.SetPlayTraining(ConstData.EnumScene.Tr_TrainingNeuroTest);
+            SceneFunc.ChangeScene(ConstData.EnumScene.Tr_TrainingNeuroTest, true);
+        }
 
 
     }
@@ -81,12 +97,12 @@ public class T_TitleSelect : SceneBase
 #endif
         if (bleConnected)
         {
-//            btnNeuro.SetColor(Color.white);
+            btnNeuro.SetColor(Color.white);
 
         }
         else
         {
-//            btnNeuro.SetColor(Color.gray);
+            btnNeuro.SetColor(Color.gray);
 
         }
 

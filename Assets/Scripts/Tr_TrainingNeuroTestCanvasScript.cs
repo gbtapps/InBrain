@@ -13,8 +13,8 @@ public class Tr_TrainingNeuroTestCanvasScript : MonoBehaviour
     [SerializeField] GameObject target;
     GameObject[] BrainValueColumnArray = new GameObject[BRAIN_VALUES_COUNT];
 
+
     //Values
-///    float[] BrainValueArray = new float[BRAIN_VALUES_COUNT];
     List<float> BrainValueList = new List<float>();
 
 
@@ -22,8 +22,14 @@ public class Tr_TrainingNeuroTestCanvasScript : MonoBehaviour
     float SumDeltatime;
     int p=0;
 
+    // GetBrainFlowData
+    public Tr_TrainingNeuro _Tr_TrainingNeuro;
 
-    //    List<object> BrainValueList = new List<object>();
+
+
+    // Debug
+    [SerializeField] Text BrainValueText;
+    [SerializeField] Text TestValueText;
 
 
 
@@ -32,8 +38,11 @@ public class Tr_TrainingNeuroTestCanvasScript : MonoBehaviour
     void Start()
     {
 
-     
+
     }
+
+
+
 
     // Update is called once per frame
     void Update()
@@ -54,20 +63,26 @@ public class Tr_TrainingNeuroTestCanvasScript : MonoBehaviour
     void UpdateChart()
     {
 
-        float sin = Mathf.Sin(Time.time);
+
+        //        BrainValueText.text = bvalue.ToString()+"\n"+BrainValueText.text;
+
+
+
 
         // Do once a second
         SumDeltatime += Time.deltaTime;
-        if (SumDeltatime > 0.01f)
+        if (SumDeltatime > 0.1f)
         {
 
-            /*
-            BrainValueArray[p] = sin * 50 + 50;
-            float value = BrainValueArray[p];
-            */
+//            float bvalue = _Tr_TrainingNeuro._length;
+//            BrainValueText.text = bvalue.ToString() + "\n" + BrainValueText.text;
 
-            //            BrainValueArray[p] = sin * 50 + 50;
+            float sin = Mathf.Sin(Time.time);
             BrainValueList.Add(sin * 50 + 50);
+            TestValueText.text = (sin * 50 + 50).ToString() + "\n" + TestValueText.text;
+
+
+
 
             if (p < BRAIN_VALUES_COUNT)
             {
