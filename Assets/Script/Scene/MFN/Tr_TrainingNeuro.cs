@@ -82,6 +82,8 @@ public class Tr_TrainingNeuro : SceneBase
     // Debug
     [SerializeField] Text BrainValueText;
     [SerializeField] Text TestValueText;
+    int DEBUGSTRINGLIMIT = 100;
+
 
     //added by moritomi until here
     /**********************************************************************/
@@ -112,8 +114,6 @@ public class Tr_TrainingNeuro : SceneBase
     private void Update()
     {
 
-        //added by moritomi
-        UpdateChart();
 
         switch (state)
         {
@@ -133,6 +133,8 @@ public class Tr_TrainingNeuro : SceneBase
 
 
 
+        //added by moritomi
+        UpdateChart();
 
 
 
@@ -224,21 +226,24 @@ public class Tr_TrainingNeuro : SceneBase
             xbValue = GetXBValue();
             _length = xbValue - avgXbValue;
 
-            XbValue.text += xbValue.ToString() + "\n";
-            AvgXbValue.text += avgXbValue.ToString() + "\n";
+            //見せ方変更
+            XbValue.text = xbValue.ToString() + "\n"+ XbValue.text;
+            AvgXbValue.text = avgXbValue.ToString() + "\n"+ AvgXbValue.text;
+            BrainFlow.text = _length + "\n"+ BrainFlow.text;
 
 
-            BrainFlow.text += _length + "\n";
+
+            if (XbValue.text.Length > DEBUGSTRINGLIMIT)
+            {
+                XbValue.text = XbValue.text.Substring(0, DEBUGSTRINGLIMIT);
+                AvgXbValue.text = AvgXbValue.text.Substring(0, DEBUGSTRINGLIMIT);
+                BrainFlow.text = BrainFlow.text.Substring(0, DEBUGSTRINGLIMIT);
+            }
+
+
             BloodFlows.Add(_length);
-
             DataCount.text = BloodFlows.Count.ToString();
 
-            if ((BloodFlows.Count % 50) == 0)
-            {
-                BrainFlow.text = "";
-                XbValue.text = "";
-                AvgXbValue.text = "";
-            }
 
         }
 
@@ -303,8 +308,24 @@ public class Tr_TrainingNeuro : SceneBase
             //            BrainValueText.text = bvalue.ToString() + "\n" + BrainValueText.text;
 
             float sin = Mathf.Sin(Time.time);
-            BrainValueList.Add(sin * 50 + 50);
+            //            BrainValueList.Add(sin * 50 + 50);
+
+//            if (BloodFlows.Count > 0)
+            {
+                BrainValueList.Add(_length);
+            }
+
+            BrainValueText.text = _length.ToString() + "\n" + BrainValueText.text;
             TestValueText.text = (sin * 50 + 50).ToString() + "\n" + TestValueText.text;
+
+
+/*
+            if(TestValueText.text.Length > DEBUGSTRINGLIMIT)
+            {
+                BrainValueText.text = BrainValueText.text.Substring(0, DEBUGSTRINGLIMIT);
+                TestValueText.text = TestValueText.text.Substring(0, DEBUGSTRINGLIMIT);
+            }
+            */
 
 
 

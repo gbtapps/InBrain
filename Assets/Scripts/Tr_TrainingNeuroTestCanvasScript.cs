@@ -6,31 +6,24 @@ using UnityEngine.UI;
 public class Tr_TrainingNeuroTestCanvasScript : MonoBehaviour
 {
 
-
+    /*
     // Chart making
     const int BRAIN_VALUES_COUNT = 300;
     [SerializeField] GameObject BrainValueBackgroudImage;
     [SerializeField] GameObject target;
     GameObject[] BrainValueColumnArray = new GameObject[BRAIN_VALUES_COUNT];
 
-
     //Values
     List<float> BrainValueList = new List<float>();
-
 
     // Time controll
     float SumDeltatime;
     int p=0;
 
-    // GetBrainFlowData
-    public Tr_TrainingNeuro _Tr_TrainingNeuro;
-
-
-
     // Debug
     [SerializeField] Text BrainValueText;
     [SerializeField] Text TestValueText;
-
+    */
 
 
 
@@ -68,7 +61,7 @@ public class Tr_TrainingNeuroTestCanvasScript : MonoBehaviour
 
 
 
-
+        /*
         // Do once a second
         SumDeltatime += Time.deltaTime;
         if (SumDeltatime > 0.1f)
@@ -115,12 +108,10 @@ public class Tr_TrainingNeuroTestCanvasScript : MonoBehaviour
 
         }
 
+    */
+    
 
-
-
-
-
-}
+    }
 
 
 
