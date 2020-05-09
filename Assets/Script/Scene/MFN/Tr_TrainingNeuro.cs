@@ -84,6 +84,8 @@ public class Tr_TrainingNeuro : SceneBase
     [SerializeField] Text TestValueText;
     int DEBUGSTRINGLIMIT = 100;
 
+    [SerializeField] Text EstateText;
+    [SerializeField] Text EmodeText;
 
     //added by moritomi until here
     /**********************************************************************/
@@ -151,16 +153,31 @@ public class Tr_TrainingNeuro : SceneBase
         //OnHead状態で5秒間に変更
         if (Hot2gApplication.Instance.state2 == Hot2gApplication.eState.OnHead)
         {
+            //added by moritomi
+            //eStateOnHead
+            EstateText.text = "eState.Onhead: Yes";
 
             if (Hot2gApplication.Instance.mode == Hot2gApplication.eMode.RecieveData)//- Measureing data in stable status
             {
                 cnt += Time.deltaTime;
+
                 SpentTime.text = cnt.ToString();
+
+                //added by moritomi
+                //eModeRecieveData
+                EstateText.text = "eMode.RecieveData: Yes";
 
             }
             else
             {
                 cnt = 0;//- counter reset because of unstable situation
+
+                
+                //added by moritomi
+                //eModeRecieveData
+                EstateText.text = "eMode.RecieveData: No";
+                //ColumnNumberReset
+                p = 0;
 
             }
 
@@ -168,8 +185,15 @@ public class Tr_TrainingNeuro : SceneBase
         }
         else//- NOT On the head
         {
+
+
             cnt = 0;//- counter reset because of unstable situation
 
+            //added by moritomi
+            //eStateOnHead
+            EstateText.text = "eState.Onhead: No";
+            //ColumnNumberReset
+            p = 0;
 
         }
 
@@ -310,10 +334,19 @@ public class Tr_TrainingNeuro : SceneBase
             float sin = Mathf.Sin(Time.time);
             //            BrainValueList.Add(sin * 50 + 50);
 
-//            if (BloodFlows.Count > 0)
+
+
+            //brainbroodflowvalue = bbfvalue
+            float bbfvalue = _length;
+
+            if(bbfvalue < 0.1)
             {
-                BrainValueList.Add(_length);
+
             }
+
+
+            BrainValueList.Add(bbfvalue);
+            
 
             BrainValueText.text = _length.ToString() + "\n" + BrainValueText.text;
             TestValueText.text = (sin * 50 + 50).ToString() + "\n" + TestValueText.text;

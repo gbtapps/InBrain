@@ -66,9 +66,15 @@ public class S522Test1ControllerScript : MonoBehaviour
                     SceneManager.LoadScene("Tr_TraningSetting3rd");
 
                 }
+                else if (ActiveSceneName == "Tr_TrainingNeuroTest")
+                {
+                    Debug.Log("SceneManager.LoadScene>T_TitleSelect");
+                    SceneManager.LoadScene("T_TitleSelect");
+
+                }
                 else
                 {
-                    MoveToS523Interval2();
+                    SceneManager.LoadScene("T_TitleSelect");
 
                 }
 
