@@ -14,7 +14,7 @@ public class CountdownPanelScript : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    void CountdownStart()
     {
         CountdownPanelImage.SetActive(true);
     }
@@ -22,7 +22,7 @@ public class CountdownPanelScript : MonoBehaviour
 
 
     // Update is called once per frame
-    void Update()
+    void CountdownUpdate()
     {
 
         DeltaTimeCount += Time.deltaTime;

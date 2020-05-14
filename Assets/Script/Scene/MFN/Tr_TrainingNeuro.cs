@@ -58,7 +58,8 @@ public class Tr_TrainingNeuro : SceneBase
     [SerializeField] Text cntValue;
 
     //取得データマネジメント
-    List<float> BloodFlows = new List<float>();
+    List<float> Xb01ValueList = new List<float>();
+
     //デバッグ
     [SerializeField] Text DataCount;
     [SerializeField] Text BrainFlow;
@@ -72,14 +73,27 @@ public class Tr_TrainingNeuro : SceneBase
     [SerializeField] GameObject target;
     GameObject[] BrainValueColumnArray = new GameObject[BRAIN_VALUES_COUNT];
 
+    float PreviousXbValue = 0;
+    float ColumnValue = 100;
+
+
     //Values
     List<float> BrainValueList = new List<float>();
+    List<float> BrainValueDeviation = new List<float>();
+
 
     // Time controll
     float SumDeltatime;
     int p = 0;
 
+    //Countdown
+    [SerializeField] GameObject CountdownPanelImage;
+    public float DeltaTimeCount = 0f;
+    public Text CountdownText;
+    public int CountdownInt;
+
     // Debug
+    [SerializeField] Text AdjustBrainValueText;
     [SerializeField] Text BrainValueText;
     [SerializeField] Text TestValueText;
     int DEBUGSTRINGLIMIT = 100;
@@ -93,6 +107,10 @@ public class Tr_TrainingNeuro : SceneBase
 
     void Start()
     {
+
+        CountdownStart();
+
+
         CommonHeaderMfn.Instance.SetView(false);
 
 #if !BLUE_DEBUG
@@ -116,6 +134,8 @@ public class Tr_TrainingNeuro : SceneBase
     private void Update()
     {
 
+        CountdownUpdate();
+
 
         switch (state)
         {
@@ -128,16 +148,19 @@ public class Tr_TrainingNeuro : SceneBase
                 break;
             case STATE.MOVE:
                 UpdateMove();
+
+                //added by moritomi
+//                UpdateChart();
+
                 break;
+
             case STATE.FIN:
                 break;
         }
 
 
-
-        //added by moritomi
+        // To try to draw chart instead of removing sensor
         UpdateChart();
-
 
 
     }
@@ -165,7 +188,7 @@ public class Tr_TrainingNeuro : SceneBase
 
                 //added by moritomi
                 //eModeRecieveData
-                EstateText.text = "eMode.RecieveData: Yes";
+                EmodeText.text = "eMode.RecieveData: Yes";
 
             }
             else
@@ -175,9 +198,8 @@ public class Tr_TrainingNeuro : SceneBase
                 
                 //added by moritomi
                 //eModeRecieveData
-                EstateText.text = "eMode.RecieveData: No";
+                EmodeText.text = "eMode.RecieveData: No";
                 //ColumnNumberReset
-                p = 0;
 
             }
 
@@ -193,24 +215,21 @@ public class Tr_TrainingNeuro : SceneBase
             //eStateOnHead
             EstateText.text = "eState.Onhead: No";
             //ColumnNumberReset
-            p = 0;
 
         }
 
 
-        //デルタタイムで5秒経過した処理
-        //        if (cnt >= 5)
+        //デルタタイムで5秒経過　
+        //        if (cnt >= 1)
 
-        //5秒は長いので2秒にした
-        if (cnt >= 2)
+
+        //5秒経過は飛行機が出てくるまでの溜め
+        //タメがないなら1秒でOK、1秒でavgXBvalue obtainしている
+        if (cnt >= 1)
         {
-
             cntValue.text = cnt.ToString();
 
-
-            //着けている時間が5秒越えた以降に5秒毎にavgXBValueの値を更新
-
-
+            //前の1秒で平均値をとってる
             //avgXbValue = GetXBValue();//- Average from 4sec to 5sec in buffer
             avgXbValue = (float)Hot2gApplication.Instance.m_nfb.calcActivenessFromBufferedUsingLastData(10);//- ave last 1 sec (10points)
 
@@ -227,11 +246,7 @@ public class Tr_TrainingNeuro : SceneBase
     }
 
 
-    public float GetBrainValue()
-    {
-        return _length;
-    }
-
+    
 
     void UpdateMove()
     {
@@ -247,14 +262,24 @@ public class Tr_TrainingNeuro : SceneBase
             //            float xbValue = GetXBValue();
             //            float _length = xbValue - avgXbValue;
 
+            //実測値
             xbValue = GetXBValue();
+
+            //Add measured values to List
+            Xb01ValueList.Add(xbValue);
+
+            //偏差
             _length = xbValue - avgXbValue;
+
+
+
+
+            // for debug from here **************************************************************
 
             //見せ方変更
             XbValue.text = xbValue.ToString() + "\n"+ XbValue.text;
             AvgXbValue.text = avgXbValue.ToString() + "\n"+ AvgXbValue.text;
             BrainFlow.text = _length + "\n"+ BrainFlow.text;
-
 
 
             if (XbValue.text.Length > DEBUGSTRINGLIMIT)
@@ -264,9 +289,28 @@ public class Tr_TrainingNeuro : SceneBase
                 BrainFlow.text = BrainFlow.text.Substring(0, DEBUGSTRINGLIMIT);
             }
 
+            
+            
+            DataCount.text = Xb01ValueList.Count.ToString();
 
-            BloodFlows.Add(_length);
-            DataCount.text = BloodFlows.Count.ToString();
+            // for debug from here **************************************************************
+
+
+
+
+
+            if (xbValue == 0.0f)
+            {
+                //実測値がゼロのためセンサー外れとみなし繋ぐところから
+                state = STATE.START;
+
+                //Show Error dialog and return to Previous scence.
+
+
+
+            }
+
+
 
 
         }
@@ -316,11 +360,7 @@ public class Tr_TrainingNeuro : SceneBase
 
     void UpdateChart()
     {
-
-
-        //        BrainValueText.text = bvalue.ToString()+"\n"+BrainValueText.text;
-
-
+        // It only acts on STATE.MOVE to be synced getting values and chart action.
 
 
         // Do once a second
@@ -332,54 +372,131 @@ public class Tr_TrainingNeuro : SceneBase
             //            BrainValueText.text = bvalue.ToString() + "\n" + BrainValueText.text;
 
             float sin = Mathf.Sin(Time.time);
-            //            BrainValueList.Add(sin * 50 + 50);
 
 
+            // Make chart with _lenght(= deviation) from here
+            // but no use because of using virtual value plus 1 or minus 1 for previous value using real xbvalue
 
-            //brainbroodflowvalue = bbfvalue
-            float bbfvalue = _length;
+            /*
 
-            if(bbfvalue < 0.1)
+            // Get Deviation
+            // _length = deviation
+
+            Debug.Log("_length: " + _length);
+            float deviation;
+
+//            deviation = sin * 50 + 50;
+            deviation = _length;
+
+
+            //Get Dispersion
+            BrainValueDeviation.Add(deviation);
+
+            float sumdiviation = 0;
+            int deviationdatacount = 0;
+            foreach (float a in BrainValueDeviation)
             {
+                sumdiviation +=  a;
+                deviationdatacount++;
+            }
+            float dispersion = sumdiviation/deviationdatacount;
+            Debug.Log("dispersion（分散）: " + dispersion);
 
+
+            //Get Standard Deviation
+            float standarddeviation = Mathf.Sqrt(dispersion);
+            Debug.Log("standarddeviation（標準偏差）: " + standarddeviation);
+
+
+            //Get Standarized Value
+            float standarizedbrainvalue;
+            standarizedbrainvalue = deviation / standarddeviation;
+            Debug.Log("standarizedbrainvalue: " + standarizedbrainvalue);
+
+
+            // 標準化がうまく動いていないのでコメントアウト
+//            BrainValueList.Add(standarizedbrainvalue);
+
+
+
+            //Brain blood flow values are recorded to make chart
+            float bbfvforchart = deviation * 100 + 100;
+
+            switch (state)
+            {
+                case STATE.START:
+                    bbfvforchart=0;
+                    break;
             }
 
+            BrainValueList.Add(bbfvforchart);
+            */
 
-            BrainValueList.Add(bbfvalue);
-            
 
-            BrainValueText.text = _length.ToString() + "\n" + BrainValueText.text;
+            //***** for debug from here ****************
+
+            // comment out because of no use standerized value.
+            //            AdjustBrainValueText.text = standarizedbrainvalue.ToString() + "\n" + AdjustBrainValueText.text;
+
+
+
+            /*
+            BrainValueText.text = xbValue.ToString() + "\n" + BrainValueText.text;
             TestValueText.text = (sin * 50 + 50).ToString() + "\n" + TestValueText.text;
 
-
-/*
             if(TestValueText.text.Length > DEBUGSTRINGLIMIT)
             {
                 BrainValueText.text = BrainValueText.text.Substring(0, DEBUGSTRINGLIMIT);
                 TestValueText.text = TestValueText.text.Substring(0, DEBUGSTRINGLIMIT);
             }
-            */
+
+*/
+
+
+            //***** for debug until here ****************
 
 
 
 
+            //show chart
+
+            //set size value
+
+
+            if(PreviousXbValue < xbValue)
+            {
+                ColumnValue += 0.5f;
+            }
+            else if (PreviousXbValue > xbValue)
+            {
+                ColumnValue -= 0.5f;
+            }
+
+            PreviousXbValue = xbValue;
+
+
+            //create, give position, give size, attach parent
             if (p < BRAIN_VALUES_COUNT)
             {
+                // comment out for y-axis from 0 to -100 
+                //                BrainValueColumnArray[p] = Instantiate(target, new Vector3(p + 30, 0, 0), Quaternion.identity);
+                BrainValueColumnArray[p] = Instantiate(target, new Vector3(p + 30, -100, 0), Quaternion.identity);
 
-                BrainValueColumnArray[p] = Instantiate(target, new Vector3(p + 30, 0, 0), Quaternion.identity);
-                BrainValueColumnArray[p].GetComponent<RectTransform>().sizeDelta = new Vector2(1, BrainValueList[p]);
+                //                BrainValueColumnArray[p].GetComponent<RectTransform>().sizeDelta = new Vector2(1, BrainValueList[p]);
+                BrainValueColumnArray[p].GetComponent<RectTransform>().sizeDelta = new Vector2(1, ColumnValue);
                 BrainValueColumnArray[p].transform.SetParent(BrainValueBackgroudImage.transform, false);
             }
             else
             {
-
+                //Move chart from right to left
                 for (int i = 0; i < BRAIN_VALUES_COUNT - 1; i++)
                 {
                     BrainValueColumnArray[i].GetComponent<RectTransform>().sizeDelta = BrainValueColumnArray[i + 1].GetComponent<RectTransform>().sizeDelta;
                 }
-                BrainValueColumnArray[BRAIN_VALUES_COUNT - 1].GetComponent<RectTransform>().sizeDelta = new Vector2(1, BrainValueList[p]);
+//                BrainValueColumnArray[BRAIN_VALUES_COUNT - 1].GetComponent<RectTransform>().sizeDelta = new Vector2(1, BrainValueList[p]);
+                BrainValueColumnArray[BRAIN_VALUES_COUNT - 1].GetComponent<RectTransform>().sizeDelta = new Vector2(1, ColumnValue);
 
-                //                Debug.Log(BrainValueArray);
+                //  Debug.Log(BrainValueArray);
 
 
             }
@@ -392,11 +509,54 @@ public class Tr_TrainingNeuro : SceneBase
 
             Debug.Log(p + " :p");
 
+
         }
 
 
     }
 
+
+    void CountdownStart()
+    {
+        CountdownPanelImage.SetActive(true);
+    }
+
+
+
+    // Update is called once per frame
+    void CountdownUpdate()
+    {
+
+        DeltaTimeCount += Time.deltaTime;
+
+
+        if (DeltaTimeCount >= 1.0f)
+        {
+
+            DeltaTimeCount = 0.0f;
+
+
+            if (CountdownInt > 0)
+            {
+                //カウントダウン表示
+                CountdownText.text = CountdownInt.ToString();
+
+            }
+            else
+            {
+
+                CountdownPanelImage.SetActive(false);
+
+
+
+            }
+
+            //1秒たったのでカウントをダウンする
+            CountdownInt--;
+
+        }
+
+    }
 
 
 
