@@ -68,7 +68,9 @@ public class Tr_TrainingNeuro : SceneBase
 
 
     // Chart making
-    const int BRAIN_VALUES_COUNT = 300;
+    // CHART_LEFT_MARGIN x2 + BRAIN_VALUES_COUNT = 360
+    const int CHART_LEFT_MARGIN = 10;
+    const int BRAIN_VALUES_COUNT = 340;
     [SerializeField] GameObject BrainValueBackgroudImage;
     [SerializeField] GameObject target;
     GameObject[] BrainValueColumnArray = new GameObject[BRAIN_VALUES_COUNT];
@@ -150,7 +152,7 @@ public class Tr_TrainingNeuro : SceneBase
                 UpdateMove();
 
                 //added by moritomi
-//                UpdateChart();
+                UpdateChart();
 
                 break;
 
@@ -160,7 +162,7 @@ public class Tr_TrainingNeuro : SceneBase
 
 
         // To try to draw chart instead of removing sensor
-        UpdateChart();
+//        UpdateChart();
 
 
     }
@@ -178,7 +180,7 @@ public class Tr_TrainingNeuro : SceneBase
         {
             //added by moritomi
             //eStateOnHead
-            EstateText.text = "eState.Onhead: Yes";
+            EstateText.text = "Onhead: Yes";
 
             if (Hot2gApplication.Instance.mode == Hot2gApplication.eMode.RecieveData)//- Measureing data in stable status
             {
@@ -188,7 +190,7 @@ public class Tr_TrainingNeuro : SceneBase
 
                 //added by moritomi
                 //eModeRecieveData
-                EmodeText.text = "eMode.RecieveData: Yes";
+                EmodeText.text = "RecieveData: Yes";
 
             }
             else
@@ -198,7 +200,7 @@ public class Tr_TrainingNeuro : SceneBase
                 
                 //added by moritomi
                 //eModeRecieveData
-                EmodeText.text = "eMode.RecieveData: No";
+                EmodeText.text = "RecieveData: No";
                 //ColumnNumberReset
 
             }
@@ -213,7 +215,7 @@ public class Tr_TrainingNeuro : SceneBase
 
             //added by moritomi
             //eStateOnHead
-            EstateText.text = "eState.Onhead: No";
+            EstateText.text = "Onhead: No";
             //ColumnNumberReset
 
         }
@@ -374,90 +376,6 @@ public class Tr_TrainingNeuro : SceneBase
             float sin = Mathf.Sin(Time.time);
 
 
-            // Make chart with _lenght(= deviation) from here
-            // but no use because of using virtual value plus 1 or minus 1 for previous value using real xbvalue
-
-            /*
-
-            // Get Deviation
-            // _length = deviation
-
-            Debug.Log("_length: " + _length);
-            float deviation;
-
-//            deviation = sin * 50 + 50;
-            deviation = _length;
-
-
-            //Get Dispersion
-            BrainValueDeviation.Add(deviation);
-
-            float sumdiviation = 0;
-            int deviationdatacount = 0;
-            foreach (float a in BrainValueDeviation)
-            {
-                sumdiviation +=  a;
-                deviationdatacount++;
-            }
-            float dispersion = sumdiviation/deviationdatacount;
-            Debug.Log("dispersion（分散）: " + dispersion);
-
-
-            //Get Standard Deviation
-            float standarddeviation = Mathf.Sqrt(dispersion);
-            Debug.Log("standarddeviation（標準偏差）: " + standarddeviation);
-
-
-            //Get Standarized Value
-            float standarizedbrainvalue;
-            standarizedbrainvalue = deviation / standarddeviation;
-            Debug.Log("standarizedbrainvalue: " + standarizedbrainvalue);
-
-
-            // 標準化がうまく動いていないのでコメントアウト
-//            BrainValueList.Add(standarizedbrainvalue);
-
-
-
-            //Brain blood flow values are recorded to make chart
-            float bbfvforchart = deviation * 100 + 100;
-
-            switch (state)
-            {
-                case STATE.START:
-                    bbfvforchart=0;
-                    break;
-            }
-
-            BrainValueList.Add(bbfvforchart);
-            */
-
-
-            //***** for debug from here ****************
-
-            // comment out because of no use standerized value.
-            //            AdjustBrainValueText.text = standarizedbrainvalue.ToString() + "\n" + AdjustBrainValueText.text;
-
-
-
-            /*
-            BrainValueText.text = xbValue.ToString() + "\n" + BrainValueText.text;
-            TestValueText.text = (sin * 50 + 50).ToString() + "\n" + TestValueText.text;
-
-            if(TestValueText.text.Length > DEBUGSTRINGLIMIT)
-            {
-                BrainValueText.text = BrainValueText.text.Substring(0, DEBUGSTRINGLIMIT);
-                TestValueText.text = TestValueText.text.Substring(0, DEBUGSTRINGLIMIT);
-            }
-
-*/
-
-
-            //***** for debug until here ****************
-
-
-
-
             //show chart
 
             //set size value
@@ -465,11 +383,19 @@ public class Tr_TrainingNeuro : SceneBase
 
             if(PreviousXbValue < xbValue)
             {
-                ColumnValue += 0.5f;
+                ColumnValue += 1.0f;
+                if (ColumnValue > 200f)
+                {
+                    ColumnValue = 200;
+                }
             }
             else if (PreviousXbValue > xbValue)
             {
-                ColumnValue -= 0.5f;
+                ColumnValue -= 1.0f;
+                if(ColumnValue < 0f)
+                {
+                    ColumnValue = 0;
+                }
             }
 
             PreviousXbValue = xbValue;
@@ -480,7 +406,7 @@ public class Tr_TrainingNeuro : SceneBase
             {
                 // comment out for y-axis from 0 to -100 
                 //                BrainValueColumnArray[p] = Instantiate(target, new Vector3(p + 30, 0, 0), Quaternion.identity);
-                BrainValueColumnArray[p] = Instantiate(target, new Vector3(p + 30, -100, 0), Quaternion.identity);
+                BrainValueColumnArray[p] = Instantiate(target, new Vector3(p + CHART_LEFT_MARGIN, -100, 0), Quaternion.identity);
 
                 //                BrainValueColumnArray[p].GetComponent<RectTransform>().sizeDelta = new Vector2(1, BrainValueList[p]);
                 BrainValueColumnArray[p].GetComponent<RectTransform>().sizeDelta = new Vector2(1, ColumnValue);
