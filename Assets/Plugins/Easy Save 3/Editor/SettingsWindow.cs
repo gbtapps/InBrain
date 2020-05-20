@@ -13,6 +13,8 @@ namespace ES3Editor
 		public SerializedObject so = null;
 		public SerializedProperty assemblyNamesProperty = null;
 
+        private Vector2 scrollPos = Vector2.zero;
+
 		public SettingsWindow(EditorWindow window) : base("Settings", window){}
 
 		public override void OnGUI()
@@ -24,67 +26,67 @@ namespace ES3Editor
 
 			EditorGUI.BeginChangeCheck();
 
-			EditorGUILayout.BeginVertical(style.area);
+            using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPos, style.area))
+            {
+                scrollPos = scrollView.scrollPosition;
 
-			GUILayout.Label("Runtime Settings", style.heading);
+                GUILayout.Label("Runtime Settings", style.heading);
 
-			EditorGUILayout.BeginVertical(style.area);
+                using (new EditorGUILayout.VerticalScope(style.area))
+                {
+                    ES3SettingsEditor.Draw(settings);
+                }
 
-			ES3SettingsEditor.Draw(settings);
+                var wideLabel = new GUIStyle();
+                wideLabel.fixedWidth = 400;
 
-			EditorGUILayout.EndVertical();
+                GUILayout.Label("Debug Settings", style.heading);
 
-            var wideLabel = new GUIStyle();
-            wideLabel.fixedWidth = 400;
+                using (new EditorGUILayout.VerticalScope(style.area))
+                {
+                    using (new EditorGUILayout.HorizontalScope())
+                    {
+                        EditorGUILayout.PrefixLabel("Log Info", wideLabel);
+                        editorSettings.logDebugInfo = EditorGUILayout.Toggle(editorSettings.logDebugInfo);
+                    }
 
-            GUILayout.Label("Debug Settings", style.heading);
+                    using (new EditorGUILayout.HorizontalScope())
+                    {
+                        EditorGUILayout.PrefixLabel("Log Warnings", wideLabel);
+                        editorSettings.logWarnings = EditorGUILayout.Toggle(editorSettings.logWarnings);
+                    }
 
-            EditorGUILayout.BeginVertical(style.area);
+                    using (new EditorGUILayout.HorizontalScope())
+                    {
+                        EditorGUILayout.PrefixLabel("Log Errors", wideLabel);
+                        editorSettings.logErrors = EditorGUILayout.Toggle(editorSettings.logErrors);
+                    }
 
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PrefixLabel("Log Warnings", wideLabel);
-            editorSettings.logWarnings = EditorGUILayout.Toggle(editorSettings.logWarnings);
-            EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.Space();
+                }
 
-            EditorGUILayout.Space();
-            EditorGUILayout.EndVertical();
+                GUILayout.Label("Editor Settings", style.heading);
 
-            GUILayout.Label("Editor Settings", style.heading);
+                using (new EditorGUILayout.VerticalScope(style.area))
+                {
+                    using (new EditorGUILayout.HorizontalScope())
+                    {
+                        EditorGUILayout.PrefixLabel("Auto Update References", wideLabel);
+                        editorSettings.autoUpdateReferences = EditorGUILayout.Toggle(editorSettings.autoUpdateReferences);
+                    }
 
-			EditorGUILayout.BeginVertical(style.area);
+                    using (new EditorGUILayout.HorizontalScope())
+                    {
+                        EditorGUILayout.PrefixLabel("Use Global References", wideLabel);
+                        editorSettings.useGlobalReferences = EditorGUILayout.Toggle(editorSettings.useGlobalReferences);
+                    }
 
-			EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.PrefixLabel("Auto Add Manager to Scene", wideLabel);
-			editorSettings.addMgrToSceneAutomatically = EditorGUILayout.Toggle(editorSettings.addMgrToSceneAutomatically);
-			EditorGUILayout.EndHorizontal();
-
-			EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.PrefixLabel("Auto Update References", wideLabel);
-			editorSettings.autoUpdateReferences = EditorGUILayout.Toggle(editorSettings.autoUpdateReferences);
-			EditorGUILayout.EndHorizontal();
-
-			EditorGUILayout.Space();
-
-
-			// Show Assembly names array.
-			//EditorGUILayout.PropertyField(assemblyNamesProperty, new GUIContent("Assemblies containing ES3Types", "The names of assemblies we want to load ES3Types from."), true); // True means show children
-			/*if(so.ApplyModifiedProperties())
-			{
-				#if UNITY_2018_3_OR_NEWER
-				PrefabUtility.SaveAsPrefabAsset(defaultSettingsGo,ES3Settings.PathToDefaultSettings());
-				#endif
-			}*/
-
-			EditorGUILayout.EndVertical();
-
-			EditorGUILayout.EndVertical();
-
+                    EditorGUILayout.Space();
+                }
+            }
 
             if (EditorGUI.EndChangeCheck())
-            {
-
                 EditorUtility.SetDirty(editorSettings);
-            }
 		}
 
 		public void Init()

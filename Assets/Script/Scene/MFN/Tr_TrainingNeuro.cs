@@ -4,6 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
+using System.IO;
+using System;
+
+using UnityEngine.SceneManagement;
+
+
+
 //ニューロフィードバック
 //脳活動を上げ下げするやつ！
 public class Tr_TrainingNeuro : SceneBase
@@ -103,13 +110,37 @@ public class Tr_TrainingNeuro : SceneBase
     [SerializeField] Text EstateText;
     [SerializeField] Text EmodeText;
 
+    // log
+//    public int[] logData; // Logデータの宣言 テスト
+    public float[] logData; // Logデータの宣言 テスト
+    [SerializeField] Text ParmPathText;
+    [SerializeField] Text TempPathText;
+
+    // finish process
+    public float SumDeltaTimeScene;
+    [SerializeField] int SceneLimitTime;
+    [SerializeField] string ActiveSceneName;
+
+
     //added by moritomi until here
     /**********************************************************************/
 
 
     void Start()
     {
+        //ログ出力（テスト）
+//        logData = new int[] { 1, 3, 5, 7, 9 }; // 仮のLogデータ
+//        logData = new float[] { 1.2f, 3.1f, 5.6f, 7.2f, 9.9f }; // 仮のLogデータ
+//        LogSave(logData, "logData"); // Logデータをcsv形式で書き出す
 
+
+        //Get active scene name
+        ActiveSceneName = SceneManager.GetActiveScene().name;
+
+        //Add countdown time to scene limit time
+        SceneLimitTime += CountdownInt;
+
+        //Start countdown
         CountdownStart();
 
 
@@ -136,9 +167,10 @@ public class Tr_TrainingNeuro : SceneBase
     private void Update()
     {
 
+        //Show countdown
         CountdownUpdate();
 
-
+        //Controll behavior
         switch (state)
         {
             case STATE.START:
@@ -160,9 +192,15 @@ public class Tr_TrainingNeuro : SceneBase
                 break;
         }
 
-
         // To try to draw chart instead of removing sensor
-//        UpdateChart();
+        //        UpdateChart();
+
+
+        //Finish process
+        FinishProcess();
+
+
+
 
 
     }
@@ -484,6 +522,125 @@ public class Tr_TrainingNeuro : SceneBase
 
     }
 
+//    public void LogSave(int[] x, string fileName)
+
+    public void LogSave(float[] x, string fileName)
+    {
+        StreamWriter sw; // これがキモらしい
+        FileInfo fi;
+
+        //日付をYYYYMMDD24hmmssで表示する文字列作成 
+        DateTime now = DateTime.Now;
+        string tempdatestring = now.Year.ToString() + now.Month.ToString() + now.Day.ToString()
+            + now.Hour.ToString() + now.Minute.ToString() + now.Second.ToString();
+        //        Debug.Log(tempdatestring);
+
+
+        //ファイルを出力するパス
+//        string temppathstring = Application.dataPath + "/Resources/";
+        string temppathstring = UnityEngine.Application.persistentDataPath;
+
+
+        //出力先ファイルパス
+        // Aplication.dataPath で プロジェクトファイルがある絶対パスが取り込める
+        //        fi = new FileInfo(Application.dataPath + "/Resources/" + fileName +tempdatestring+ ".csv");
+
+        fi = new FileInfo(temppathstring + fileName + tempdatestring + ".csv");
+
+        
+  
+        //パス情報
+        //        UnityEngine.Application.persistentDataPath(永続性のある情報向け)
+        //        UnityEngine.Application.temporaryCachePath(一時的な情報向け)
+
+
+        Debug.Log("UnityEngine.Application.persistentDataPath: " + UnityEngine.Application.persistentDataPath);
+        Debug.Log("UnityEngine.Application.temporaryCachePath: " + UnityEngine.Application.temporaryCachePath);
+        ParmPathText.text = UnityEngine.Application.persistentDataPath;
+        TempPathText.text = UnityEngine.Application.temporaryCachePath;
+
+        sw = fi.AppendText();
+        for (int i = 0; i < x.Length; i++)
+        {
+            sw.WriteLine(x[i].ToString());
+        }
+        sw.Flush();
+        sw.Close();
+
+    }
+
+
+    // Update is called once per frame
+    void FinishProcess()
+    {
+
+        ////////////////////////////
+        //1秒毎に処理させるここから
+        //
+        SumDeltaTimeScene += Time.deltaTime;
+        //        Debug.Log(DeltaTimeCount + " =DeltaTimeCount");
+
+        if (SumDeltaTimeScene >= 1.0f)
+        {
+
+            SumDeltaTimeScene = 0.0f;
+
+            //1秒たったのでカウントをダウンする
+            SceneLimitTime--;
+
+            if (SceneLimitTime == 0)
+            {
+
+
+                //                logData = new float[] { 1.2f, 3.1f, 5.6f, 7.2f, 9.9f }; // 仮のLogデータ
+
+                logData = Xb01ValueList.ToArray();
+                LogSave(logData, "logData"); // Logデータをcsv形式で書き出す
+//                LogSave(Xb01ValueList, "logDataList"); // Logデータをcsv形式で書き出す
+
+               
+
+
+
+
+                Debug.Log(SceneLimitTime + " :SceneLimitTime");
+
+
+                if (ActiveSceneName == "Tr_TrainingNeuro")
+                {
+                    Debug.Log("SceneManager.LoadScene>Tr_TraningSetting2nd");
+                    SceneManager.LoadScene("Tr_TraningSetting2nd");
+
+                }
+                else if (ActiveSceneName == "Tr_TrainingNeuro2nd")
+                {
+                    Debug.Log("SceneManager.LoadScene>Tr_TraningSetting2nd");
+                    SceneManager.LoadScene("Tr_TraningSetting3rd");
+
+                }
+                else if (ActiveSceneName == "Tr_TrainingNeuroTest")
+                {
+                    Debug.Log("SceneManager.LoadScene>T_TitleSelect");
+                    SceneManager.LoadScene("T_TitleSelect");
+
+                }
+                else
+                {
+                    SceneManager.LoadScene("T_TitleSelect");
+
+                }
+
+
+
+            }
+
+
+        }
+        //
+        //1秒毎に処理させるここまで
+        ///////////////////////////////////
+
+    }
 
 
 }

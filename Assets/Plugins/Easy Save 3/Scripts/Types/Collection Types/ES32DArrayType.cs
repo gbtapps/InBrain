@@ -17,12 +17,12 @@ namespace ES3Types
 			if(elementType == null)
 				throw new ArgumentNullException("ES3Type argument cannot be null.");
 
-			writer.StartWriteCollection(array.Length);
+			//writer.StartWriteCollection();
 
 			for(int i=0; i < array.GetLength(0); i++)
 			{
 				writer.StartWriteCollectionItem(i);
-				writer.StartWriteCollection(array.Length);
+				writer.StartWriteCollection();
 				for(int j=0; j < array.GetLength(1); j++)
 				{
 					writer.StartWriteCollectionItem(j);
@@ -33,12 +33,13 @@ namespace ES3Types
 				writer.EndWriteCollectionItem(i);
 			}
 
-			writer.EndWriteCollection();
+			//writer.EndWriteCollection();
 		}
 
 		public override object Read<T>(ES3Reader reader)
 		{
-			if(reader.StartReadCollection())
+            return Read(reader);
+			/*if(reader.StartReadCollection())
 				return null;
 
 			// Create a List to store the items as a 1D array, which we can work out the positions of by calculating the lengths of the two dimensions.
@@ -66,7 +67,7 @@ namespace ES3Types
 				for(int j=0; j<length2; j++)
 					array[i,j] = items[ (i * length2) + j ];
 
-			return array;
+			return array;*/
 		}
 
 		public override object Read(ES3Reader reader)

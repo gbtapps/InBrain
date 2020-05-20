@@ -10,20 +10,11 @@ using System.Reflection;
 using System;
 #endif
 
-public class ES3ReferenceMgr : ES3ReferenceMgrBase, ISerializationCallbackReceiver 
+public class ES3ReferenceMgr : ES3ReferenceMgrBase
 {
-	public void OnBeforeSerialize()
-	{
 #if UNITY_EDITOR
-		// This is called before building or when things are being serialised before pressing play.
-		#endif
-	}
-
-	public void OnAfterDeserialize(){}
-
-	#if UNITY_EDITOR
-
-	public void RefreshDependencies()
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    public void RefreshDependencies()
 	{
         // This will get the dependencies for all GameObjects and Components from the active scene.
         AddDependencies(SceneManager.GetActiveScene().GetRootGameObjects());
@@ -31,6 +22,7 @@ public class ES3ReferenceMgr : ES3ReferenceMgrBase, ISerializationCallbackReceiv
         RemoveNullValues();
     }
 
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void Optimize()
     {
         var dependencies = CollectDependencies(SceneManager.GetActiveScene().GetRootGameObjects());
@@ -44,7 +36,8 @@ public class ES3ReferenceMgr : ES3ReferenceMgrBase, ISerializationCallbackReceiv
             Remove(obj);
     }
 
-	public void AddDependencies(UnityEngine.Object[] objs, float timeoutSecs=1f)
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    public void AddDependencies(UnityEngine.Object[] objs, float timeoutSecs=1f)
 	{
 		var startTime = Time.realtimeSinceStartup;
 
@@ -66,36 +59,38 @@ public class ES3ReferenceMgr : ES3ReferenceMgrBase, ISerializationCallbackReceiv
     	    var dependencies = CollectDependencies(obj);
     
     		foreach(var dependency in dependencies)
-    			if(dependency != null && CanBeSaved(dependency))
+    			if(dependency != null)
     			    Add(dependency);
         }
         EditorUtility.ClearProgressBar();
         Undo.RecordObject(this, "Update Easy Save 3 Reference List");
 	}
 
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void AddDependencies(UnityEngine.Object obj, float timeoutSecs = 1f)
     {
         AddDependencies(new UnityEngine.Object[] { obj }, timeoutSecs);
     }
 
-
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void GeneratePrefabReferences()
 	{
 		AddPrefabsToManager();
 		foreach(var es3Prefab in prefabs)
 			es3Prefab.GeneratePrefabReferences();
     }
-    
+
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void AddPrefabsToManager()
 	{
 		if(this.prefabs.RemoveAll(item => item == null) > 0)
 			Undo.RecordObject(this, "Update Easy Save 3 Reference List");
-			
+
 		foreach(var es3Prefab in Resources.FindObjectsOfTypeAll<ES3Prefab>())
 		{
             try
             {
-                if (GetPrefab(es3Prefab) == -1)
+                if (es3Prefab != null && EditorUtility.IsPersistent(es3Prefab) && GetPrefab(es3Prefab, true) == -1)
                 {
                     AddPrefab(es3Prefab);
                     Undo.RecordObject(this, "Update Easy Save 3 Reference List");
@@ -104,31 +99,5 @@ public class ES3ReferenceMgr : ES3ReferenceMgrBase, ISerializationCallbackReceiv
             catch { }
 		}
 	}
-
-    public static bool CanBeSaved(UnityEngine.Object obj)
-	{
-        if (obj == null)
-            return true;
-
-        var type = obj.GetType();
-
-        // Check if any of the hide flags determine that it should not be saved.
-        if ((((obj.hideFlags & HideFlags.DontSave) == HideFlags.DontSave) || 
-		     ((obj.hideFlags & HideFlags.DontSaveInBuild) == HideFlags.DontSaveInBuild) ||
-		     ((obj.hideFlags & HideFlags.DontSaveInEditor) == HideFlags.DontSaveInEditor) ||
-		     ((obj.hideFlags & HideFlags.HideAndDontSave) == HideFlags.HideAndDontSave)))
-		{
-			// Meshes are marked with HideAndDontSave, but shouldn't be ignored.
-			if(type == typeof(Mesh) || type == typeof(Material))
-				return true;
-        }
-
-        // Exclude the Easy Save 3 Manager, and all components attached to it.
-        if (obj.name == "Easy Save 3 Manager")
-            return false;
-
-        return true;
-	}
-
-	#endif
+#endif
 }

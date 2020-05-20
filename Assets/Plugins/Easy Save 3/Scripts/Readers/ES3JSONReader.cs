@@ -33,10 +33,10 @@ namespace ES3Internal
 				{
 					SkipOpeningBraceOfFile();
 				}
-				catch(Exception e)
+				catch
 				{
 					this.Dispose();
-					throw e;
+					throw new FormatException("Cannot load from file because the data in it is not JSON data, or the data is encrypted.\nIf the save data is encrypted, please ensure that encryption is enabled when you load, and that you are using the same password used to encrypt the data.");
 				}
 			}
 		}
@@ -65,6 +65,8 @@ namespace ES3Internal
 			var propertyName = Read_string();
 			if(propertyName == null)
 				throw new FormatException("Stream isn't positioned before a property.");
+
+            ES3Debug.Log("<b>"+propertyName+"</b> (reading property)", null, serializationDepth);
 
 			// Skip the ':' seperating property and value.
 			ReadCharIgnoreWhitespace(':');
@@ -105,13 +107,15 @@ namespace ES3Internal
 
 		internal override bool StartReadObject()
 		{
+            base.StartReadObject();
 			return ReadNullOrCharIgnoreWhitespace('{');
 		}
 
 		internal override void EndReadObject()
 		{
 			ReadCharIgnoreWhitespace('}');
-		}
+            base.EndReadObject();
+        }
 
 
 		internal override bool StartReadDictionary()
@@ -191,7 +195,7 @@ namespace ES3Internal
 		 */
 		internal override bool Goto(string key)
 		{
-			if(settings.encryptionType == ES3.EncryptionType.None)
+			if(settings.encryptionType == ES3.EncryptionType.None && settings.compressionType == ES3.CompressionType.None)
 				Reset();
 
 			string currentKey;

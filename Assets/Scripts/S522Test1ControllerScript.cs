@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class S522Test1ControllerScript : MonoBehaviour
 {
 
+    /*
     public float DeltaTimeCount = 0f;
     [SerializeField] int CountdownInt;
     [SerializeField] string ActiveSceneName;
@@ -95,7 +96,7 @@ public class S522Test1ControllerScript : MonoBehaviour
     {
         SceneManager.LoadScene("S523Interval2");
     }
-
+    */
 
 
 

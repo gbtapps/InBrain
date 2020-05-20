@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ES3AutoSaveMgr : MonoBehaviour, ISerializationCallbackReceiver 
+public class ES3AutoSaveMgr : MonoBehaviour
 {
 	public static ES3AutoSaveMgr Instance
 	{
@@ -22,14 +22,17 @@ public class ES3AutoSaveMgr : MonoBehaviour, ISerializationCallbackReceiver
 	public string key = System.Guid.NewGuid().ToString();
 	public SaveEvent saveEvent = SaveEvent.OnApplicationQuit;
 	public LoadEvent loadEvent = LoadEvent.Awake;
-	public ES3SerializableSettings settings = null;
+	public ES3SerializableSettings settings = new ES3SerializableSettings("AutoSave.es3");
 
-	public HashSet<ES3AutoSave> autoSaves = null;
+	public HashSet<ES3AutoSave> autoSaves = new HashSet<ES3AutoSave>();
 
 	public void Save()
 	{
-		if(autoSaves == null || autoSaves.Count == 0)
-			return;
+        if (autoSaves == null || autoSaves.Count == 0)
+        {
+            ES3.DeleteKey(key, settings);
+            return;
+        }
 
         var gameObjects = new List<GameObject>();
         foreach (var autoSave in autoSaves)
@@ -73,8 +76,7 @@ public class ES3AutoSaveMgr : MonoBehaviour, ISerializationCallbackReceiver
 	void OnApplicationPause(bool paused)
 	{
 		if(	(saveEvent == SaveEvent.OnApplicationPause || 
-			(Application.isMobilePlatform && saveEvent == SaveEvent.OnApplicationQuit)) && 
-			paused)
+			(Application.isMobilePlatform && saveEvent == SaveEvent.OnApplicationQuit)) && paused)
 			Save();
 	}
 
@@ -91,15 +93,4 @@ public class ES3AutoSaveMgr : MonoBehaviour, ISerializationCallbackReceiver
 		if(ES3AutoSaveMgr.Instance != null)
 			ES3AutoSaveMgr.Instance.autoSaves.Remove(autoSave);
 	}
-
-	public void OnBeforeSerialize()
-	{
-		#if UNITY_EDITOR
-		// If the default settings have not yet been set, set them.
-		if(settings == null || settings.bufferSize == 0)
-			settings = new ES3SerializableSettings (true);
-		#endif
-	}
-
-	public void OnAfterDeserialize(){}
 }

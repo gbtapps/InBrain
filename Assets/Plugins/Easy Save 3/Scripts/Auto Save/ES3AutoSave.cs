@@ -1,9 +1,13 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class ES3AutoSave : MonoBehaviour
 {
 	public bool saveChildren = false;
 	private bool isQuitting = false;
+
+    [HideInInspector]
+    public List<Component> componentsToSave = new List<Component>();
 
     public void Awake()
     {

@@ -46,6 +46,9 @@ namespace ES3Internal
 			long id;
 			if(localRefs.TryGetValue(obj, out id))
 				return id;
+
+            if (!ES3ReferenceMgr.CanBeSaved(obj))
+                return -1;
 			id = GetNewRefID();
 			localRefs.Add(obj, id);
 			return id;
@@ -176,9 +179,17 @@ namespace ES3Types
 
 			var es3Prefab = ES3ReferenceMgrBase.Current.GetPrefab(prefabId);
 			if(es3Prefab == null)
-				throw new MissingReferenceException("Prefab with ID "+prefabId+" could not be found.");
-			var instance = GameObject.Instantiate(es3Prefab.gameObject);
-			var instanceES3Prefab = ((GameObject)instance).GetComponent<ES3Prefab>();
+				throw new MissingReferenceException("Prefab with ID "+prefabId+" could not be found.\nPress the 'Refresh References' button on the ES3ReferenceMgr Component of the Easy Save 3 Manager in the scene to refresh prefabs.");
+
+
+#if UNITY_EDITOR
+            // Use PrefabUtility.InstantiatePrefab if we're saving in the Editor and the application isn't playing.
+            // This keeps the connection to the prefab, which is useful for Editor scripts saving data outside of runtime.
+            var instance = Application.isPlaying ? GameObject.Instantiate(es3Prefab.gameObject) : PrefabUtility.InstantiatePrefab(es3Prefab.gameObject);
+#else
+            var instance = GameObject.Instantiate(es3Prefab.gameObject);
+#endif
+            var instanceES3Prefab = ((GameObject)instance).GetComponent<ES3Prefab>();
 			if(instanceES3Prefab == null)
 				throw new MissingReferenceException("Prefab with ID "+prefabId+" was found, but it does not have an ES3Prefab component attached.");
 

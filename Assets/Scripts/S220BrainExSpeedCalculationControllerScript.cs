@@ -10,6 +10,8 @@ public class S220BrainExSpeedCalculationControllerScript : MonoBehaviour
     public GameObject DifficultyPanel;
     public static string GameId;
 
+
+    /*
     public void MoveToS200BrainExMenu()
     {
         SceneManager.LoadScene("S200BrainExMenu");
@@ -22,6 +24,8 @@ public class S220BrainExSpeedCalculationControllerScript : MonoBehaviour
         SceneManager.LoadScene("S221BexSpeedCalculationId1");
 
     }
+    */
+
 
     /*
     public void MoveToS212Bex()

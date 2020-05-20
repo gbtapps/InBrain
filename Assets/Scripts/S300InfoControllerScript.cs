@@ -13,7 +13,7 @@ public class S300InfoControllerScript : MonoBehaviour
 
     [SerializeField] GameObject InformationColumn;
     [SerializeField] GameObject ClockImg;
-    [SerializeField] string DateString;
+    [SerializeField] Text DateText;
     [SerializeField] Text InformationString;
     [SerializeField] Button MoveToDetailBtn;
 
@@ -71,13 +71,19 @@ public class S300InfoControllerScript : MonoBehaviour
             InformationString = TempColumn.transform.Find("InformationText").GetComponent<Text>(); ;
             InformationString.text = InformaitonList[i];
 
+//            GameObject objDate = TempColumn.transform.Find("InformationText").gameObject;
+            DateText = TempColumn.transform.Find("DateText").GetComponent<Text>(); ;
+            DateText.text = "YYYY/MM/DD"+"1";
+
+            
+
 
 
 
 
 //            hoge = TempColumn.GetComponent<RectTransform>();
 
-//            hoge.sizeDeslta = new Vector2(x, y);　//サイズが変更できる　
+            //            hoge.sizeDeslta = new Vector2(x, y);　//サイズが変更できる　
 
 
 

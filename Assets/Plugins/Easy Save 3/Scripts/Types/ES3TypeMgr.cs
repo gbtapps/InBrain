@@ -39,6 +39,11 @@ namespace ES3Internal
 		{
 			if(types == null)
 				Init();
+
+            var existingType = GetES3Type(type);
+            if (existingType != null && existingType.priority > es3Type.priority)
+                return;
+
 			types[type] = es3Type;
 		}
 
@@ -108,11 +113,10 @@ namespace ES3Internal
 			{
 				if(throwException)
 					throw new NotSupportedException(string.Format("ES3Type.type is null when trying to create an ES3Type for {0}, possibly because the element type is not supported.", type));
-
 				return null;
 			}
 
-			Add(type, es3Type);
+            Add(type, es3Type);
 			return es3Type;
 		}
 

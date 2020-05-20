@@ -52,7 +52,7 @@ namespace ES3Internal
 			if(slash == (path.Length - 1))
 				slash = path.Substring(0, slash).LastIndexOf(slashChar);
 			if(slash == -1)
-				Debug.LogError("Path provided is not a directory path as it contains no slashes.");
+				ES3Debug.LogError("Path provided is not a directory path as it contains no slashes.");
 			return path.Substring(0, slash);
 		}
 		

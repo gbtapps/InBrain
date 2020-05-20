@@ -3,6 +3,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ES3Internal;
 using HutongGames.PlayMaker.Actions;
 using HutongGames.PlayMaker;
 using Tooltip = HutongGames.PlayMaker.TooltipAttribute;
@@ -212,6 +213,42 @@ namespace ES3PlayMaker
 	}
 
     [ActionCategory("Easy Save 3")]
+    [Tooltip("Saves all FsmVariables in this FSM to a file with the given key.")]
+    public class SaveAll : SettingsAction
+    {
+        [Tooltip("The unique key we want to use to identity the data we are saving.")]
+        public FsmString key;
+
+        [Tooltip("Save the local variables accessible in this FSM?")]
+        public FsmBool saveFsmVariables = true;
+        [Tooltip("Save the global variables accessible in all FSMs?")]
+        public FsmBool saveGlobalVariables = true;
+
+        public override void OnReset()
+        {
+            key = "key";
+        }
+
+        public override void Enter()
+        {
+            // Get FSMVariables objects required based on whether the user wants to save local variables, global variables or both.
+            var variableLists = new List<FsmVariables>();
+
+            if (saveFsmVariables.Value)
+                variableLists.Add(Fsm.Variables);
+            if (saveGlobalVariables.Value)
+                variableLists.Add(FsmVariables.GlobalVariables);
+
+            var dict = new Dictionary<string, object>();
+
+            foreach (var variableList in variableLists)
+                foreach (var fsmVariable in variableList.GetAllNamedVariables())
+                    dict.Add(fsmVariable.Name, fsmVariable.RawValue);
+            ES3.Save<Dictionary<string, object>>(key.Value, dict);
+        }
+    }
+
+    [ActionCategory("Easy Save 3")]
 	[Tooltip("Saves a byte array as a file, overwriting any existing files.")]
 	public class SaveRaw : SettingsAction
 	{
@@ -348,7 +385,43 @@ namespace ES3PlayMaker
 		}
 	}
 
-	[ActionCategory("Easy Save 3")]
+    [ActionCategory("Easy Save 3")]
+    [Tooltip("Loads all FsmVariables in this FSM to a file with the given key.")]
+    public class LoadAll : SettingsAction
+    {
+        [Tooltip("The key we used to save the data we're loading.")]
+        public FsmString key;
+
+        [Tooltip("Load the local variables accessible in this FSM?")]
+        public FsmBool loadFsmVariables = true;
+        [Tooltip("Load the global variables accessible in all FSMs?")]
+        public FsmBool loadGlobalVariables = true;
+
+        public override void OnReset()
+        {
+            key = "key";
+        }
+
+        public override void Enter()
+        {
+            // Get FSMVariables objects required based on whether the user wants to save local variables, global variables or both.
+            var variableLists = new List<FsmVariables>();
+
+            if (loadFsmVariables.Value)
+                variableLists.Add(Fsm.Variables);
+            if (loadGlobalVariables.Value)
+                variableLists.Add(FsmVariables.GlobalVariables);
+
+            var dict = ES3.Load<Dictionary<string, object>>(key.Value);
+
+            foreach (var variableList in variableLists)
+                foreach (var fsmVariable in variableList.GetAllNamedVariables())
+                    if (dict.ContainsKey(fsmVariable.Name))
+                        fsmVariable.RawValue = dict[fsmVariable.Name];
+        }
+    }
+
+    [ActionCategory("Easy Save 3")]
 	[Tooltip("Loads an entire file as a string.")]
 	public class LoadRawString : SettingsAction
 	{
@@ -846,7 +919,9 @@ namespace ES3PlayMaker
 
 		public override void Enter()
 		{
-			value.SetValue(es3Spreadsheet.GetCell<object>(col.Value, row.Value));
+            var method = new ES3Reflection.ES3ReflectedMethod(typeof(ES3Spreadsheet), "GetCell", new System.Type[] { value.RealType }, new System.Type[] { typeof(int), typeof(int) });
+            var returnValue = method.Invoke(es3Spreadsheet, new object[] { col.Value, row.Value });
+            value.SetValue(returnValue);
 		}
 	}
 	
@@ -1321,7 +1396,7 @@ namespace ES3PlayMaker
 
 		public override void Enter()
 		{
-			StartCoroutine(cloud.DownloadFilenames(user.Value, password.Value, searchPattern.Value));
+			StartCoroutine(cloud.SearchFilenames(searchPattern.Value, user.Value, password.Value));
 		}
 
 		public override void OnUpdate()
@@ -1338,7 +1413,43 @@ namespace ES3PlayMaker
 		}
 	}
 
-	[ActionCategory("Easy Save 3")]
+    [ActionCategory("Easy Save 3")]
+    [Tooltip("Downloads the names of all of the files on the server for the given user.")]
+    public class ES3CloudSearchFilenames : ES3CloudUserAction
+    {
+        [Tooltip("The string array variable we want to load our file names into.")]
+        [ArrayEditor(VariableType.String)]
+        public FsmArray filenames;
+
+        [Tooltip("An optional search pattern containing '%' or '_' wildcards where '%' represents zero, one, or multiple characters, and '_' represents a single character. See https://www.w3schools.com/sql/sql_like.asp for more info.")]
+        public FsmString searchPattern;
+
+        public override void OnReset()
+        {
+            filenames = null;
+            searchPattern = "";
+        }
+
+        public override void Enter()
+        {
+            StartCoroutine(cloud.SearchFilenames(searchPattern.Value, user.Value, password.Value));
+        }
+
+        public override void OnUpdate()
+        {
+            if (cloud != null && cloud.isDone)
+            {
+                var downloadedFilenames = cloud.filenames;
+                filenames.Resize(cloud.filenames.Length);
+                for (int i = 0; i < downloadedFilenames.Length; i++)
+                    filenames.Set(i, downloadedFilenames[i]);
+                filenames.SaveChanges();
+            }
+            base.OnUpdate();
+        }
+    }
+
+    [ActionCategory("Easy Save 3")]
 	[Tooltip("Determines when a file was last updated.")]
 	public class ES3CloudDownloadTimestamp : ES3CloudUserAction
 	{
@@ -1388,7 +1499,47 @@ namespace ES3PlayMaker
 		}
 	}
 
-	#endregion
+    #endregion
+
+    #region ES3Cache actions
+
+    [ActionCategory("Easy Save 3")]
+    [Tooltip("Caches a locally-stored file into memory.")]
+    public class CacheFile : SettingsAction
+    {
+        [Tooltip("The filename or file path of the file we want to cache.")]
+        public FsmString filePath;
+
+        public override void OnReset()
+        {
+            filePath = "SaveFile.es3";
+        }
+
+        public override void Enter()
+        {
+            ES3.CacheFile(filePath.Value, GetSettings());
+        }
+    }
+
+    [ActionCategory("Easy Save 3")]
+    [Tooltip("Stores a file in the cache to a local file.")]
+    public class StoreCachedFile : SettingsAction
+    {
+        [Tooltip("The filename or file path of the file we want to store.")]
+        public FsmString filePath;
+
+        public override void OnReset()
+        {
+            filePath = "SaveFile.es3";
+        }
+
+        public override void Enter()
+        {
+            ES3.StoreCachedFile(filePath.Value, GetSettings());
+        }
+    }
+
+    #endregion
 }
 
 
