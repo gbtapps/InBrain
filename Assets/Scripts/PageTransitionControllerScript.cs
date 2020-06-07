@@ -218,6 +218,29 @@ public class PageTransitionControllerScript : MonoBehaviour
     }
 
 
+    
+    public void MoveToT_TitleSelect()
+    {
+        SceneManager.LoadScene("T_TitleSelect");
+
+    }
+
+    public void MoveToTr_TrainingNeuro()
+    {
+        SceneManager.LoadScene("Tr_TrainingNeuro");
+        
+            
+
+    }
+
+    public void MoveToTr_TrainingNeuroTest()
+    {
+        SceneManager.LoadScene("Tr_TrainingNeuroTest");
+
+    }
+
+
+
     // Start is called before the first frame update
     void Start()
     {

@@ -6,8 +6,15 @@ namespace ES3Internal
 {
     public class ES3GlobalReferences : ScriptableObject
     {
+#if !UNITY_EDITOR || ES3GLOBAL_DISABLED
+        public static ES3GlobalReferences Instance{ get{ return null; } }
+        public UnityEngine.Object Get(long id){return null;}
+        public long GetOrAdd(UnityEngine.Object obj){return 0;}
+        public void RemoveInvalidKeys(){}
+#else
         private const string globalReferencesPath = "ES3/ES3GlobalReferences";
 
+        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public ES3RefIdDictionary refId = new ES3RefIdDictionary();
 
         private static ES3GlobalReferences _globalReferences = null;
@@ -15,13 +22,14 @@ namespace ES3Internal
         {
             get
             {
-                if (!ES3Settings.defaultSettingsScriptableObject.useGlobalReferences)
+                // If Global References is disabled, we still keep it enabled unless we're playing so that ES3ReferenceMgrs in different scenes still use the same IDs.
+                if (Application.isPlaying)
                     return null;
 
                 if (_globalReferences == null)
                 {
                     _globalReferences = Resources.Load<ES3GlobalReferences>(globalReferencesPath);
-#if UNITY_EDITOR
+
                     if (_globalReferences == null)
                     {
                         _globalReferences = ScriptableObject.CreateInstance<ES3GlobalReferences>();
@@ -36,13 +44,14 @@ namespace ES3Internal
                         UnityEditor.AssetDatabase.CreateAsset(_globalReferences, PathToGlobalReferences());
                         UnityEditor.AssetDatabase.SaveAssets();
                     }
-#endif
+
                 }
+
                 return _globalReferences;
             }
         }
 
-        public long Get(UnityEngine.Object obj)
+        private long Get(UnityEngine.Object obj)
         {
             if (obj == null)
                 return -1;
@@ -85,7 +94,6 @@ namespace ES3Internal
             refId = newRefId;
         }
 
-#if UNITY_EDITOR
         public long GetOrAdd(UnityEngine.Object obj)
         {
             if (Application.isPlaying)

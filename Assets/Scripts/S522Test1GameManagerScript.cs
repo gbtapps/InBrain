@@ -59,6 +59,12 @@ public class S522Test1GameManagerScript : MonoBehaviour
     //開始時刻取得（1問目 i=0、2問目 i=1）
     public DateTime[] startDateTime = new DateTime[2];
 
+
+    // 回答記録処理
+    List<string> T1UserAnswerList = new List<string>();
+    public string EsThreeParaName = "";
+
+
     //タッチボタン数
     public static int pushDownTask1 = 0;
     public static int pdtTask1 = 0;
@@ -102,17 +108,56 @@ public class S522Test1GameManagerScript : MonoBehaviour
     private TMT1TouchManagerScript InstanceTMT1TouchManagerScript;
 
 
+
+    public void SaveT1UserAnswerList(string dateandtime)
+    {
+
+
+
+        // Make ES3 save point name
+        EsThreeParaName = "T1UserAnswerList" + dateandtime;
+        //        Debug.Log(EsThreeParaName); 
+
+
+        ES3.Save<List<string>>(EsThreeParaName, T1UserAnswerList);
+
+        //保存確認
+        List<string> temp = new List<string>();
+        temp = ES3.Load<List<string>>(EsThreeParaName);
+        foreach(string str in temp)
+        {
+            Debug.Log(str);
+        }
+
+
+    }
+
+
+
+
+
+
+
     //プッシュしたボタン数と時刻を記録する関数
     public void PushDown()
     {
+/*
 
         //エディタでアタッチしたテキストを扱えるようにする
         Text touches_text = touches.GetComponent<Text>();
 
-        pushDownTask1++;
-        pushDownTimeTask1[pdtTask1] = DateTime.Now;
-        //        Debug.Log("pushDownTime[pdt]" + pushDownTime[pdt]);
 
+        //画面タップ数カウントアップ
+        pushDownTask1++;
+
+        //画面タップした時間を記録
+        pushDownTimeTask1[pdtTask1] = DateTime.Now;
+
+
+
+
+
+        /*
         //平均プッシュ時間、最大時間、最小時間等を計算する
         //最初のボタン（＝１）を探す箇所はスキップする
         if (pdtTask1 == 0)
@@ -137,7 +182,10 @@ public class S522Test1GameManagerScript : MonoBehaviour
             pdtTask1++;
             return;
         }
+        */
 
+
+        /*
         //タップ時間を取得する（最大、最小、平均）
         //NとN-1プッシュ時刻の差分＝プッシュ時間を算出
         TimeSpan diff = pushDownTimeTask1[pdtTask1] - pushDownTimeTask1[pdtTask1 - 1];
@@ -173,10 +221,13 @@ public class S522Test1GameManagerScript : MonoBehaviour
         }
         //        Debug.Log("minTaptimePushDownTask1: " + minTaptimePushDownTask1);
 
+
+
         ShowResultMonitorPushDownTask1();
             
         pdtTask1++;
-        
+     */
+            
     }
 
 
@@ -200,7 +251,6 @@ public class S522Test1GameManagerScript : MonoBehaviour
         touches_text.text = result.ToString();
 
     }
-
 
     //プッシュしたボタン全ての数のゲッター
     public static int GetPushDownTask1()
@@ -233,9 +283,11 @@ public class S522Test1GameManagerScript : MonoBehaviour
     }
 
 
+
     public void RightPush()
     {
 
+        /*
         rightPushTask1++;
         rightPushTimeTask1[rptTask1] = DateTime.Now;
 //        Debug.Log("rightPushTimeTask1[rptTask1]" + rightPushTimeTask1[rptTask1]);
@@ -301,6 +353,17 @@ public class S522Test1GameManagerScript : MonoBehaviour
         ShowResultMonitorRightPushTask1();
 
         rptTask1++;
+        */
+
+
+
+        // "回答時刻,正誤(0or1)"をリストに登録
+        T1UserAnswerList.Add(DateTime.Now.ToString("yyyyMMddHHmmss.fff") + "," + "1");
+        
+
+
+
+
 
     }
 
@@ -357,6 +420,8 @@ public class S522Test1GameManagerScript : MonoBehaviour
 
     public void WrongPush()
     {
+
+        /*
         //エディタでアタッチしたテキストを扱えるようにする
         Text wrongs_text = wrongs.GetComponent<Text>();
 
@@ -426,6 +491,14 @@ public class S522Test1GameManagerScript : MonoBehaviour
         ShowResultMonitorWrongPushTask1();
 
         wptTask1++;
+
+        */
+
+
+        // "回答時刻,正誤(0or1)"をリストに登録
+        T1UserAnswerList.Add(DateTime.Now.ToString("yyyyMMddHHmmss.fff") + "," + "0");
+
+
 
     }
 
@@ -504,29 +577,31 @@ public class S522Test1GameManagerScript : MonoBehaviour
 //        Debug.Log("buttonCount：" + buttonCount);
     }
 
+
     // Start is called before the first frame update
     void Start()
     {
 
 
-
-
-
-
+        // Get currect scene name
         ActiveSceneName.text = SceneManager.GetActiveScene().name;
 
 
-
-    //TMT1TouchMnagerの機能を使う
-    TMT1TouchManager = GameObject.Find("TMT1TouchManager");
+        //TMT1TouchMnagerの機能を使う
+        TMT1TouchManager = GameObject.Find("TMT1TouchManager");
         InstanceTMT1TouchManagerScript = TMT1TouchManager.GetComponent<TMT1TouchManagerScript>();
 
 
 
-        startDateTime[0] = DateTime.Now;
+
+
+
+    startDateTime[0] = DateTime.Now;
 //        Debug.Log("startDateTime[0] ：" + startDateTime[0]);
         CreateTargets(numOfTargets);
     }
+
+
 
     public void ReCreateTargets()
     {
@@ -547,7 +622,12 @@ public class S522Test1GameManagerScript : MonoBehaviour
         spenttime.text = "経過時間: " + difftimedouble.ToString();
 
 
+
     }
+
+
+
+
 
 
     public void DropButtons()

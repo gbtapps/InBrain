@@ -60,7 +60,7 @@ public class TMT2TouchManagerScript : MonoBehaviour
         //ボタンタップのカウンタbCountを作成
         int bCount;
         bCount = InstanceS524Test2GameManagerScript.GetButtonCount();
-        Debug.Log("bCount= " + bCount);
+//        Debug.Log("bCount= " + bCount);
 
         //1から順ではないと押せない処理
         //テキストを受ける
@@ -68,7 +68,7 @@ public class TMT2TouchManagerScript : MonoBehaviour
         string touched_button_value = target_text_text.text;
 
 //        Debug.Log("target_text_text.text: " + target_text_text.text);
-        Debug.Log("touched_button_value: " + touched_button_value);
+//        Debug.Log("touched_button_value: " + touched_button_value);
 
         //タッチしたボタンと正解数字との比較し正解だったら
 
@@ -103,7 +103,7 @@ public class TMT2TouchManagerScript : MonoBehaviour
             case 26: buttonSymbol = "14"; break;
         }
 
-            Debug.Log("buttonSymbol:" + buttonSymbol);
+//            Debug.Log("buttonSymbol:" + buttonSymbol);
 
 
         //        if ( touched_button_value == bCount.ToString() )

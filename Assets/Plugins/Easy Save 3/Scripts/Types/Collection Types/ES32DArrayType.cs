@@ -70,7 +70,7 @@ namespace ES3Types
 			return array;*/
 		}
 
-		public override object Read(ES3Reader reader)
+        public override object Read(ES3Reader reader)
 		{
 			if(reader.StartReadCollection())
 				return null;
@@ -103,8 +103,12 @@ namespace ES3Types
 			return array;
 		}
 
-	
-		public override void ReadInto<T>(ES3Reader reader, object obj)
+        public override void ReadInto<T>(ES3Reader reader, object obj)
+        {
+            ReadInto(reader, obj);
+        }
+
+        public override void ReadInto(ES3Reader reader, object obj)
 		{
 			var array = (Array)obj;
 

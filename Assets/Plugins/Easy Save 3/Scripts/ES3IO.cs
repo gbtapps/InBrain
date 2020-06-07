@@ -114,6 +114,8 @@ namespace ES3Internal
 
 		public static void CommitBackup(ES3Settings settings)
 		{
+            ES3Debug.Log("Committing backup for "+settings.path+" to storage location "+settings.location);
+
 			if(settings.location == ES3.Location.File)
 			{
 				// Delete the old file before overwriting it.

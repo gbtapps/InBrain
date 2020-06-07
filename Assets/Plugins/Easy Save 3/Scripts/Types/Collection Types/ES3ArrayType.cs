@@ -95,7 +95,7 @@ namespace ES3Types
 
 		public override void ReadInto<T>(ES3Reader reader, object obj)
 		{
-			ReadICollectionInto(reader, (T[])obj, elementType);
+			ReadICollectionInto(reader, (ICollection)obj, elementType);
 		}
 
 		public override void ReadInto(ES3Reader reader, object obj)

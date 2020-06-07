@@ -582,6 +582,23 @@ MonoBehaviour:
   BrainFlow: {fileID: 372643009}
   XbValue: {fileID: 1540478440}
   AvgXbValue: {fileID: 200162122}
+  BrainValueBackgroudImage: {fileID: 0}
+  target: {fileID: 0}
+  CountdownPanelImage: {fileID: 0}
+  DeltaTimeCount: 0
+  CountdownText: {fileID: 0}
+  CountdownInt: 0
+  AdjustBrainValueText: {fileID: 0}
+  BrainValueText: {fileID: 0}
+  TestValueText: {fileID: 0}
+  EstateText: {fileID: 0}
+  EmodeText: {fileID: 0}
+  logData: []
+  ParmPathText: {fileID: 0}
+  TempPathText: {fileID: 0}
+  SumDeltaTimeScene: 0
+  SceneLimitTime: 0
+  ActiveSceneName: 
 --- !u!1 &371401287
 GameObject:
   m_ObjectHideFlags: 0
@@ -2063,7 +2080,7 @@ PrefabInstance:
     - target: {fileID: 6320474181997261759, guid: eb4fe15c11173ac4b9a06c7b5c53479d,
         type: 3}
       propertyPath: m_startScene
-      value: 5
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6320474181997261759, guid: eb4fe15c11173ac4b9a06c7b5c53479d,
         type: 3}

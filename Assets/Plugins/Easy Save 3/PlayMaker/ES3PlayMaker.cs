@@ -919,9 +919,7 @@ namespace ES3PlayMaker
 
 		public override void Enter()
 		{
-            var method = new ES3Reflection.ES3ReflectedMethod(typeof(ES3Spreadsheet), "GetCell", new System.Type[] { value.RealType }, new System.Type[] { typeof(int), typeof(int) });
-            var returnValue = method.Invoke(es3Spreadsheet, new object[] { col.Value, row.Value });
-            value.SetValue(returnValue);
+            value.SetValue(es3Spreadsheet.GetCell(value.RealType, col.Value, row.Value));
 		}
 	}
 	

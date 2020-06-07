@@ -7,12 +7,17 @@ using System.Linq;
 using System.IO;
 using System;
 
+
 using UnityEngine.SceneManagement;
 
 
 
-//ニューロフィードバック
-//脳活動を上げ下げするやつ！
+//脳血流測定
+//指定時間の脳血流を測定する
+
+
+
+
 public class Tr_TrainingNeuro : SceneBase
 {
 
@@ -29,6 +34,7 @@ public class Tr_TrainingNeuro : SceneBase
         MOVE,
         FIN
     }
+    
 
     STATE state;
 
@@ -58,6 +64,12 @@ public class Tr_TrainingNeuro : SceneBase
     //現在脳血流と平均との差分
     float _length;
 
+    //test code
+    string TestCode = "";
+
+    //test on/off
+    string OnTest = "0";
+
 
     //タイムマネジメント
     float cnt = 0;
@@ -65,9 +77,11 @@ public class Tr_TrainingNeuro : SceneBase
     [SerializeField] Text cntValue;
 
     //取得データマネジメント
-    List<float> Xb01ValueList = new List<float>();
+    List<string> Xb01ValueList = new List<string>();
+    public string EsThreeParaName = "";
 
-    //デバッグ
+
+    //Debug text for Demo
     [SerializeField] Text DataCount;
     [SerializeField] Text BrainFlow;
     [SerializeField] Text XbValue;
@@ -81,6 +95,8 @@ public class Tr_TrainingNeuro : SceneBase
     [SerializeField] GameObject BrainValueBackgroudImage;
     [SerializeField] GameObject target;
     GameObject[] BrainValueColumnArray = new GameObject[BRAIN_VALUES_COUNT];
+    int p = 0;
+
 
     float PreviousXbValue = 0;
     float ColumnValue = 100;
@@ -88,60 +104,176 @@ public class Tr_TrainingNeuro : SceneBase
 
     //Values
     List<float> BrainValueList = new List<float>();
-    List<float> BrainValueDeviation = new List<float>();
 
 
-    // Time controll
+    // Time controll for Demo
     float SumDeltatime;
-    int p = 0;
 
-    //Countdown
-    [SerializeField] GameObject CountdownPanelImage;
-    public float DeltaTimeCount = 0f;
-    public Text CountdownText;
-    public int CountdownInt;
-
-    // Debug
+    // Debug-demo
     [SerializeField] Text AdjustBrainValueText;
     [SerializeField] Text BrainValueText;
     [SerializeField] Text TestValueText;
     int DEBUGSTRINGLIMIT = 100;
 
+    // Status
     [SerializeField] Text EstateText;
     [SerializeField] Text EmodeText;
+    [SerializeField] Text StateText;
+
 
     // log
-//    public int[] logData; // Logデータの宣言 テスト
-    public float[] logData; // Logデータの宣言 テスト
+    //    public int[] logData; // Logデータの宣言 テスト
+    //public float[] logData; // Logデータの宣言 テスト
+    public string[] logData; // Logデータの宣言 テスト
+
+
     [SerializeField] Text ParmPathText;
     [SerializeField] Text TempPathText;
 
     // finish process
-    public float SumDeltaTimeScene;
-    [SerializeField] int SceneLimitTime;
+    float SumDeltaTimeScene;
+
+    [SerializeField] int DemoTime;
+    [SerializeField] int DemoCountdown;
+
+
+    // Countdown
+    [SerializeField] GameObject CountdownPanelImage;
+    [SerializeField] float DeltaTimeCount = 0f;
+    [SerializeField] Text CountdownText;
+    [SerializeField] int CountdownInt;
+
+    // whole scene controll
+    [SerializeField] float SumDeltaTimeWholeScene;
+    int SumTimeWholeScene;
+    [SerializeField] int IntervalTime;
+    [SerializeField] int TestTime;
+
+    int Interval1StartTime;
+    int Test1StartTime;
+    int Interval2StartTime;
+    int Test2StartTime;
+    int Interval3StartTime;
+    int FinishProcessStartTime;
+
+    // Active scene name 
     [SerializeField] string ActiveSceneName;
+
+    // Test Controll
+    [SerializeField] GameObject Test1Area;
+    [SerializeField] GameObject Test2Area;
+
+
+    // Status
+    public string SceneStatus;
+
+
+    // Start Date&Time;
+    string StartDateAndTime;
+
+
+    //
+    //外部クラスの関数や変数を使う
+    //
+
+    private GameObject S522Test1GameManager;
+    private S522Test1GameManagerScript InstanseS522Test1GameManagerScript;
+
+    private GameObject S524Test2GameManager;
+    private S524Test2GameManagerScript InstanseS524Test2GameManagerScript;
+
+    List<string> TestLogSaveNameList = new List<string>();
+    string EsThreeTestLogSaveName = "Es3TestLogSaveNameList";
+
+    private bool WithXb01flg;
+
 
 
     //added by moritomi until here
     /**********************************************************************/
 
 
+
+
     void Start()
     {
-        //ログ出力（テスト）
-//        logData = new int[] { 1, 3, 5, 7, 9 }; // 仮のLogデータ
-//        logData = new float[] { 1.2f, 3.1f, 5.6f, 7.2f, 9.9f }; // 仮のLogデータ
-//        LogSave(logData, "logData"); // Logデータをcsv形式で書き出す
+
+        //Set using xb01 flg from another scene
+        WithXb01flg = S510ConnectingSensorControllerScript.WithXb01;
+
+        WithXb01flg = true;
+
+        StartDateAndTime = DateTime.Now.ToString("yyyyMMddHHmmss");
 
 
         //Get active scene name
         ActiveSceneName = SceneManager.GetActiveScene().name;
 
-        //Add countdown time to scene limit time
-        SceneLimitTime += CountdownInt;
 
-        //Start countdown
-        CountdownStart();
+        if (ActiveSceneName == "Tr_TrainingNeuro")
+        {
+
+            //TestArea(included the target buttons of test) hides;
+            Test1Area.SetActive(false);
+            Test2Area.SetActive(false);
+
+
+            //S522Test1GameManagerの機能と変数を使う
+            S522Test1GameManager = GameObject.Find("S522Test1GameManager");
+            InstanseS522Test1GameManagerScript = S522Test1GameManager.GetComponent<S522Test1GameManagerScript>();
+
+            //S524Test2GameManagerの機能と変数を使う
+            S524Test2GameManager = GameObject.Find("S524Test2GameManager");
+            InstanseS524Test2GameManagerScript = S524Test2GameManager.GetComponent<S524Test2GameManagerScript>();
+
+            // Make ES3 save point name
+            EsThreeParaName = "Xb01ValueList" + StartDateAndTime;
+
+            //
+            TestCode = "TMT";
+
+            //Set count for countdown
+            CountdownInt = IntervalTime;
+
+
+
+            //Time Controll
+            Interval1StartTime = 0;
+            Test1StartTime = IntervalTime;
+            Interval2StartTime = IntervalTime + TestTime;
+            Test2StartTime = IntervalTime + TestTime + IntervalTime;
+            Interval3StartTime = IntervalTime + TestTime + IntervalTime + TestTime;
+            FinishProcessStartTime = IntervalTime + TestTime + IntervalTime + TestTime + IntervalTime;
+
+
+            /*
+            Debug.Log("Interval1StartTime: "+ Interval1StartTime);
+            Debug.Log("Test1StartTime: " + Test1StartTime);
+            Debug.Log("Interval2StartTime: " + Interval2StartTime);
+            Debug.Log("Test2StartTime: " + Test2StartTime);
+            Debug.Log("Interval3StartTime: " + Interval3StartTime);
+            Debug.Log("FinishProcessStartTime: " + FinishProcessStartTime);
+            */
+
+
+        }
+        else
+        {
+            CountdownInt = DemoCountdown;
+            TestCode = "DEMO";
+
+            //Start countdown
+            CountdownStart();
+            DemoTime += DemoCountdown;
+
+
+        }
+
+
+
+
+
+
 
 
         CommonHeaderMfn.Instance.SetView(false);
@@ -167,10 +299,208 @@ public class Tr_TrainingNeuro : SceneBase
     private void Update()
     {
 
-        //Show countdown
-        CountdownUpdate();
 
-        //Controll behavior
+        // if test mode
+        // 5 seconds of first interval and 30 seconds of demonstration.
+        // if check mode
+        // 10 secondes of first inteval and 50 secondes of test, which go twice and 10 seconds of last interval.
+
+
+
+        SumDeltaTimeWholeScene += Time.deltaTime;
+
+        if (SumDeltaTimeWholeScene > 1.0f)
+        {
+            SumTimeWholeScene++;
+            CountdownInt--;
+//            Debug.Log("SumTimeWholeScene: " + SumTimeWholeScene);
+            SumDeltaTimeWholeScene = 0;
+        }
+
+
+
+        if (ActiveSceneName == "Tr_TrainingNeuro")
+        {
+
+            //Inverval1 Start
+            if (SumTimeWholeScene >= Interval1StartTime && SumTimeWholeScene < Test1StartTime)
+            {
+                SceneStatus = "Interval1";
+                TestCode = "Interval1";
+
+                //                Debug.Log("Interval1StartTime");
+                CountdownPanelImage.SetActive(true);
+                CountdownText.text = CountdownInt.ToString() + "\nInterval1";
+
+                //Test On/Off
+                OnTest = "0";
+
+
+            }
+
+            //Test1 Start
+            else if (SumTimeWholeScene >= Test1StartTime && SumTimeWholeScene < Interval2StartTime)
+            {
+                //                Debug.Log("Test1StartTime");
+                SceneStatus = "Test1";
+                TestCode = "Test1";
+                CountdownPanelImage.SetActive(false);
+                Test1Area.SetActive(true);
+                CountdownInt = IntervalTime+1;
+            
+                //Test On/Off
+                OnTest = "1";
+
+            }
+
+            //Inverval2 Start
+            else if (SumTimeWholeScene >= Interval2StartTime && SumTimeWholeScene < Test2StartTime)
+            {
+                //                Debug.Log("Interval2StartTime");
+
+
+                SceneStatus = "Interval2";
+                TestCode = "Interval2";
+
+                //Hide Test1 area 
+                Test1Area.SetActive(false);
+                CountdownPanelImage.SetActive(true);
+                CountdownText.text = CountdownInt.ToString() + "\nInterval2";
+
+                //Test On/Off
+                OnTest = "0";
+
+            }
+
+            //Test2 Start
+            else if (SumTimeWholeScene >= Test2StartTime && SumTimeWholeScene < Interval3StartTime)
+            {
+                //               Debug.Log("Test2StartTime");
+                SceneStatus = "Test2";
+                TestCode = "Test2";
+
+                CountdownPanelImage.SetActive(false);
+                Test2Area.SetActive(true);
+                CountdownInt = IntervalTime+1;
+
+                //Test On/Off
+                OnTest = "1";
+
+            }
+
+            //Inverval3 Start
+            else if (SumTimeWholeScene >= Interval3StartTime && SumTimeWholeScene < FinishProcessStartTime)
+            {
+                //                Debug.Log("Interval3StartTime");
+                SceneStatus = "Interval3";
+                TestCode = "Interval3";
+
+                Test2Area.SetActive(false);
+                CountdownPanelImage.SetActive(true);
+                CountdownText.text = CountdownInt.ToString() + "\nInterval3";
+
+                //Test On/Off
+                OnTest = "0";
+
+            }
+
+            //Finish Process Start
+            else if (SumTimeWholeScene == FinishProcessStartTime)
+            {
+
+
+                SceneStatus = "FinishProcess";
+
+
+                //Save logs on each test and xb01
+                InstanseS522Test1GameManagerScript.SaveT1UserAnswerList(StartDateAndTime);
+                InstanseS524Test2GameManagerScript.SaveT2UserAnswerList(StartDateAndTime);
+
+
+                //Call save parameter name
+                string name1 = InstanseS522Test1GameManagerScript.EsThreeParaName;
+                string name2 = InstanseS524Test2GameManagerScript.EsThreeParaName;
+
+
+                //Check exist of save parameter to save new data after previous data
+                bool existsKey = ES3.KeyExists(EsThreeTestLogSaveName);
+                if (existsKey == true)
+                {
+                    //Load save parameter name list
+                    TestLogSaveNameList = ES3.Load<List<string>>(EsThreeTestLogSaveName);
+                }
+
+                
+                string tmpstr = StartDateAndTime +"," + name1 + "," + name2;
+                Debug.Log("tmpstr: " + tmpstr);
+
+
+                // Process when with xb01
+                if (WithXb01flg == true)
+                {
+
+                    // Save Xb01 value to es3 on function
+                    SaveXb01ValueList();
+
+                    // Save xb01 value to csv file
+                    logData = Xb01ValueList.ToArray();
+                    LogSave(logData, "DebugTestLogData");
+
+                    // Set name of xb01 data on save string
+                    string name3 = EsThreeParaName;
+                    tmpstr += "," + name3;
+
+                }
+
+
+                //Add current save parameter name to list
+                TestLogSaveNameList.Add(tmpstr);
+
+
+                //Save list(controll list name, answer list name)
+                ES3.Save<List<string>>(EsThreeTestLogSaveName, TestLogSaveNameList);
+
+
+
+                //debug for 
+                List<string> temp = new List<string>();
+                temp = ES3.Load<List<string>>(EsThreeTestLogSaveName);
+
+                foreach(string str in temp)
+                {
+                    Debug.Log(str);
+                }
+
+                Debug.Log("FinishProcessStartTime");
+
+                //Change scene
+                SceneManager.LoadScene("S526TestResultSummary");
+
+
+
+            }
+
+        }
+
+
+
+        else if (ActiveSceneName == "Tr_TrainingNeuroTest")
+        {
+
+//            Debug.Log("ActiveSceneName: " + ActiveSceneName);
+
+            //Show countdown
+            CountdownUpdate();
+
+            //Finish process
+            FinishProcess();
+
+            StateText.text = "Status: " + state;
+
+        }
+
+
+        //Measure Process starts from beginning
         switch (state)
         {
             case STATE.START:
@@ -181,9 +511,11 @@ public class Tr_TrainingNeuro : SceneBase
                 state = STATE.MOVE;
                 break;
             case STATE.MOVE:
+
+                //Measuring
                 UpdateMove();
 
-                //added by moritomi
+                //Drawing chart
                 UpdateChart();
 
                 break;
@@ -192,12 +524,11 @@ public class Tr_TrainingNeuro : SceneBase
                 break;
         }
 
+
+        
         // To try to draw chart instead of removing sensor
-        //        UpdateChart();
+//        UpdateChart();
 
-
-        //Finish process
-        FinishProcess();
 
 
 
@@ -206,9 +537,8 @@ public class Tr_TrainingNeuro : SceneBase
     }
 
 
-    //紙飛行機登場。この隙に5秒間の脳波の平均値を取得
-    //↑よくわからん
 
+    //指定秒間の脳血流の平均値を取得したら準備時間完了
     void UpdateStart()
     {
 
@@ -229,6 +559,14 @@ public class Tr_TrainingNeuro : SceneBase
                 //added by moritomi
                 //eModeRecieveData
                 EmodeText.text = "RecieveData: Yes";
+
+
+
+                //ここにデータ取得ロジックを入れるとギャップがない
+
+
+
+
 
             }
             else
@@ -306,7 +644,11 @@ public class Tr_TrainingNeuro : SceneBase
             xbValue = GetXBValue();
 
             //Add measured values to List
-            Xb01ValueList.Add(xbValue);
+//            Xb01ValueList.Add(xbValue);
+
+            Xb01ValueList.Add(DateTime.Now.ToString("yyyyMMddHHmmss.fff") + "," + xbValue.ToString()+","+OnTest+","+ TestCode);
+
+
 
             //偏差
             _length = xbValue - avgXbValue;
@@ -408,10 +750,23 @@ public class Tr_TrainingNeuro : SceneBase
         if (SumDeltatime > 0.1f)
         {
 
-            //            float bvalue = _Tr_TrainingNeuro._length;
-            //            BrainValueText.text = bvalue.ToString() + "\n" + BrainValueText.text;
+
 
             float sin = Mathf.Sin(Time.time);
+
+
+            TestValueText.text = sin.ToString() + "\n" + TestValueText.text;            
+            BrainValueText.text = xbValue.ToString() + "\n" + BrainValueText.text;
+            if (TestValueText.text.Length > DEBUGSTRINGLIMIT)
+            {
+                TestValueText.text = TestValueText.text.Substring(0, DEBUGSTRINGLIMIT);
+            }
+            if (BrainValueText.text.Length > DEBUGSTRINGLIMIT)
+            {
+                BrainValueText.text = BrainValueText.text.Substring(0, DEBUGSTRINGLIMIT);
+            }
+
+
 
 
             //show chart
@@ -419,7 +774,7 @@ public class Tr_TrainingNeuro : SceneBase
             //set size value
 
 
-            if(PreviousXbValue < xbValue)
+            if (PreviousXbValue < xbValue)
             {
                 ColumnValue += 1.0f;
                 if (ColumnValue > 200f)
@@ -491,7 +846,10 @@ public class Tr_TrainingNeuro : SceneBase
     void CountdownUpdate()
     {
 
+        Debug.Log("CountdownUpdate");
+
         DeltaTimeCount += Time.deltaTime;
+        
 
 
         if (DeltaTimeCount >= 1.0f)
@@ -500,31 +858,38 @@ public class Tr_TrainingNeuro : SceneBase
             DeltaTimeCount = 0.0f;
 
 
+
+            //CountdownInt value is different among Test and Demo.
             if (CountdownInt > 0)
             {
                 //カウントダウン表示
                 CountdownText.text = CountdownInt.ToString();
+                Debug.Log("CountdownText.text: "+ CountdownText.text);
 
             }
             else
             {
-
                 CountdownPanelImage.SetActive(false);
-
-
 
             }
 
+            //Update()で実装したのでこちらは消す
             //1秒たったのでカウントをダウンする
-            CountdownInt--;
+//            CountdownInt--;
 
         }
 
     }
 
+
+
+
+
+
 //    public void LogSave(int[] x, string fileName)
 
-    public void LogSave(float[] x, string fileName)
+//    public void LogSave(float[] x, string fileName)
+    public void LogSave(string[] x, string fileName)
     {
         StreamWriter sw; // これがキモらしい
         FileInfo fi;
@@ -586,16 +951,17 @@ public class Tr_TrainingNeuro : SceneBase
             SumDeltaTimeScene = 0.0f;
 
             //1秒たったのでカウントをダウンする
-            SceneLimitTime--;
+            DemoTime--;
 
-            if (SceneLimitTime == 0)
+            if (DemoTime == 0)
             {
 
 
                 //                logData = new float[] { 1.2f, 3.1f, 5.6f, 7.2f, 9.9f }; // 仮のLogデータ
 
+//                logData = Xb01ValueList.ToArray();
                 logData = Xb01ValueList.ToArray();
-                LogSave(logData, "logData"); // Logデータをcsv形式で書き出す
+                LogSave(logData, "DemoLogData"); // Logデータをcsv形式で書き出す
 //                LogSave(Xb01ValueList, "logDataList"); // Logデータをcsv形式で書き出す
 
                
@@ -603,7 +969,7 @@ public class Tr_TrainingNeuro : SceneBase
 
 
 
-                Debug.Log(SceneLimitTime + " :SceneLimitTime");
+                Debug.Log(DemoTime + " :DemoTime");
 
 
                 if (ActiveSceneName == "Tr_TrainingNeuro")
@@ -641,6 +1007,25 @@ public class Tr_TrainingNeuro : SceneBase
         ///////////////////////////////////
 
     }
+
+
+    public void SaveXb01ValueList()
+    {
+
+        Debug.Log("SaveXb01ValueList Start");
+        ES3.Save<List<string>>(EsThreeParaName, Xb01ValueList);
+
+        //保存確認
+        List<string> temp = new List<string>();
+        temp = ES3.Load<List<string>>(EsThreeParaName);
+        foreach (string str in temp)
+        {
+            Debug.Log(str);
+        }
+
+
+    }
+
 
 
 }

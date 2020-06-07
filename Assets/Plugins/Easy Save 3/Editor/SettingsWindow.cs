@@ -78,7 +78,24 @@ namespace ES3Editor
                     using (new EditorGUILayout.HorizontalScope())
                     {
                         EditorGUILayout.PrefixLabel("Use Global References", wideLabel);
-                        editorSettings.useGlobalReferences = EditorGUILayout.Toggle(editorSettings.useGlobalReferences);
+
+                        var symbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
+                        bool useGlobalReferences = !symbols.Contains("ES3GLOBAL_DISABLED");
+                        if(EditorGUILayout.Toggle(useGlobalReferences) != useGlobalReferences)
+                        {
+                            // Remove the existing symbol even if we're disabling global references, just incase it's already in there.
+                            symbols = symbols.Replace("ES3GLOBAL_DISABLED;", ""); // With semicolon
+                            symbols = symbols.Replace("ES3GLOBAL_DISABLED", "");  // Without semicolon
+
+                            // Add the symbol if useGlobalReferences is currently true, meaning that we want to disable it.
+                            if (useGlobalReferences)
+                                symbols = "ES3GLOBAL_DISABLED;" + symbols;
+
+                            PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup, symbols);
+
+                            if(useGlobalReferences)
+                                EditorUtility.DisplayDialog("Global references disabled for build platform", "This will only disable Global References for this build platform. To disable it for other build platforms, open that platform in the Build Settings and uncheck this box again.", "Ok");
+                        }
                     }
 
                     EditorGUILayout.Space();

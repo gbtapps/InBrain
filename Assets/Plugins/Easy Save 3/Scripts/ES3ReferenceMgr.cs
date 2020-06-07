@@ -14,12 +14,14 @@ public class ES3ReferenceMgr : ES3ReferenceMgrBase
 {
 #if UNITY_EDITOR
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public void RefreshDependencies()
+    public void RefreshDependencies(bool isEnteringPlayMode = false)
 	{
+        ES3ReferenceMgrBase.isEnteringPlayMode = isEnteringPlayMode;
         // This will get the dependencies for all GameObjects and Components from the active scene.
         AddDependencies(SceneManager.GetActiveScene().GetRootGameObjects());
         AddPrefabsToManager();
         RemoveNullValues();
+        ES3ReferenceMgrBase.isEnteringPlayMode = false;
     }
 
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
@@ -37,25 +39,15 @@ public class ES3ReferenceMgr : ES3ReferenceMgrBase
     }
 
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public void AddDependencies(UnityEngine.Object[] objs, float timeoutSecs=1f)
+    public void AddDependencies(UnityEngine.Object[] objs)
 	{
-		var startTime = Time.realtimeSinceStartup;
-
         for(int i=0; i<objs.Length; i++)
         {
             var obj = objs[i];
 
-            // If it's longer than the timeout period, show a progress bar so people can cancel if necessary.
-            if (Time.realtimeSinceStartup - startTime > timeoutSecs)
-            {
-                if (EditorUtility.DisplayCancelableProgressBar("Updating references", "Easy Save is updating references for this scene.", i / objs.Length))
-                {
-                    EditorUtility.ClearProgressBar();
-                    EditorUtility.DisplayDialog("Reference updating cancelled", "Reference updating was cancelled.\nTo continue updating references, go to Window > Easy Save 3 > References, and press Refresh references", "Ok");
-                    return;
-                }
-            }
-        	
+            if (obj.name == "Easy Save 3 Manager")
+                continue;
+
     	    var dependencies = CollectDependencies(obj);
     
     		foreach(var dependency in dependencies)
@@ -67,9 +59,9 @@ public class ES3ReferenceMgr : ES3ReferenceMgrBase
 	}
 
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public void AddDependencies(UnityEngine.Object obj, float timeoutSecs = 1f)
+    public void AddDependencies(UnityEngine.Object obj)
     {
-        AddDependencies(new UnityEngine.Object[] { obj }, timeoutSecs);
+        AddDependencies(new UnityEngine.Object[] { obj });
     }
 
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]

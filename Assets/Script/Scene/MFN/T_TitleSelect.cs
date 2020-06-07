@@ -71,9 +71,12 @@ public class T_TitleSelect : SceneBase
         if (btnNeuro.lastHit2 && bleConnected)
         {
             Tr_TraningSetting.SetPlayTraining(ConstData.EnumScene.Tr_TrainingNeuro);
-            SceneFunc.ChangeScene(ConstData.EnumScene.Tr_TraningSetting, true);
+//            SceneFunc.ChangeScene(ConstData.EnumScene.Tr_TraningSetting, true);
+            SceneFunc.ChangeScene(ConstData.EnumScene.Tr_TrainingNeuro, true);
         }
 
+
+        
         //added by moritomi
         //ニューロフィードバック
         if (btnNeuroTest.lastHit2 && bleConnected)
@@ -98,12 +101,12 @@ public class T_TitleSelect : SceneBase
         if (bleConnected)
         {
             btnNeuro.SetColor(Color.white);
-
+            btnNeuroTest.SetColor(Color.white);
         }
         else
         {
             btnNeuro.SetColor(Color.gray);
-
+            btnNeuroTest.SetColor(Color.gray);
         }
 
 //        textDebug.text = Hot2gApplication.Instance.mode.ToString();

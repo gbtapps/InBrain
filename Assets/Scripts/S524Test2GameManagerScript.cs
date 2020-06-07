@@ -96,11 +96,46 @@ public class S524Test2GameManagerScript : MonoBehaviour
     private TMT2TouchManagerScript InstanceTMT2TouchManagerScript;
 
 
+    // 回答記録処理
+    List<string> T2UserAnswerList = new List<string>();
+    public string EsThreeParaName = "";
+
+
+
+    public void SaveT2UserAnswerList(string dateandtime)
+    {
+
+
+        // Make ES3 save point name
+
+
+        EsThreeParaName = "T2UserAnswerList" + dateandtime;
+        //        Debug.Log(EsThreeParaName); 
+
+
+
+        ES3.Save<List<string>>(EsThreeParaName, T2UserAnswerList);
+
+        //保存確認
+        List<string> temp = new List<string>();
+        temp = ES3.Load<List<string>>(EsThreeParaName);
+        foreach (string str in temp)
+        {
+            Debug.Log(str);
+        }
+
+
+    }
+
+
+
+
 
     //プッシュしたボタン数と時刻を記録する関数
     public void PushDown()
     {
 
+        /*
         //エディタでアタッチしたテキストを扱えるようにする
         Text touches_text = touches.GetComponent<Text>();
 
@@ -171,6 +206,9 @@ public class S524Test2GameManagerScript : MonoBehaviour
         ShowResultMonitorPushDownTask1();
             
         pdtTask1++;
+
+        */
+
         
     }
 
@@ -231,6 +269,7 @@ public class S524Test2GameManagerScript : MonoBehaviour
     public void RightPush()
     {
 
+        /*
         rightPushTask1++;
         rightPushTimeTask1[rptTask1] = DateTime.Now;
 //        Debug.Log("rightPushTimeTask1[rptTask1]" + rightPushTimeTask1[rptTask1]);
@@ -296,6 +335,12 @@ public class S524Test2GameManagerScript : MonoBehaviour
         ShowResultMonitorRightPushTask1();
 
         rptTask1++;
+        */
+
+        // "回答時刻,正誤(0or1)"をリストに登録
+        T2UserAnswerList.Add(DateTime.Now.ToString("yyyyMMddHHmmss.fff") + "," + "1");
+
+
 
     }
 
@@ -352,6 +397,9 @@ public class S524Test2GameManagerScript : MonoBehaviour
 
     public void WrongPush()
     {
+
+
+        /*
         //エディタでアタッチしたテキストを扱えるようにする
         Text wrongs_text = wrongs.GetComponent<Text>();
 
@@ -421,6 +469,13 @@ public class S524Test2GameManagerScript : MonoBehaviour
         ShowResultMonitorWrongPushTask1();
 
         wptTask1++;
+
+        */
+
+
+        // "回答時刻,正誤(0or1)"をリストに登録
+        T2UserAnswerList.Add(DateTime.Now.ToString("yyyyMMddHHmmss.fff") + "," + "0");
+
 
     }
 
@@ -517,6 +572,10 @@ public class S524Test2GameManagerScript : MonoBehaviour
         CreateTargets(numOfTargets);
     }
 
+
+
+
+
     public void ReCreateTargets()
     {
         //DropButtons()はここで実行してもよいし
@@ -535,6 +594,11 @@ public class S524Test2GameManagerScript : MonoBehaviour
         Double difftimedouble = difftime.TotalSeconds;
         spenttime.text = "経過時間: " + difftimedouble.ToString();
 
+
+
+
+
+
     }
 
 
@@ -546,7 +610,7 @@ public class S524Test2GameManagerScript : MonoBehaviour
 
         foreach (Transform child in drawArea.transform)
         {
-            if (child.name == "Button(Clone)")
+            if (child.name == "ButtonTMT2(Clone)")
             {
                 GameObject.Destroy(child.gameObject);
             }

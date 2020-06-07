@@ -66,6 +66,9 @@ namespace ES3Internal
 
 		public static List<FieldInfo> GetSerializableFields(Type type, List<FieldInfo> serializableFields=null, bool safe=true, string[] memberNames=null, BindingFlags bindings = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly)
 		{
+            if (type == null)
+                return new List<FieldInfo>();
+
 			var fields = type.GetFields(bindings);
 			
             if(serializableFields == null)
@@ -120,7 +123,8 @@ namespace ES3Internal
 				serializableFields.Add(field);
 			}
 
-            if (BaseType(type) != typeof(System.Object))
+            var baseType = BaseType(type);
+            if (baseType != null && baseType != typeof(System.Object))
                 GetSerializableFields(BaseType(type), serializableFields, safe, memberNames);
 
 			return serializableFields;
@@ -201,8 +205,9 @@ namespace ES3Internal
 				serializableProperties.Add(p);
 			}
 
-            if (BaseType(type) != typeof(System.Object))
-                GetSerializableProperties(BaseType(type), serializableProperties, safe, memberNames);
+            var baseType = BaseType(type);
+            if (baseType != null && baseType != typeof(System.Object))
+                GetSerializableProperties(baseType, serializableProperties, safe, memberNames);
 
             return serializableProperties;
 		}
@@ -275,6 +280,9 @@ namespace ES3Internal
 
 		public static ES3ReflectedMember[] GetSerializableMembers(Type type, bool safe=true, string[] memberNames=null)
 		{
+            if (type == null)
+                return new ES3ReflectedMember[0];
+
 			var fieldInfos = GetSerializableFields(type, new List<FieldInfo>(), safe, memberNames);
 			var propertyInfos = GetSerializableProperties(type, new List<PropertyInfo>(), safe, memberNames);
 			var reflectedFields = new ES3ReflectedMember[fieldInfos.Count + propertyInfos.Count];

@@ -21,46 +21,6 @@ public static class ES3
 
     #region ES3.Save
 
-    /*// <summary>Saves the value to the default file with the given key.</summary>
-    /// <param name="key">The key we want to use to identify our value in the file.</param>
-    /// <param name="value">The value we want to save.</param>
-    public static void Save(string key, object value)
-    {
-        Save<object>(key, value, new ES3Settings());
-    }
-
-    /// <summary>Saves the value to a file with the given key.</summary>
-    /// <param name="key">The key we want to use to identify our value in the file.</param>
-    /// <param name="value">The value we want to save.</param>
-    /// <param name="filepath">The relative or absolute path of the file we want to store our value to.</param>
-    public static void Save(string key, object value, string filePath)
-    {
-        Save<object>(key, value, new ES3Settings(filePath));
-    }
-
-    /// <summary>Saves the value to a file with the given key.</summary>
-    /// <param name="key">The key we want to use to identify our value in the file.</param>
-    /// <param name="value">The value we want to save.</param>
-    /// <param name="filepath">The relative or absolute path of the file we want to store our value to.</param>
-    /// <param name="settings">The settings we want to use to override the default settings.</param>
-    public static void Save(string key, object value, string filePath, ES3Settings settings)
-    {
-        Save<object>(key, value, new ES3Settings(filePath, settings));
-    }
-
-    /// <summary>Saves the value to a file with the given key.</summary>
-    /// <param name="key">The key we want to use to identify our value in the file.</param>
-    /// <param name="value">The value we want to save.</param>
-    /// <param name="settings">The settings we want to use to override the default settings.</param>
-    public static void Save(string key, object value, ES3Settings settings)
-    {
-        using (var writer = ES3Writer.Create(settings))
-        {
-            writer.Write<object>(key, value);
-            writer.Save();
-        }
-    }*/
-
     /// <summary>Saves the value to the default file with the given key.</summary>
     /// <param name="T">The type of the data that we want to save.</param>
     /// <param name="key">The key we want to use to identify our value in the file.</param>

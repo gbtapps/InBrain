@@ -22,6 +22,8 @@ public class S510ConnectingSensorControllerScript : MonoBehaviour
 
     public GameObject PutXbOnPanel;
 
+    public static bool WithXb01 = false;
+
     // Update is called once per frame
     void Update()
     {
@@ -104,6 +106,9 @@ public class S510ConnectingSensorControllerScript : MonoBehaviour
         OnNextBtn.SetActive(true);
         OffNextBtn.SetActive(false);
 
+        //Set no xb01
+        WithXb01 = false;
+
     }
 
     public void SelectOption2()
@@ -122,6 +127,11 @@ public class S510ConnectingSensorControllerScript : MonoBehaviour
         //次へのボタン非活性化（BLE接続済みで再度活性化）
         OnNextBtn.SetActive(false);
         OffNextBtn.SetActive(true);
+
+        //Set xb01 true
+        WithXb01 = false;
+
+
 
     }
 
@@ -146,6 +156,9 @@ public class S510ConnectingSensorControllerScript : MonoBehaviour
     void Start()
     {
         //ログイン状態確認処理
+
+        //Set flg off
+        WithXb01 = false;
     }
 
 

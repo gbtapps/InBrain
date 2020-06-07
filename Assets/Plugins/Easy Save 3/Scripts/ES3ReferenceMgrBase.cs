@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using UnityEngine.UI;
 
 namespace ES3Internal
 {
@@ -10,10 +11,13 @@ namespace ES3Internal
     [DisallowMultipleComponent]
     public abstract class ES3ReferenceMgrBase : MonoBehaviour
     {
+        private object _lock = new object();
+
         public const string referencePropertyName = "_ES3Ref";
         private static ES3ReferenceMgrBase _current = null;
 #if UNITY_EDITOR
         private const int CollectDependenciesDepth = 5;
+        protected static bool isEnteringPlayMode = false;
 #endif
 
         private static System.Random rng;
@@ -65,14 +69,11 @@ namespace ES3Internal
             }
         }
 
-        public ES3GlobalReferences _globalReferences = null;
         public ES3GlobalReferences GlobalReferences
         {
             get
             {
-                if (_globalReferences == null)
-                    _globalReferences = ES3GlobalReferences.Instance;
-                return _globalReferences;
+                return ES3GlobalReferences.Instance;
             }
         }
 
@@ -94,17 +95,7 @@ namespace ES3Internal
         public void Merge(ES3ReferenceMgrBase otherMgr)
         {
             foreach (var kvp in otherMgr.idRef)
-            {
-                // Check for duplicate keys with different values.
-                UnityEngine.Object value;
-                if (idRef.TryGetValue(kvp.Key, out value))
-                {
-                    if (value != kvp.Value)
-                        throw new ArgumentException("Attempting to merge two ES3 Reference Managers, but they contain duplicate IDs. If you've made a copy of a scene and you're trying to load it additively into another scene, generate new reference IDs by going to Assets > Easy Save 3 > Generate New Reference IDs for Scene. Alternatively, remove the Easy Save 3 Manager from the scene if you do not intend on saving any data from it.");
-                }
-                else
-                    Add(kvp.Value, kvp.Key);
-            }
+                Add(kvp.Value, kvp.Key);
         }
 
         public long Get(UnityEngine.Object obj)
@@ -131,7 +122,7 @@ namespace ES3Internal
                         return globalRef;
                 }
 
-                ES3Internal.ES3Debug.LogWarning("Reference for " + type + " with ID " + id + " could not be found in Easy Save's reference manager. Try pressing the Refresh References button on the ES3ReferenceMgr Component of the Easy Save 3 Manager in your scene. If you are loading objects dynamically, this warning is expected and can be ignored.", this);
+                ES3Debug.LogWarning("Reference for " + type + " with ID " + id + " could not be found in Easy Save's reference manager. Try pressing the Refresh References button on the ES3ReferenceMgr Component of the Easy Save 3 Manager in your scene. If you are loading objects dynamically, this warning is expected and can be ignored.", this);
                 return null;
             }
             if (obj == null) // If obj has been marked as destroyed but not yet destroyed, don't return it.
@@ -185,8 +176,8 @@ namespace ES3Internal
             // If it already exists in the list, do nothing.
             if (refId.TryGetValue(obj, out id))
                 return id;
-#if UNITY_EDITOR
-            if (!Application.isPlaying && GlobalReferences != null)
+
+            if (GlobalReferences != null)
             {
                 id = GlobalReferences.GetOrAdd(obj);
                 if (id != -1)
@@ -195,10 +186,13 @@ namespace ES3Internal
                     return id;
                 }
             }
-#endif
-            // Add the reference to the Dictionary.
-            id = GetNewRefID();
-            return Add(obj, id);
+
+            lock (_lock)
+            {
+                // Add the reference to the Dictionary.
+                id = GetNewRefID();
+                return Add(obj, id);
+            }
         }
 
         public long Add(UnityEngine.Object obj, long id)
@@ -210,9 +204,12 @@ namespace ES3Internal
             if (id == -1)
                 id = GetNewRefID();
             // Add the reference to the Dictionary.
-            idRef[id] = obj;
-            refId[obj] = id;
-            return id;
+            lock (_lock)
+            {
+                idRef[id] = obj;
+                refId[obj] = id;
+            }
+                return id;
         }
 
         public void AddPrefab(ES3Prefab prefab)
@@ -223,18 +220,24 @@ namespace ES3Internal
 
         public void Remove(UnityEngine.Object obj)
         {
-            refId.Remove(obj);
-            // There may be multiple references with the same ID, so remove them all.
-            foreach (var item in idRef.Where(kvp => kvp.Value == obj).ToList())
-                idRef.Remove(item.Key);
+            lock(_lock)
+            {
+                refId.Remove(obj);
+                // There may be multiple references with the same ID, so remove them all.
+                foreach (var item in idRef.Where(kvp => kvp.Value == obj).ToList())
+                    idRef.Remove(item.Key);
+            }
         }
 
         public void Remove(long referenceID)
         {
-            idRef.Remove(referenceID);
-            // There may be multiple references with the same ID, so remove them all.
-            foreach (var item in refId.Where(kvp => kvp.Value == referenceID).ToList())
-                refId.Remove(item.Key);
+            lock (_lock)
+            {
+                idRef.Remove(referenceID);
+                // There may be multiple references with the same ID, so remove them all.
+                foreach (var item in refId.Where(kvp => kvp.Value == referenceID).ToList())
+                    refId.Remove(item.Key);
+            }
         }
 
         public void RemoveNullValues()
@@ -249,8 +252,11 @@ namespace ES3Internal
 
         public void Clear()
         {
-            refId.Clear();
-            idRef.Clear();
+            lock (_lock)
+            {
+                refId.Clear();
+                idRef.Clear();
+            }
         }
 
         public bool Contains(UnityEngine.Object obj)
@@ -294,9 +300,7 @@ namespace ES3Internal
                 return dependencies;
 
             if (dependencies == null)
-                dependencies = new HashSet<UnityEngine.Object>(objs);
-            else
-                dependencies.UnionWith(objs);
+                dependencies = new HashSet<UnityEngine.Object>();
 
             foreach (var obj in objs)
             {
@@ -312,6 +316,7 @@ namespace ES3Internal
                 if (type == typeof(GameObject))
                 {
                     var go = (GameObject)obj;
+                    dependencies.Add(go);
                     // Get the dependencies of each Component in the GameObject.
                     CollectDependencies(go.GetComponents<Component>(), dependencies, depth - 1);
                     // Get the dependencies of each child in the GameObject.
@@ -333,8 +338,71 @@ namespace ES3Internal
 
         private static void CollectDependenciesFromFields(UnityEngine.Object obj, HashSet<UnityEngine.Object> dependencies, int depth)
         {
+            // If we've already collected dependencies for this, do nothing.
+            if (!dependencies.Add(obj))
+                return;
+
             if (depth < 0)
                 return;
+
+            var type = obj.GetType();
+
+            if (isEnteringPlayMode && type == typeof(UnityEngine.UI.Text))
+                return;
+
+            try
+            {
+                // SerializedObject is expensive, so for known classes we manually gather references.
+
+                if (type == typeof(Animator) || obj is Transform || type == typeof(CanvasRenderer) || type == typeof(Mesh) || type == typeof(AudioClip) || type == typeof(Rigidbody) || obj is Texture || obj is HorizontalOrVerticalLayoutGroup)
+                    return;
+
+                if (obj is Graphic)
+                {
+                    var m = (Graphic)obj;
+                    dependencies.Add(m.material);
+                    dependencies.Add(m.defaultMaterial);
+                    dependencies.Add(m.mainTexture);
+
+                    if (type == typeof(Text))
+                    {
+                        var text = (Text)obj;
+                        dependencies.Add(text.font);
+                    }
+                    else if (type == typeof(Image))
+                    {
+                        var img = (Image)obj;
+                        dependencies.Add(img.sprite);
+                    }
+                    return;
+                }
+
+                if (type == typeof(Material))
+                {
+                    dependencies.Add(((Material)obj).shader);
+                    return;
+                }
+
+                if (type == typeof(MeshFilter))
+                {
+                    dependencies.Add(((MeshFilter)obj).sharedMesh);
+                    return;
+                }
+
+                if (type == typeof(Camera))
+                {
+                    var c = (Camera)obj;
+                    dependencies.Add(c.targetTexture);
+                    return;
+                }
+
+                if (obj is Renderer)
+                {
+                    dependencies.UnionWith(((Renderer)obj).sharedMaterials);
+                    return;
+                }
+            }
+            catch { }
 
             var so = new UnityEditor.SerializedObject(obj);
             if (so == null)
@@ -355,21 +423,25 @@ namespace ES3Internal
                         for (int i = 0; i < property.arraySize; i++)
                         {
                             var element = property.GetArrayElementAtIndex(i);
+
                             // If the array contains UnityEngine.Object types, add them to the dependencies.
-                            if (element.propertyType == UnityEditor.SerializedPropertyType.ObjectReference && element.objectReferenceValue != null)
+                            if (element.propertyType == UnityEditor.SerializedPropertyType.ObjectReference)
                             {
+                                var elementValue = element.objectReferenceValue;
+                                var elementType = elementValue.GetType();
+
                                 // If it's a GameObject, use CollectDependencies so that Components are also added.
-                                if (element.objectReferenceValue.GetType() == typeof(GameObject))
+                                if (elementType == typeof(GameObject))
                                 {
                                     // Only collect deeper dependencies if this GameObject hasn't already had its dependencies added.
-                                    if (dependencies.Add(element.objectReferenceValue))
-                                        CollectDependencies(element.objectReferenceValue, dependencies, depth - 1);
+                                    if (dependencies.Add(elementValue))
+                                        CollectDependencies(elementValue, dependencies, depth - 1);
                                 }
                                 else
                                 {
                                     // Only collect more dependencies if we've not already added them for this object.
-                                    if (dependencies.Add(element.objectReferenceValue))
-                                        CollectDependenciesFromFields(element.objectReferenceValue, dependencies, depth - 1);
+                                    if (dependencies.Add(elementValue))
+                                        CollectDependenciesFromFields(elementValue, dependencies, depth - 1);
                                 }
                             }
                             // Otherwise this array does not contain UnityEngine.Object types, so we should stop.
@@ -378,20 +450,24 @@ namespace ES3Internal
                         }
                     }
                     // Else if it's a normal UnityEngine.Object field, add it.
-                    else if (property.propertyType == UnityEditor.SerializedPropertyType.ObjectReference && property.objectReferenceValue != null)
+                    else if (property.propertyType == UnityEditor.SerializedPropertyType.ObjectReference)
                     {
+                        var propertyValue = property.objectReferenceValue;
+                        if (propertyValue == null)
+                            break;
+
                         // If it's a GameObject, use CollectDependencies so that Components are also added.
-                        if (property.objectReferenceValue.GetType() == typeof(GameObject))
+                        if (propertyValue.GetType() == typeof(GameObject))
                         {
                             // Only collect deeper dependencies if this GameObject hasn't already had its dependencies added.
-                            if (dependencies.Add(property.objectReferenceValue))
-                                CollectDependencies(property.objectReferenceValue, dependencies, depth - 1);
+                            if (dependencies.Add(propertyValue))
+                                CollectDependencies(propertyValue, dependencies, depth - 1);
                         }
                         else
                         {
                             // Only add more dependencies if we've not already added them for this object.
-                            if (dependencies.Add(property.objectReferenceValue))
-                                CollectDependenciesFromFields(property.objectReferenceValue, dependencies, depth - 1);
+                            if (dependencies.Add(propertyValue))
+                                CollectDependenciesFromFields(propertyValue, dependencies, depth - 1);
                         }
                     }
                 }

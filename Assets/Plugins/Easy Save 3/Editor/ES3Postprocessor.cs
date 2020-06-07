@@ -41,58 +41,51 @@ public class ES3Postprocessor : UnityEditor.AssetModificationProcessor
 		// Open the Easy Save 3 window the first time ES3 is installed.
 		ES3Editor.ES3Window.OpenEditorWindowOnStart();
 
-		EditorApplication.update += Update;
-		Selection.selectionChanged += SelectionChanged;
-        Undo.postprocessModifications += PostProcessModifications;
+		//Selection.selectionChanged += SelectionChanged;
+        //Undo.postprocessModifications += PostProcessModifications;
 
 #if UNITY_2017_2_OR_NEWER
         EditorApplication.playModeStateChanged += PlayModeStateChanged;
 #else
         EditorApplication.playmodeStateChanged += PlaymodeStateChanged;
 #endif
-
-        //CreateDefaultSettingsIfNotExist();
     }
 
 #region Reference Updating
 
+    private static void RefreshReferences(bool isEnteringPlayMode = false)
+    {
+        if (refMgr != null && ES3Settings.defaultSettingsScriptableObject.autoUpdateReferences)
+            refMgr.RefreshDependencies(isEnteringPlayMode);
+        UpdateAssembliesContainingES3Types();
+    }
+
 #if UNITY_2017_2_OR_NEWER
     public static void PlayModeStateChanged(PlayModeStateChange state)
-
     {
         // Add all GameObjects and Components to the reference manager before we enter play mode.
-        if (state == PlayModeStateChange.ExitingEditMode)
-        {
-            //AddGameObjectsAndComponentsToManager();
-            if (refMgr != null)
-                refMgr.RefreshDependencies();
-            UpdateAssembliesContainingES3Types();
-        }
+        if (state == PlayModeStateChange.ExitingEditMode && ES3Settings.defaultSettingsScriptableObject.autoUpdateReferences)
+            RefreshReferences(true);
     }
 #else
     public static void PlaymodeStateChanged()
     {
         // Add all GameObjects and Components to the reference manager before we enter play mode.
-        if (!EditorApplication.isPlaying)
-            AddGameObjectsAndComponentsToManager();
+        if (!EditorApplication.isPlaying && ES3Settings.defaultSettingsScriptableObject.autoUpdateReferences)
+            RefreshReferences(true);
     }
 #endif
 
 
     public static string[] OnWillSaveAssets(string[] paths)
     {
-        // Add all GameObjects and Components to the reference manager whenever we save the scene.
-        if (ES3Settings.defaultSettingsScriptableObject.autoUpdateReferences)
-            //AddGameObjectsAndComponentsToManager();
-            if (refMgr != null)
-                refMgr.RefreshDependencies();
-        UpdateAssembliesContainingES3Types();
+        RefreshReferences();
         return paths;
     }
 
-    static UndoPropertyModification[] PostProcessModifications(UndoPropertyModification[] modifications)
+    /*static UndoPropertyModification[] PostProcessModifications(UndoPropertyModification[] modifications)
     {
-        if (refMgr != null)
+        if (refMgr != null && ES3Settings.defaultSettingsScriptableObject.autoUpdateReferences)
             // For each property which has had an Undo registered ...
             foreach (var mod in modifications)
                 // If this property change is an object reference, and the Component this change has been made to is in the scene, not in Assets ...
@@ -100,35 +93,11 @@ public class ES3Postprocessor : UnityEditor.AssetModificationProcessor
                         // Add it to the reference manager
                         refMgr.Add(mod.currentValue.objectReference);
         return modifications;
-    }
-
-    static void AddGameObjectsAndComponentsToManager()
-    {
-        if (refMgr != null)
-        {
-            foreach (var obj in EditorUtility.CollectDeepHierarchy(SceneManager.GetActiveScene().GetRootGameObjects()))
-            {
-                try
-                {
-                    // If this object can be saved, add it to the reference manager.
-                    if (obj != null)
-                        refMgr.Add(obj);
-                }
-                catch { }
-            }
-
-            refMgr.AddPrefabsToManager();
-            refMgr.RemoveNullValues();
-        }
-    }
+    }*/
 
 #endregion
 
-    static void OnWillCreateAsset(string assetName)
-    {
-    }
-
-    static void SelectionChanged()
+    /*static void SelectionChanged()
 	{
 		if(EditorApplication.isPlaying || EditorApplication.isCompiling || EditorApplication.isPaused || EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isUpdating)
 			return;
@@ -141,19 +110,13 @@ public class ES3Postprocessor : UnityEditor.AssetModificationProcessor
             var selected = Selection.activeGameObject;
 
             // If we just deselected a prefab, process its references.
-            if (lastSelected != null && ES3EditorUtility.IsPrefabInAssets(selected))
+            if (ES3Settings.defaultSettingsScriptableObject.autoUpdateReferences && lastSelected != null && ES3EditorUtility.IsPrefabInAssets(selected))
                 ProcessGameObject(lastSelected);
 
             lastSelected = selected;
         }
         catch{}
-	}
-	
-	static void Update()
-	{
-        if (EditorApplication.isPlaying || EditorApplication.isCompiling || EditorApplication.isPaused || EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isUpdating)
-			return;
-	}
+	}*/
 
     private static void UpdateAssembliesContainingES3Types()
     {

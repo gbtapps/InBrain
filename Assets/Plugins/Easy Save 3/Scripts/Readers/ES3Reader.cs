@@ -193,7 +193,6 @@ public abstract class ES3Reader : System.IDisposable
 			return defaultValue;
 
 		Type type = ReadTypeFromHeader<T>();
-
 		T obj = Read<T>(ES3TypeMgr.GetOrCreateES3Type(type));
 
 		ReadKeySuffix();

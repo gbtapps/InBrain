@@ -4,19 +4,17 @@ using UnityEngine;
 
 using UnityEngine.UI;
 
+using System;
+
+
 
 
 
 public class TMT1TouchManagerScript : MonoBehaviour
 {
 
-    //タッチカウンタ
-//    public S522Test1GameManagerScript InstanceS522Test1GameManagerScript;
     
-    //
     //S522TestGameManagerの関数を使う
-    //
-
     private GameObject S522Test1GameManager;
     private S522Test1GameManagerScript InstanceS522Test1GameManagerScript;
 
@@ -30,6 +28,9 @@ public class TMT1TouchManagerScript : MonoBehaviour
     //ボタン色変更メソッド用変数
     public Image image;
     private Sprite sprite;
+
+    // T1テスト結果の記録（回答時刻、正否
+//    List<string> T1UserAnswerList = new List<string>();
 
 
     // Start is called before the first frame update
@@ -55,7 +56,10 @@ public class TMT1TouchManagerScript : MonoBehaviour
     public void OnClick()
     {
 
+        //画面タッチ時間を記録
         InstanceS522Test1GameManagerScript.PushDown();
+
+
 
         //ボタンタップのカウンタbCountを作成
         int bCount;
@@ -67,9 +71,11 @@ public class TMT1TouchManagerScript : MonoBehaviour
         Text target_text_text = target_text.GetComponent<Text>();
         string touched_button_value = target_text_text.text;
 
-//        Debug.Log("target_text_text.text: " + target_text_text.text);
-//        Debug.Log("touched_button_value: " + touched_button_value);
+        //        Debug.Log("target_text_text.text: " + target_text_text.text);
+        //        Debug.Log("touched_button_value: " + touched_button_value);
 
+
+        string truefalse = "";
 
         //タッチしたボタンと正解数字との比較し正解だったら
         if ( touched_button_value == bCount.ToString() )
@@ -88,11 +94,67 @@ public class TMT1TouchManagerScript : MonoBehaviour
 
             InstanceS522Test1GameManagerScript.RightPush();
 
+
+
+//            truefalse = "1";
+
+
+
         }
         else
         {
             InstanceS522Test1GameManagerScript.WrongPush();
+            truefalse = "0";
+
+
         }
+
+
+//        T1UserAnswerList.Add(DateTime.Now.ToString("yyyyMMddHHmmss.fff")+","+truefalse);
+
+//        Debug.Log(T1UserAnswerList.Count);
+
+
+
+        /*
+        for(int i=0; i<T1UserAnswerList.Count; i++)
+        {
+            if (T1UserAnswerList.Count == 1) continue;
+//            string a = T1UserAnswerList[i].Substring(0, 18);
+//            string b = T1UserAnswerList[i - 1].Substring(0, 18);
+
+            float aaa = float.Parse(T1UserAnswerList[i].Substring(0, 18));
+            float bbb = float.Parse(T1UserAnswerList[i - 1].Substring(0, 18));
+
+            Debug.Log(aaa);
+            Debug.Log(bbb);
+            Debug.Log(bbb-aaa);
+
+
+        }
+        */
+
+
+
+        /*
+        string a = T1UserAnswerList[i].Substring(0, 18);
+            string b = T1UserAnswerList[i - 1].Substring(0, 18);
+
+        */
+
+        /*
+        foreach (string str in T1UserAnswerList)
+        {
+
+            Debug.Log(str);
+            /*
+            Debug.Log(str.Substring(0, 18));
+            Debug.Log(float.Parse(str.Substring(0, 18)));
+      
+        }
+    */
+
+
 
 
         //ボタンすべて押し切った

@@ -345,7 +345,7 @@ PrefabInstance:
     - target: {fileID: 6320474181997261759, guid: eb4fe15c11173ac4b9a06c7b5c53479d,
         type: 3}
       propertyPath: m_startScene
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1157783728216533040, guid: eb4fe15c11173ac4b9a06c7b5c53479d, type: 3}
@@ -471,6 +471,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8035be854fedca74eb089a1952e436eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IntervalSeconds: 5
   CountDownText: {fileID: 1163477066}
 --- !u!1 &519420028
 GameObject:

@@ -149,6 +149,9 @@ public class S526TestResultSummaryControllerScript : MonoBehaviour
     float tmta22temp = 0f;
     float tmta23temp = 0f;
 
+//    float[] TmtAtmp = new float[23];
+
+
     float tmtb1temp = 0f;
     float tmtb2temp = 0f;
     float tmtb3temp = 0f;
@@ -173,6 +176,8 @@ public class S526TestResultSummaryControllerScript : MonoBehaviour
     float tmtb22temp = 0f;
     float tmtb23temp = 0f;
 
+//    float[] TmtBtmp = new float[23];
+
 
     public GameObject explanationPanelPage110;
 
@@ -185,6 +190,7 @@ public class S526TestResultSummaryControllerScript : MonoBehaviour
     //それぞれの計算結果は以下の静的変数に入れる
     //他シーンへの引継ぎ用として使うだけにする
     //本シーンの内部処理では使わない
+
 
     //処理速度
     public static int scoreSpeed;  //点
@@ -210,6 +216,63 @@ public class S526TestResultSummaryControllerScript : MonoBehaviour
     String rBrain;
     String rDeclines;
 
+
+    // Show result values
+    [SerializeField] Text SpeedScore;
+    [SerializeField] Text SpeedAge;
+    [SerializeField] Text SpeedStatus;
+
+    [SerializeField] Text AttentionScore;
+    [SerializeField] Text AttentionAge;
+    [SerializeField] Text AttentionStatus;
+
+    [SerializeField] Text BrainScore;
+    [SerializeField] Text BrainAge;
+    [SerializeField] Text BrainStatus;
+
+    [SerializeField] GameObject NoMoreData1;
+    [SerializeField] GameObject NoMoreData2;
+
+    [SerializeField] GameObject NoDataMessagePanel;
+    [SerializeField] Text NoDataMessageText;
+    [SerializeField] Text TestDateAndTime;
+
+
+
+
+    // User property
+    private int MyAge; //real age
+
+
+
+    // ES3セーブデータリストを操作
+    List<string> TestLogSaveNameList = new List<string>();
+    int SaveNumber = 0;
+
+    // Manipulate Xb01 values
+    List<string> Xb01ValueList = new List<string>();
+
+    // Manipulate Test1 log
+    List<string> T1LogList = new List<string>();
+
+    // Manipulate Test2 log
+    List<string> T2LogList = new List<string>();
+
+
+    // For debug1
+    [SerializeField] Text SaveList;
+    [SerializeField] Text Chart1List;
+    [SerializeField] Text Chart2List;
+
+    // For debug2
+    [SerializeField] Text Interval1DataOutline;
+    [SerializeField] Text Interval2DataOutline;
+    [SerializeField] Text Interval3DataOutline;
+    [SerializeField] Text Test1DataOutline;
+    [SerializeField] Text Test2DataOutline;
+
+    // For debug3
+    [SerializeField] Text CountPlusOverAve;
 
 
     public void TmtAOnOff()
@@ -238,659 +301,1322 @@ public class S526TestResultSummaryControllerScript : MonoBehaviour
         }
     }
 
+    private int GetRealAge()
+    {
+        int realage=40;
+
+        //Get user age from ES3.userproperty
+        //If it can't be got 
+
+
+        return realage;
+
+    }
+
+    //
+    private int CountCorrects(List<string> a)
+    {
+        int corrects = 0;
+        for (int i = 0; i < a.Count; i++)
+        {
+
+            //Caution: Format is "Date&Time,1or0" that's why follow logic.
+            string[] tmpArray = a[i].Split(',');
+            if (tmpArray[1] == "1")
+            {
+                corrects++;
+            }
+
+        }
+        return corrects;
+    }
+
+
+    public void ShowResultSummary(string a)
+    {
+
+        //For debug
+        SaveList.text = a;
+        Debug.Log(a);
+
+
+        NoDataMessagePanel.SetActive(false);
+
+
+        //Get save list name 
+        string[] stringArray = a.Split(',');
+
+        //        stringArray[0] TestDate&Time
+        //        stringArray[1] test1
+        //        stringArray[2] test2
+        //        stringArray[3] xb01
+
+
+
+        // Get Date&Time from stringArray[0]
+        int tmpIndex = 0;
+        int tmpLength = "YYYYMMDDhhmmss".Length;
+
+        string tmpStr = stringArray[0];
+        Debug.Log("tmpStr: "+tmpStr);
+
+        tmpIndex = tmpStr.IndexOf("2020");
+        Debug.Log("tmpIndex: " + tmpIndex);
+
+        tmpStr = tmpStr.Substring(tmpIndex, tmpLength);
+        Debug.Log(tmpStr);
+
+        string tmpDate = tmpStr.Substring(0, 4)+"/"+ tmpStr.Substring(4, 2) + "/" + tmpStr.Substring(6, 2);
+        Debug.Log("tmpDate: " + tmpDate);
+
+        string tmpTime = tmpStr.Substring(8, 2) + ":" + tmpStr.Substring(10, 2) + ":" + tmpStr.Substring(12, 2);
+
+        TestDateAndTime.text = "Date&Time: "+tmpDate+" "+tmpTime;
+
+
+
+        // Change process each mode(with XB01 or not)
+        int testtype = stringArray.Length;
+
+        if (testtype == 3)
+        {
+
+            Debug.Log("testtype: " + testtype);
+            //No XbValue because of 2 elemnets(=testtype 2)        
+            //No chart of XbValue 
+
+            BrainScore.text = "-";
+            BrainAge.text = "-";
+            BrainStatus.text = "-";
+
+
+            NoDataMessagePanel.SetActive(true);
+            NoDataMessageText.text = "THIS TEST NOT USE XB-01";
+
+            // Clear chart
+            ClearChart();
+
+
+
+        }
+
+        //        BrainScore.text = "-";
+
+
+        if (testtype == 4)
+        {
+
+
+            // Exist XbValueList
+
+            Xb01ValueList = ES3.Load<List<string>>(stringArray[3]);
+
+
+            bool Xb01ValueListNotNull = false;
+
+            if (Xb01ValueList.Count == 0)
+            {
+
+                NoDataMessagePanel.SetActive(true);
+                NoDataMessageText.text = "THIS TEST NOT GET DATA \n FROM XB-01";
+
+                // Clear chart in the reason of no data on list
+                ClearChart();
+
+                //                MakeDummyXb01Value();
+            }
+            else
+            {
+                Xb01ValueListNotNull = true;
+            }
+
+
+
+            if (Xb01ValueListNotNull == true)
+            {
+
+                // Make array for drawing chart
+
+                // Make Low data list
+                List<float> test1Xb01RowData = new List<float>();
+                List<float> test2Xb01RowData = new List<float>();
+
+
+                foreach (string str in Xb01ValueList)
+                {
+
+                    string[] eachXb01value = str.Split(',');
+
+
+                    // 0:Date&Time, 1:data, 2:onoff, 3:testtype
+                    if (eachXb01value[3] == "Test1")
+                    {
+                        //                    test1datacount++;
+                        if (eachXb01value[2] == "1")
+                        {
+                            try
+                            {
+                                test1Xb01RowData.Add(float.Parse(eachXb01value[1]));
+
+                            }
+                            catch (FormatException)
+                            {
+                                Debug.Log("Unable to float.parse on ShowResultSummary(): " + eachXb01value[1]);
+
+                            }
+
+                        }
+
+                    }
+
+
+                    if (eachXb01value[3] == "Test2")
+                    {
+                        //                    test2datacount++;
+                        if (eachXb01value[2] == "1")
+                        {
+
+                            try
+                            {
+                                test2Xb01RowData.Add(float.Parse(eachXb01value[1]));
+
+                            }
+                            catch (FormatException)
+                            {
+                                Debug.Log("Unable to float.parse on ShowResultSummary()" + eachXb01value[1]);
+
+                            }
+
+
+
+                        }
+
+                    }
+
+                }
+
+                Debug.Log("test1Xb01RowData.Count: " + test1Xb01RowData.Count);
+                Debug.Log("test2Xb01RowData.Count: " + test2Xb01RowData.Count);
+
+
+
+
+                // Is it true to show deviation value on chart?
+
+                // Deviation value <- Standerd Deviation <- Variance <- Deviation <- Average
+
+
+                //----------- Average
+                float test1sum = 0;
+                for (int i = 0; i < test1Xb01RowData.Count; i++)
+                {
+                    test1sum += test1Xb01RowData[i];
+                }
+                float test1average = test1sum / test1Xb01RowData.Count;
+
+
+                float test2sum = 0;
+                for (int i = 0; i < test2Xb01RowData.Count; i++)
+                {
+                    test2sum += test2Xb01RowData[i];
+                }
+                float test2average = test2sum / test2Xb01RowData.Count;
+
+
+                Debug.Log("test1average: " + test1average);
+                Debug.Log("test2average: " + test2average);
+
+
+
+
+                //---------- Deviation
+                List<float> test1Xb01DataDeviation = new List<float>();
+                List<float> test2Xb01DataDeviation = new List<float>();
+
+                for (int i = 0; i < test1Xb01RowData.Count; i++)
+                {
+                    test1Xb01DataDeviation.Add(test1Xb01RowData[i] - test1average);
+
+                }
+
+                for (int i = 0; i < test2Xb01RowData.Count; i++)
+                {
+                    test2Xb01DataDeviation.Add(test2Xb01RowData[i] - test2average);
+
+                }
+
+
+                Debug.Log("test1Xb01DataDeviation.Count: " + test1Xb01DataDeviation.Count);
+                Debug.Log("test2Xb01DataDeviation.Count: " + test2Xb01DataDeviation.Count);
+
+
+
+
+                //---------- Variance
+
+                float sumtest1devdev = 0;
+                foreach (float tmp in test1Xb01DataDeviation)
+                {
+                    sumtest1devdev += tmp * tmp;
+                }
+                float test1variance = sumtest1devdev / test1Xb01DataDeviation.Count;
+
+
+                float sumtest2devdev = 0;
+                foreach (float tmp in test2Xb01DataDeviation)
+                {
+                    sumtest2devdev += tmp * tmp;
+                }
+                float test2variance = sumtest2devdev / test2Xb01DataDeviation.Count;
+
+                Debug.Log("sumtest1devdev: " + sumtest1devdev);
+                Debug.Log("sumtest2devdev: " + sumtest2devdev);
+
+                Debug.Log("test1variance: " + test1variance);
+                Debug.Log("test2variance: " + test2variance);
+
+
+                //---------- Standard Deviation
+
+                float test1StandardDeviation = Mathf.Sqrt(test1variance);
+                float test2StandardDeviation = Mathf.Sqrt(test2variance);
+
+                Debug.Log("test1StandardDeviation: " + test1StandardDeviation);
+                Debug.Log("test2StandardDeviation: " + test2StandardDeviation);
+
+
+                //---------- Deviation Value (means hensa-chi in Japanese)
+
+                //自分の得点から平均値を引いた値を標準偏差（数値のばらつきの程度を示す値）で割って 10 倍し、それに 50 を加えます。
+
+                List<float> test1DeviationValue = new List<float>();
+                List<float> test2DeviationValue = new List<float>();
+
+
+                for (int i = 0; i < test1Xb01RowData.Count; i++)
+                {
+                    float tmp = (test1Xb01RowData[i] - test1average) / test1StandardDeviation * 10 + 50;
+                    test1DeviationValue.Add(tmp);
+                }
+
+                for (int i = 0; i < test2Xb01RowData.Count; i++)
+                {
+                    float tmp = (test2Xb01RowData[i] - test2average) / test2StandardDeviation * 10 + 50;
+                    test2DeviationValue.Add(tmp);
+                }
+
+
+                Debug.Log("test1DeviationValue.Count: " + test1DeviationValue.Count);
+                Debug.Log("test2DeviationValue.Count: " + test2DeviationValue.Count);
+
+
+                /*
+                foreach(float fl in test1DeviationValue)
+                {
+                    Debug.Log("test1DeviationValue: " + fl);
+                }
+                */
+
+
+
+                //--------------------------------------------------------------------------------
+
+
+                // List of Comparison with Intervals
+                List<float> test1ListPlusValueCompareInterval = new List<float>();
+                List<float> test2ListPlusValueCompareInterval = new List<float>();
+
+                test1ListPlusValueCompareInterval = GetListPlusValueCompareInterval("Test1", Xb01ValueList);
+                test2ListPlusValueCompareInterval = GetListPlusValueCompareInterval("Test2", Xb01ValueList);
+
+                Debug.Log("test1ListPlusValueCompareInterval.Count: " + test1ListPlusValueCompareInterval.Count);
+                Debug.Log("test2ListPlusValueCompareInterval.Count: " + test2ListPlusValueCompareInterval.Count);
+
+
+
+                // Make Chart
+
+
+                //common
+                int test1GetDataInterval = 0;
+                int test2GetDataInterval = 0;
+
+                //common
+                List<float> test1Xb01DataForChart = new List<float>();
+                List<float> test2Xb01DataForChart = new List<float>();
+
+
+                
+                /*
+                // Partten 1
+
+                // 22 equals chart columns
+                test1GetDataInterval = test1DeviationValue.Count / 22;
+                test2GetDataInterval = test2DeviationValue.Count / 22;
+
+                string test1StrP1 = "";
+                string test2StrP1 = "";
+
+                for (int i = 0; i < test1DeviationValue.Count; i++)
+                {
+                    if (i % test1GetDataInterval == 0)
+                    {
+                        test1Xb01DataForChart.Add(test1DeviationValue[i]);
+                        test1StrP1 += test1DeviationValue[i]+",";
+                    }
+                }
+
+                for (int i = 0; i < test2DeviationValue.Count; i++)
+                {
+                    if (i % test2GetDataInterval == 0)
+                    {
+                        test2Xb01DataForChart.Add(test2DeviationValue[i]);
+                        test2StrP1 += test2DeviationValue[i] + ",";
+                    }
+                }
+                */
+
+
+
+
+
+                // Partten 2
+
+
+                // 22 equals chart columns
+                test1GetDataInterval = test1ListPlusValueCompareInterval.Count / 22;
+                test2GetDataInterval = test2ListPlusValueCompareInterval.Count / 22;
+
+                string test1StrP2 = "";
+                string test2StrP2 = "";
+
+
+
+                for (int i = 0; i < test1ListPlusValueCompareInterval.Count; i++)
+                {
+                    if (i % test1GetDataInterval == 0)
+                    {
+                        test1Xb01DataForChart.Add(test1ListPlusValueCompareInterval[i]);
+                        test1StrP2 += test1ListPlusValueCompareInterval[i] + ",";
+                    }
+                }
+
+                for (int i = 0; i < test2ListPlusValueCompareInterval.Count; i++)
+                {
+                    if (i % test2GetDataInterval == 0)
+                    {
+                        test2Xb01DataForChart.Add(test2ListPlusValueCompareInterval[i]);
+                        test2StrP2 += test2ListPlusValueCompareInterval[i] + ",";
+                    }
+                }
+
+
+
+                /*
+                Debug.Log(test1StrP1);
+                Debug.Log(test1StrP2);
+                Debug.Log(test2StrP1);
+                Debug.Log(test2StrP2);
+                */
+
+
+
+
+
+
+                //Draw chart of brain blood flow 
+                //
+                //Set 20 parameter A and B each to argument 
+
+                DrawChartFloat(test1Xb01DataForChart, test2Xb01DataForChart);
+                Debug.Log("Done DrawChart()");
+
+
+            }
+
+
+
+
+            //NOTICE
+            //Date&Time,xbValue,Onoff,TestCode
+            //Don't forget to do process only in case of Onoff=1
+
+
+            // Get brain score as count plus of interval average 
+//            int count2 = CountPlusValueCompareInterval(Xb01ValueList);
+//            Debug.Log("CountPlusValueCompareInterval" + count2);
+
+            /*
+            List<float> test1ListPlusValueCompareInterval = new List<float>();
+            List<float> test2ListPlusValueCompareInterval = new List<float>();
+
+            test1ListPlusValueCompareInterval = GetListPlusValueCompareInterval("Test1", Xb01ValueList);
+            test2ListPlusValueCompareInterval = GetListPlusValueCompareInterval("Test2", Xb01ValueList);
+
+            Debug.Log("test1ListPlusValueCompareInterval.Count: " + test1ListPlusValueCompareInterval.Count);
+            Debug.Log("test2ListPlusValueCompareInterval.Count: " + test2ListPlusValueCompareInterval.Count);
+            */
+
+
+            // Get brain score as deviation 
+            int count = CountDeviationPlus(Xb01ValueList);
+
+            BrainScore.text = count.ToString();
+
+            string brainAge = GetCogAge("BrainActivity", count);
+            BrainAge.text = brainAge;
+
+
+
+            string brainStatus = GetCogStatus(brainAge, MyAge);
+            BrainStatus.text = brainStatus;
+       
+            // Set special parameter in case of something error 
+            if (count == 0)
+            {
+                BrainScore.text = "-";
+                BrainAge.text = "-";
+                BrainStatus.text = "-";
+
+
+
+            }
+            else
+            {
+                /*
+                foreach(string str in Xb01ValueList)
+                {
+                    Debug.Log("count= " + count);
+                    Debug.Log(str);
+                }
+                */
+
+            }
+
+
+
+
+        }
+
+
+
+
+        //-----------------  Result Matrix on bellow area  ----------------
+
+
+        //--------  Test1 resut from here  ---------
+
+        // Test1 speed result
+        T1LogList = ES3.Load<List<string>>(stringArray[1]);
+
+
+        // Just count corrects only
+        int t1corrects = CountCorrects(T1LogList);
+        SpeedScore.text = t1corrects.ToString();
+        //        Debug.Log("t1corrects: " + t1corrects);
+
+        string speedAge = GetCogAge("Speed", t1corrects);
+        SpeedAge.text = speedAge;
+
+
+        string speedStatus = GetCogStatus(speedAge, MyAge);
+        SpeedStatus.text = speedStatus;
+
+
+        if (t1corrects == 0)
+        {
+            SpeedScore.text = "-";
+            SpeedAge.text = "-";
+            SpeedStatus.text = "-";
+
+        }
+
+
+
+        //--------  Test1 resut until here  ---------
+
+
+
+        //--------  Test2 resut from here  ---------
+
+
+        // Load T2 data
+        T2LogList = ES3.Load<List<string>>(stringArray[2]);
+        
+        //Just count corrects only
+        int t2corrects = CountCorrects(T2LogList);
+        AttentionScore.text = t2corrects.ToString();
+        //        Debug.Log("t2corrects: " + t2corrects);
+
+        string attentionAge = GetCogAge("Attention", t2corrects);
+        AttentionAge.text = attentionAge;
+
+        string attentionStatus = GetCogStatus(attentionAge, MyAge);
+        AttentionStatus.text = speedStatus;
+
+        if (t2corrects == 0)
+        {
+            AttentionScore.text = "-";
+            AttentionAge.text = "-";
+            AttentionStatus.text = "-";
+
+        }
+
+
+        //--------  Test2 resut until here  ---------
+
+
+    }
+
+
+    private string GetCogStatus(string argcogage, int myage)
+    {
+        // myage is user property age.
+        // cogage is calculated with score-age table each cognitive.
+
+        string status = "";
+        int cogage = 0;
+
+
+        try
+        {
+            cogage = int.Parse(argcogage);
+
+        }
+        catch (FormatException)
+        {
+            Debug.Log("Unable to int.parse on GetCogStatus(): " + argcogage);
+
+        }
+
+
+
+        if ( cogage > myage + 10)
+        {
+            status = "△";
+
+        }
+        else if (cogage < myage - 10)
+        {
+            status = "◎";
+
+        }
+        else
+        {
+            status = "○";
+
+        }
+
+        Debug.Log(cogage);
+        Debug.Log(status);
+
+        return status;
+
+
+    }
+
+
+    private string GetCogAge(string cog, int score)
+    {
+
+
+        string targetCogAge = "";
+
+        List<string> TargetCogAgeTbl = new List<string>();
+
+
+        // Get table from web or local storage(userpref or es3) or hard cording
+
+        // No table and make provisional table that string value to make easy by provider
+
+
+        if(cog == "Speed")
+        {
+
+            /*
+            for (int i = 0; i < 100; i++)
+            {
+                string tmp = (100 - i).ToString() + "," + i.ToString();
+
+                // 26 buttons in 20 sec means 13 buttons in 10 sec means 65 buttons in 50 sec
+                // 26 buttons in 30 sec means 9  buttons in 10 sec means 45 buttons in 50 sec
+                // 26 buttons in 40 sec means 6  buttons in 10 sec means 30 buttons in 50 sec
+                // 26 buttons in 60 sec means 4  buttons in 10 sec means 20 buttons in 50 sec
+
+                TargetCogAgeTbl.Add(tmp);
+                //            Debug.Log(tmp);
+
+            }
+            */
+
+
+            TargetCogAgeTbl = GetSpeedAgeTable();
+
+
+
+        }
+        else if (cog == "Attention")
+        {
+            /*
+            for (int i = 0; i < 100; i++)
+            {
+                string tmp = (100 - i).ToString() + "," + i.ToString();
+                TargetCogAgeTbl.Add(tmp);
+                //            Debug.Log(tmp);
+
+            }
+            */
+
+
+            TargetCogAgeTbl = GetAttentionAgeTable();
+
+
+        }
+        else if (cog == "BrainActivity")
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                string tmp = (100 - i).ToString() + "," + i.ToString();
+                TargetCogAgeTbl.Add(tmp);
+                //            Debug.Log(tmp);
+
+            }
+
+        }
+
+
+
+
+
+        // Format is "score, age"
+
+
+        // Fit and get age from table(array or list)
+        for (int i = 0; i < TargetCogAgeTbl.Count; i++)
+        {
+            //Caution: Format is "Date&Time,1or0" that's why follow logic.
+            string[] tmpArray = TargetCogAgeTbl[i].Split(',');
+
+            if (tmpArray[0] == score.ToString())
+            {
+
+
+                    targetCogAge = tmpArray[1];
+
+
+
+
+
+            }
+        }
+
+        return targetCogAge;
+
+
+    }
+
+
+
+
+
+
+
+
+    private List<float> GetListPlusValueCompareInterval(string str, List<string> a)
+    {
+
+        List<float> reTest1List = new List<float>();
+        List<float> reTest2List = new List<float>();
+
+
+
+
+        if (a.Count == 0)
+        {
+            //No data in the List indicated. 
+            Debug.Log("No data");
+        }
+
+
+
+        // count each data
+        int countDataTest1 = 0;
+        int countDataTest2 = 0;
+        int countDataInterval1 = 0;
+        int countDataInterval2 = 0;
+        int countDataInterval3 = 0;
+
+        // summation of each data
+        float sumDataTest1 = 0f;
+        float sumDataTest2 = 0f;
+        float sumDataInterval1 = 0f;
+        float sumDataInterval2 = 0f;
+        float sumDataInterval3 = 0f;
+
+        // average of each data
+        float aveDataTest1 = 0f;
+        float aveDataTest2 = 0f;
+        float aveDataInterval1 = 0f;
+        float aveDataInterval2 = 0f;
+        float aveDataInterval3 = 0f;
+
+
+        // Summation of data
+        for (int i = 0; i < a.Count; i++)
+        {
+
+            //Caution: Format is "Date&Time,data,1or0,testname" that's why follow logic.
+            string[] tmpArray = a[i].Split(',');
+
+            //tmpArray[0]: Data&Time
+            //tmpArray[1]: data
+            //tmpArray[2]: OnOff(1or0)
+            //tmpArray[3]: testname
+
+            if (tmpArray[3] == "Interval1")
+            {
+                countDataInterval1++;
+                try
+                {
+                    sumDataInterval1 += float.Parse(tmpArray[1]);
+                }
+                catch { Debug.Log("CountPlusValueCompareInterval.error"); }
+            }
+
+            else if (tmpArray[3] == "Test1")
+            {
+                countDataTest1++;
+                try
+                {
+                    sumDataTest1 += float.Parse(tmpArray[1]);
+                }
+                catch { Debug.Log("CountPlusValueCompareInterval.error"); }
+            }
+
+            else if (tmpArray[3] == "Interval2")
+            {
+                countDataInterval2++;
+                try
+                {
+                    sumDataInterval2 += float.Parse(tmpArray[1]);
+                }
+                catch { Debug.Log("CountPlusValueCompareInterval.error"); }
+            }
+
+            else if (tmpArray[3] == "Test2")
+            {
+                countDataTest2++;
+                try
+                {
+                    sumDataTest2 += float.Parse(tmpArray[1]);
+                }
+                catch { Debug.Log("CountPlusValueCompareInterval.error"); }
+            }
+
+            else if (tmpArray[3] == "Interval3")
+            {
+                countDataInterval3++;
+                try
+                {
+                    sumDataInterval3 += float.Parse(tmpArray[1]);
+                }
+                catch { Debug.Log("CountPlusValueCompareInterval.error"); }
+            }
+
+        }
+
+
+        aveDataTest1 = sumDataTest1 / countDataTest1;
+        aveDataTest2 = sumDataTest2 / countDataTest2;
+        aveDataInterval1 = sumDataInterval1 / countDataInterval1;
+        aveDataInterval2 = sumDataInterval2 / countDataInterval2;
+        aveDataInterval3 = sumDataInterval3 / countDataInterval3;
+
+        float aveDataInterval1And2 = (sumDataInterval1 + sumDataInterval2) / (countDataInterval1 + countDataInterval2);
+        float aveDataInterval2And3 = (sumDataInterval2 + sumDataInterval3) / (countDataInterval2 + countDataInterval3);
+
+
+        Debug.Log("test1: " + countDataTest1 + ":" + sumDataTest1 + ":" + aveDataTest1);
+        Debug.Log("test2: " + countDataTest2 + ":" + sumDataTest2 + ":" + aveDataTest2);
+        Debug.Log("interval1: " + countDataInterval1 + ":" + sumDataInterval1 + ":" + aveDataInterval1);
+        Debug.Log("interval2: " + countDataInterval2 + ":" + sumDataInterval2 + ":" + aveDataInterval2);
+        Debug.Log("interval3: " + countDataInterval3 + ":" + sumDataInterval3 + ":" + aveDataInterval3);
+
+
+        Interval1DataOutline.text = "interval1: " + countDataInterval1.ToString() + ":" + sumDataInterval1.ToString() + ":" + aveDataInterval1.ToString();
+        Interval2DataOutline.text = "interval2: " + countDataInterval2.ToString() + ":" + sumDataInterval2.ToString() + ":" + aveDataInterval2.ToString();
+        Interval3DataOutline.text = "interval3: " + countDataInterval3.ToString() + ":" + sumDataInterval3.ToString() + ":" + aveDataInterval3.ToString();
+        Test1DataOutline.text = "test1: " + countDataTest1.ToString() + ":" + sumDataTest1.ToString() + ":" + aveDataTest1.ToString();
+        Test2DataOutline.text = "test2: " + countDataTest2.ToString() + ":" + sumDataTest2.ToString() + ":" + aveDataTest2.ToString();
+
+
+        for (int i = 0; i < a.Count; i++)
+        {
+
+            //Caution: Format is "Date&Time,data,1or0,testname" that's why follow logic.
+            string[] tmpArray = a[i].Split(',');
+
+            //tmpArray[0]: Data&Time
+            //tmpArray[1]: data
+            //tmpArray[2]: OnOff(1or0)
+            //tmpArray[3]: testname
+
+            if (tmpArray[3] == "Test1")
+            {
+                float test1Value = 0f;
+                try
+                {
+                    test1Value = float.Parse(tmpArray[1]);
+                }
+                catch { Debug.Log(tmpArray[1]); }
+
+
+                reTest1List.Add(test1Value - aveDataInterval1And2);
+                
+
+            }
+
+
+            if (tmpArray[3] == "Test2")
+            {
+                float test2Value = 0f;
+                try
+                {
+                    test2Value = float.Parse(tmpArray[1]);
+                }
+                catch { Debug.Log(tmpArray[1]); }
+
+
+                reTest2List.Add(test2Value - aveDataInterval2And3);
+
+
+            }
+
+
+        }
+
+
+        if(str == "Test1")
+        {
+            return reTest1List;
+
+        }
+        else if(str == "Test2")
+        {
+            return reTest2List;
+
+        }
+        else
+        {
+            return reTest1List;
+        }
+
+
+
+    }
+
+
+
+
+        private int CountDeviationPlus(List<string> a)
+    {
+
+        // Be zoro to summation of all deviation because of difference from average.
+        // Be half score as well as always 
+
+        if (a.Count == 0)
+        {
+            //No data in the List indicated. 
+            return 0;
+        }
+
+        int deviationpluscount = 0;
+        float totalxbValue = 0f;
+        int datacount = 0;
+        float averagedata = 0f;
+
+        // Summation of data
+        for (int i = 0; i < a.Count; i++)
+        {
+
+            //Caution: Format is "Date&Time,data,1or0,testname" that's why follow logic.
+            string[] tmpArray = a[i].Split(',');
+
+            if (tmpArray[2] == "1")
+            { 
+
+
+
+                try
+                {
+                    //Date&Time,xbValue,OnTest,TestCode
+                    totalxbValue += float.Parse(tmpArray[1]);
+
+                }
+                catch (FormatException)
+                {
+                    Debug.Log("Unable to float.parse on CountDeviationPlus(): " + tmpArray[1]);
+
+                }
+
+
+
+
+
+
+                //For calculating average to use as a denominator
+                datacount++;
+
+            }
+
+        }
+
+        // Average of data
+        averagedata = totalxbValue / datacount;
+
+        // count deviation pluse
+        for (int i = 0; i < a.Count; i++)
+        {
+
+            //Caution: Format is "Date&Time,1or0" that's why follow logic.
+            string[] tmpArray = a[i].Split(',');
+
+            float tmpData = 0;
+
+
+            try
+            {
+                tmpData = float.Parse(tmpArray[1]);
+
+            }
+            catch (FormatException)
+            {
+                Debug.Log("Unable to float.parse on CountDeviationPlus(): " + tmpArray[1]);
+
+            }
+
+
+
+
+            if ( tmpData - averagedata > 0)
+            {
+                deviationpluscount++;
+            }
+
+        }
+
+        return deviationpluscount;
+
+    }
+
+
+
+
+
+    public void PreviousTestResult()
+    {
+        if (SaveNumber == 0)
+        {
+            Debug.Log("No more data.");
+            NoMoreData1.SetActive(true);
+            return;
+        }
+
+        //Clear chart before drawing new chart
+        ClearChart();
+
+        //Clear result matrix before recalling new data
+        ClearResultMatrix();
+
+        SaveNumber--;
+        ShowResultSummary(TestLogSaveNameList[SaveNumber]);
+        NoMoreData2.SetActive(false);
+
+
+    }
+
+
+
+    public void NextTestResult()
+    {
+        if(SaveNumber >= TestLogSaveNameList.Count - 1)
+        {
+            Debug.Log("No more data.");
+            NoMoreData2.SetActive(true);
+            return;
+        }
+
+
+        //Clear chart before drawing new chart
+        ClearChart();
+
+        //Clear result matrix before recalling new data
+        ClearResultMatrix();
+
+        SaveNumber++;
+        ShowResultSummary(TestLogSaveNameList[SaveNumber]);
+        NoMoreData1.SetActive(false);
+
+
+    }
+
+
+    void ClearResultMatrix()
+    {
+
+        SpeedScore.text="";
+        SpeedAge.text = "";
+        SpeedStatus.text = "";
+
+        AttentionScore.text = "";
+        AttentionAge.text = "";
+        AttentionStatus.text = "";
+
+        BrainScore.text = "";
+        BrainAge.text = "";
+        BrainStatus.text = "";
+
+    }
+
+
+    void ClearChart()
+    {
+        List<float> allzero1 = new List<float>();
+        List<float> allzero2 = new List<float>();
+
+        for(int i=0; i <21; i++)
+        {
+            allzero1.Add(0.0f);
+            allzero2.Add(0.0f);
+
+        }
+
+        DrawChartFloat(allzero1, allzero2);
+        ClearValue();
+
+    }
+
+    void ClearValue()
+    {
+
+        tmta1temp = 0f;
+        tmta2temp = 0f;
+        tmta3temp = 0f;
+        tmta4temp = 0f;
+        tmta5temp = 0f;
+        tmta6temp = 0f;
+        tmta7temp = 0f;
+        tmta8temp = 0f;
+        tmta9temp = 0f;
+        tmta10temp = 0f;
+        tmta11temp = 0f;
+        tmta12temp = 0f;
+        tmta13temp = 0f;
+        tmta14temp = 0f;
+        tmta15temp = 0f;
+        tmta16temp = 0f;
+        tmta17temp = 0f;
+        tmta18temp = 0f;
+        tmta19temp = 0f;
+        tmta20temp = 0f;
+        tmta21temp = 0f;
+
+        tmtb1temp = 0f;
+        tmtb2temp = 0f;
+        tmtb3temp = 0f;
+        tmtb4temp = 0f;
+        tmtb5temp = 0f;
+        tmtb6temp = 0f;
+        tmtb7temp = 0f;
+        tmtb8temp = 0f;
+        tmtb9temp = 0f;
+        tmtb10temp = 0f;
+        tmtb11temp = 0f;
+        tmtb12temp = 0f;
+        tmtb13temp = 0f;
+        tmtb14temp = 0f;
+        tmtb15temp = 0f;
+        tmtb16temp = 0f;
+        tmtb17temp = 0f;
+        tmtb18temp = 0f;
+        tmtb19temp = 0f;
+        tmtb20temp = 0f;
+        tmtb21temp = 0f;
+
+    }
+
+
+
+
+
+    void DrawChartFloat(List<float> a, List<float> b)
+    {
+
+
+        // For debug /////////////////////////////
+        Chart1List.text = "";
+        Chart2List.text = "";
+        for (int i= 0; i < a.Count; i++){
+
+            Chart1List.text += "a["+i+"]="+a[i].ToString()+" ";
+            Chart2List.text += "a[" + i + "]=" + b[i].ToString() + " ";
+            if (i % 2 == 1)
+            {
+                Chart1List.text += "\n";
+                Chart2List.text += "\n";
+
+            }
+        }
+        //////////////////////////////////////////
+
+        TmtaBrainAct1 = a[0];
+        TmtaBrainAct2 = a[1];
+        TmtaBrainAct3 = a[2];
+        TmtaBrainAct4 = a[3];
+        TmtaBrainAct5 = a[4];
+        TmtaBrainAct6 = a[5];
+        TmtaBrainAct7 = a[6];
+        TmtaBrainAct8 = a[7];
+        TmtaBrainAct9 = a[8];
+        TmtaBrainAct10 = a[9];
+        TmtaBrainAct11 = a[10];
+        TmtaBrainAct12 = a[11];
+        TmtaBrainAct13 = a[12];
+        TmtaBrainAct14 = a[13];
+        TmtaBrainAct15 = a[14];
+        TmtaBrainAct16 = a[15];
+        TmtaBrainAct17 = a[16];
+        TmtaBrainAct18 = a[17];
+        TmtaBrainAct19 = a[18];
+        TmtaBrainAct20 = a[19];
+        TmtaBrainAct21 = a[20];
+
+        TmtbBrainAct1 = b[0];
+        TmtbBrainAct2 = b[1];
+        TmtbBrainAct3 = b[2];
+        TmtbBrainAct4 = b[3];
+        TmtbBrainAct5 = b[4];
+        TmtbBrainAct6 = b[5];
+        TmtbBrainAct7 = b[6];
+        TmtbBrainAct8 = b[7];
+        TmtbBrainAct9 = b[8];
+        TmtbBrainAct10 = b[9];
+        TmtbBrainAct11 = b[10];
+        TmtbBrainAct12 = b[11];
+        TmtbBrainAct13 = b[12];
+        TmtbBrainAct14 = b[13];
+        TmtbBrainAct15 = b[14];
+        TmtbBrainAct16 = b[15];
+        TmtbBrainAct17 = b[16];
+        TmtbBrainAct18 = b[17];
+        TmtbBrainAct19 = b[18];
+        TmtbBrainAct20 = b[19];
+        TmtbBrainAct21 = b[20];
+
+
+    }
+
+
+
+
+
+    void DrawChartStr(List<string> a, List<string> b)
+    {
+
+
+
+        //左グラフ各カラムにセットしたい値を格納する変数
+        TmtaBrainAct1 = float.Parse(a[0]);
+        TmtaBrainAct2 = float.Parse(a[1]);
+        TmtaBrainAct3 = float.Parse(a[2]);
+        TmtaBrainAct4 = float.Parse(a[3]);
+        TmtaBrainAct5 = float.Parse(a[4]);
+        TmtaBrainAct6 = float.Parse(a[5]);
+        TmtaBrainAct7 = float.Parse(a[6]);
+        TmtaBrainAct8 = float.Parse(a[7]);
+        TmtaBrainAct9 = float.Parse(a[8]);
+        TmtaBrainAct10 = float.Parse(a[9]);
+        TmtaBrainAct11 = float.Parse(a[10]);
+        TmtaBrainAct12 = float.Parse(a[11]);
+        TmtaBrainAct13 = float.Parse(a[12]);
+        TmtaBrainAct14 = float.Parse(a[13]);
+        TmtaBrainAct15 = float.Parse(a[14]);
+        TmtaBrainAct16 = float.Parse(a[15]);
+        TmtaBrainAct17 = float.Parse(a[16]);
+        TmtaBrainAct18 = float.Parse(a[17]);
+        TmtaBrainAct19 = float.Parse(a[18]);
+        TmtaBrainAct20 = float.Parse(a[19]);
+        TmtaBrainAct21 = float.Parse(a[20]);
+
+
+
+        TmtbBrainAct1 = float.Parse(b[0]);
+        TmtbBrainAct2 = float.Parse(b[1]);
+        TmtbBrainAct3 = float.Parse(b[2]);
+        TmtbBrainAct4 = float.Parse(b[3]);
+        TmtbBrainAct5 = float.Parse(b[4]);
+        TmtbBrainAct6 = float.Parse(b[5]);
+        TmtbBrainAct7 = float.Parse(b[6]);
+        TmtbBrainAct8 = float.Parse(b[7]);
+        TmtbBrainAct9 = float.Parse(b[8]);
+        TmtbBrainAct10 = float.Parse(b[9]);
+        TmtbBrainAct11 = float.Parse(b[10]);
+        TmtbBrainAct12 = float.Parse(b[11]);
+        TmtbBrainAct13 = float.Parse(b[12]);
+        TmtbBrainAct14 = float.Parse(b[13]);
+        TmtbBrainAct15 = float.Parse(b[14]);
+        TmtbBrainAct16 = float.Parse(b[15]);
+        TmtbBrainAct17 = float.Parse(b[16]);
+        TmtbBrainAct18 = float.Parse(b[17]);
+        TmtbBrainAct19 = float.Parse(b[18]);
+        TmtbBrainAct20 = float.Parse(b[19]);
+        TmtbBrainAct21 = float.Parse(b[20]);
+
+
+    }
+
 
     // Start is called before the first frame update
     void Start()
     {
 
 
-        //左グラフ各カラムにセットしたい値を格納する変数
-        TmtaBrainAct1 = 10f;
-        TmtaBrainAct2 = 20f;
-        TmtaBrainAct3 = 30f;
-        TmtaBrainAct4 = 40f;
-        TmtaBrainAct5 = 50f;
-        TmtaBrainAct6 = 60f;
-        TmtaBrainAct7 = 70f;
-        TmtaBrainAct8 = 60f;
-        TmtaBrainAct9 = 50f;
-        TmtaBrainAct10 = 50f;
-        TmtaBrainAct11 = 60f;
-        TmtaBrainAct12 = 40f;
-        TmtaBrainAct13 = 30f;
-        TmtaBrainAct14 = 20f;
-        TmtaBrainAct15 = 20f;
-        TmtaBrainAct16 = 30f;
-        TmtaBrainAct17 = 40f;
-        TmtaBrainAct18 = 50f;
-        TmtaBrainAct19 = 60f;
-        TmtaBrainAct20 = 60f;
-        TmtaBrainAct21 = 70f;
-        TmtaBrainAct22 = 70f;
-        TmtaBrainAct23 = 60f;
 
-        TmtbBrainAct1 = 30f;
-        TmtbBrainAct2 = 40f;
-        TmtbBrainAct3 = 50f;
-        TmtbBrainAct4 = 60f;
-        TmtbBrainAct5 = 80f;
-        TmtbBrainAct6 = 90f;
-        TmtbBrainAct7 = 90f;
-        TmtbBrainAct8 = 70f;
-        TmtbBrainAct9 = 50f;
-        TmtbBrainAct10 = 50f;
-        TmtbBrainAct11 = 40f;
-        TmtbBrainAct12 = 30f;
-        TmtbBrainAct13 = 40f;
-        TmtbBrainAct14 = 40f;
-        TmtbBrainAct15 = 30f;
-        TmtbBrainAct16 = 30f;
-        TmtbBrainAct17 = 40f;
-        TmtbBrainAct18 = 50f;
-        TmtbBrainAct19 = 60f;
-        TmtbBrainAct20 = 70f;
-        TmtbBrainAct21 = 70f;
-        TmtbBrainAct22 = 80f;
-        TmtbBrainAct23 = 90f;
+        //Get user real age
+        MyAge = GetRealAge();
+
+        //Load a save name list
+        TestLogSaveNameList = ES3.Load<List<string>>("Es3TestLogSaveNameList");
+
+        //Substitute the latest save number
+        SaveNumber = TestLogSaveNameList.Count - 1;
+
+        //Show latest save data
+        ShowResultSummary(TestLogSaveNameList[SaveNumber]);
 
 
-
-        ResultSpeed = textResultSpeed.GetComponent<Text>();
-        ResultAttention = textResultAttention.GetComponent<Text>();
-        ResultBrain = textResultBrain.GetComponent<Text>();
-        ResultDeclines = textResultDeclines.GetComponent<Text>();
-
-
-        //初期化処理
-        //Start()の中で計算して描画関数で値を更新
-        ResultSpeed.text = "Calculating. . .";
-        ResultAttention.text = "Calculating. . .";
-        ResultBrain.text = "Calculating. . .";
-        ResultDeclines.text = "Calculating. . .";
-
-
-        /*  
-          *  
-          *  TMT1
-          *  
-          *  プレフィックス＝　TMT1_
-          *  
-          *  
-          */
-
-        /*
-        //全タッチ関連静的変数
-        public static int pushDownTask1 = 0;
-        public static int pdtTask1 = 0;
-        public static DateTime[] pushDownTimeTask1 = new DateTime[500];
-        public static TimeSpan totalTapTimePushDownTask1;
-        public static double meanTimePushDownTask1;
-        public static double maxTaptimePushDownTask1 = 0;
-        public static double minTaptimePushDownTask1 = 0;
-        //15秒で110回プッシュできたので45秒で330回
-        //60秒までの拡張を見越して440回で500回に
-        */
-
-        //総タッチ数
-        int tmt1_pushDownTask1 = S522Test1GameManagerScript.GetPushDownTask1();
-        //総タッチ各タッチ時刻
-        DateTime[] tmt1_pushDownTimeTask1 = S522Test1GameManagerScript.GetPushDownTimeTask1();
-        //総タッチ平均タッチ時間
-        double tmt1_meanTimePushDownTask1 = S522Test1GameManagerScript.GetMeanTimePushDownTask1();
-        //総タッチ最大（最遅）タッチ時間
-        double tmt1_maxTaptimePushDownTask1 = S522Test1GameManagerScript.GetMaxTaptimePushDownTask1();
-        //総タッチ最小（最速）タッチ時間
-        double tmt1_minTaptimePushDownTask1 = S522Test1GameManagerScript.GetMinTaptimePushDownTask1();
-
-//        Debug.Log("Page70GameManagerScript.tmt1__pushDownTask1" + tmt1_pushDownTask1);
-//        Debug.Log("Page70GameManagerScript.tmt1__meanTimePushDownTask1" + tmt1_meanTimePushDownTask1);
-//        Debug.Log("Page70GameManagerScript.tmt1__maxTaptimePushDownTask1" + tmt1_maxTaptimePushDownTask1);
-//        Debug.Log("Page70GameManagerScript.tmt1__minTaptimePushDownTask1" + tmt1_minTaptimePushDownTask1);
-    
-        /*
-        //正答タッチ数関連静的変数
-        public static int rightPushTask1 = 0;
-        public static int rptTask1 = 0;
-        public static DateTime[] rightPushTimeTask1 = new DateTime[180];
-        public static TimeSpan totalTapTimeRightPushTask1;
-        public static double meanTimeRightPushTask1;
-        public static double maxTaptimeRightPushTask1 = 0;
-        public static double minTaptimeRightPushTask1 = 0;
-        */
-
-        //正答タッチ数
-        int tmt1_rightPushTask1 = S522Test1GameManagerScript.GetRightPushTask1();
-        //正答タッチ各タッチ時刻
-        DateTime[] tmt1_rightPushTimeTask1 = S522Test1GameManagerScript.GetRightPushTimeTask1();
-        //正答タッチ平均タッチ時間
-        double tmt1_meanTimeRightPushTask1 = S522Test1GameManagerScript.GetMeanTimeRightPushTask1();
-        //正答タッチ最大（最遅）タッチ時間
-        double tmt1_maxTaptimeRightPushTask1 = S522Test1GameManagerScript.GetMaxTaptimeRightPushTask1();
-        //正答タッチ最小（最速）タッチ時間
-        double tmt1_minTaptimeRightPushTask1 = S522Test1GameManagerScript.GetMinTaptimeRightPushTask1();
-
-        /*
-        Debug.Log("Page70GameManagerScript.rightPushTask1" + tmt1_rightPushTask1);
-        Debug.Log("Page70GameManagerScript.meanTimeRightPushTask1" + tmt1_meanTimeRightPushTask1);
-        Debug.Log("Page70GameManagerScript.maxTaptimeRightPushTask1" + tmt1_maxTaptimeRightPushTask1);
-        Debug.Log("Page70GameManagerScript.minTaptimeRightPushTask1" + tmt1_minTaptimeRightPushTask1);
-        */
-
-        /*
-        //誤答タッチ数関連静的変数
-        public static int wrongPushTask1 = 0;
-        public static int wptTask1 = 0;
-        public static DateTime[] wrongPushTimeTask1 = new DateTime[500];
-        public static TimeSpan totalTapTimeWrongPushTask1;
-        public static double meanTimeWrongPushTask1;
-        public static double maxTaptimeWrongPushTask1 = 0;
-        public static double minTaptimeWrongPushTask1 = 0;
-        */
-
-        //誤答タッチ数
-        int tmt1_wrongPushTask1 = S522Test1GameManagerScript.GetWrongPushTask1();
-        //誤答タッチ各タッチ時刻
-        DateTime[] tmt1_wrongPushTimeTask = S522Test1GameManagerScript.GetWrongPushTimeTask1();
-        //誤答タッチ平均タッチ時間
-        double tmt1_meanTimeWrongPushTask1 = S522Test1GameManagerScript.GetMeanTimeWrongPushTask1();
-        //誤答タッチ最大（最遅）時間
-        double tmt1_maxTaptimeWrongPushTask1 = S522Test1GameManagerScript.GetMaxTaptimeWrongPushTask1();
-        //誤答タッチ最小（最速）時間    
-        double tmt1_minTaptimeWrongPushTask1 = S522Test1GameManagerScript.GetMinTaptimeWrongPushTask1();
-
-        /*
-        Debug.Log("Page70GameManagerScript.wrongPushTask1" + tmt1_wrongPushTask1);
-        Debug.Log("Page70GameManagerScript.meanTimeWrongPushTask1" + tmt1_meanTimeWrongPushTask1);
-        Debug.Log("Page70GameManagerScript.maxTaptimeWrongPushTask1" + tmt1_maxTaptimeWrongPushTask1);
-        Debug.Log("Page70GameManagerScript.minTaptimeWrongPushTask1" + tmt1_minTaptimeWrongPushTask1);
-        */
-
-        /*  
-         *  
-         *  TMT2
-         *  
-         *  プレフィックス＝　TMT2_
-         *  
-         *  
-         */
-
-        /*
-        //全タッチ関連静的変数のグローバル変数（別クラスで宣言）
-        public static int pushDownTask1 = 0;
-        public static int pdtTask1 = 0;
-        public static DateTime[] pushDownTimeTask1 = new DateTime[500];
-        public static TimeSpan totalTapTimePushDownTask1;
-        public static double meanTimePushDownTask1;
-        public static double maxTaptimePushDownTask1 = 0;
-        public static double minTaptimePushDownTask1 = 0;
-        //15秒で110回プッシュできたので45秒で330回
-        //60秒までの拡張を見越して440回で500回に
-        */
-        //
-        int tmt2_pushDownTask1 = S524Test2GameManagerScript.GetPushDownTask1();
-        DateTime[] tmt2_pushDownTimeTask1 = S524Test2GameManagerScript.GetPushDownTimeTask1();
-        double tmt2_meanTimePushDownTask1 = S524Test2GameManagerScript.GetMeanTimePushDownTask1();
-        double tmt2_maxTaptimePushDownTask1 = S524Test2GameManagerScript.GetMaxTaptimePushDownTask1();
-        double tmt2_minTaptimePushDownTask1 = S524Test2GameManagerScript.GetMinTaptimePushDownTask1();
-
-        /*
-        Debug.Log("Page90GameManagerScript.pushDownTask1" + tmt2_pushDownTask1);
-        Debug.Log("Page90GameManagerScript.meanTimePushDownTask1" + tmt2_meanTimePushDownTask1);
-        Debug.Log("Page90GameManagerScript.maxTaptimePushDownTask1" + tmt2_maxTaptimePushDownTask1);
-        Debug.Log("Page90GameManagerScript.minTaptimePushDownTask1" + tmt2_minTaptimePushDownTask1);
-        */
-
-        //タッチ正答数関連静的変数
-        /*
-        //タッチ正答数のグローバル変数（別クラスで宣言）
-        public static int rightPushTask1 = 0;
-        public static int rptTask1 = 0;
-        public static DateTime[] rightPushTimeTask1 = new DateTime[180];
-        public static TimeSpan totalTapTimeRightPushTask1;
-        public static double meanTimeRightPushTask1;
-        public static double maxTaptimeRightPushTask1 = 0;
-        public static double minTaptimeRightPushTask1 = 0;
-        */
-
-        //タッチ正答数
-        int tmt2_rightPushTask1 = S524Test2GameManagerScript.GetRightPushTask1();
-        DateTime[] tmt2_rightPushTimeTask1 = S524Test2GameManagerScript.GetRightPushTimeTask1();
-        double tmt2_meanTimeRightPushTask1 = S524Test2GameManagerScript.GetMeanTimeRightPushTask1();
-        double tmt2_maxTaptimeRightPushTask1 = S524Test2GameManagerScript.GetMaxTaptimeRightPushTask1();
-        double tmt2_minTaptimeRightPushTask1 = S524Test2GameManagerScript.GetMinTaptimeRightPushTask1();
-
-        /*
-        Debug.Log("Page90GameManagerScript.rightPushTask1" + tmt2_rightPushTask1);
-        Debug.Log("Page90GameManagerScript.meanTimeRightPushTask1" + tmt2_meanTimeRightPushTask1);
-        Debug.Log("Page90GameManagerScript.maxTaptimeRightPushTask1" + tmt2_maxTaptimeRightPushTask1);
-        Debug.Log("Page90GameManagerScript.minTaptimeRightPushTask1" + tmt2_minTaptimeRightPushTask1);
-        */
-
-        /*
-        //タッチ誤答数のグローバル変数（別クラスで宣言）
-        public static int wrongPushTask1 = 0;
-        public static int wptTask1 = 0;
-        public static DateTime[] wrongPushTimeTask1 = new DateTime[500];
-        public static TimeSpan totalTapTimeWrongPushTask1;
-        public static double meanTimeWrongPushTask1;
-        public static double maxTaptimeWrongPushTask1 = 0;
-        public static double minTaptimeWrongPushTask1 = 0;
-        */
-
-        int tmt2_wrongPushTask1 = S524Test2GameManagerScript.GetWrongPushTask1();
-        DateTime[] tmt2_wrongPushTimeTask = S524Test2GameManagerScript.GetWrongPushTimeTask1();
-        double tmt2_meanTimeWrongPushTask1 = S524Test2GameManagerScript.GetMeanTimeWrongPushTask1();
-        double tmt2_maxTaptimeWrongPushTask1 = S524Test2GameManagerScript.GetMaxTaptimeWrongPushTask1();
-        double tmt2_minTaptimeWrongPushTask1 = S524Test2GameManagerScript.GetMinTaptimeWrongPushTask1();
-
-        /*
-        Debug.Log("Page90GameManagerScript.wrongPushTask1" + tmt2_wrongPushTask1);
-        Debug.Log("Page90GameManagerScript.meanTimeWrongPushTask1" + tmt2_meanTimeWrongPushTask1);
-        Debug.Log("Page90GameManagerScript.maxTaptimeWrongPushTask1" + tmt2_maxTaptimeWrongPushTask1);
-        Debug.Log("Page90GameManagerScript.minTaptimeWrongPushTask1" + tmt2_minTaptimeWrongPushTask1);
-        */
-
-
-
-        /***************      リザルトの計算         ************/
-
-        //入力した年齢を取得
-        int getInputAge = InputManagerScript.GetInputAge();
-
-        //低下している認知機能リスト出力用オブジェクト
-        StringBuilder resultDeclines = new StringBuilder();
-        string resultDecline;
-
-
-        //
-        //平均処理速度
-        //処理速度のスコア、順位など
-        //TMT1のみ利用する（TMT2は注意力や作動記憶を必要とするため）
-        //または誤答は勘案せずにTMT1とTMT2を使うか
-        //TMT2は悩むのでタッチ数が少なくなるがそれがスコアに
-        //反映されると納得感があるかもしれない
-        //0.5歩先で難易度が高い状態にしておく
-        //
-
-
-        //処理速度スコアを計算する
-        //この関数Start()で宣言した変数でグローバル変数を取得している
-
-        //
-        //若者は4周できるとするとタッチ個数＝点数
-        //
-
-        //int calc_ten_speed = tmt1_pushDownTask1;
-
-        //暫定で一律62点
-        //        int calc_ten_speed = 62;
-
-        int calc_ten_speed = CalcScoreSpeed();
-
-        if (calc_ten_speed > 99)
+        foreach (var key in TestLogSaveNameList)
         {
-            calc_ten_speed = 100;
-        }
-
-        //処理速度年齢を取得する
-        int calc_age_speed = CalcAgeSpeed(calc_ten_speed);
-
-
-        /*
-         *○✕評価
-         * 自分の年齢+-10歳は○
-         * 自分の年齢+11歳以上は◎
-         * 自分の年齢-11歳以上は△
-         */
-
-        string str_hantei_speed = "";
-        if ( getInputAge - calc_age_speed > 11)
-        {
-            str_hantei_speed = "◎";
-        }
-        else if( getInputAge - calc_age_speed <  - 11)
-        {
-            str_hantei_speed = "△";
-            resultDecline = "処理速度　";
-            resultDeclines.Append(resultDecline);
-
-        }
-        else
-        {
-            str_hantei_speed = "○";
+            Debug.Log("Save keyname list: " + key);
         }
 
 
-        StringBuilder result_speed = new StringBuilder();
-        string str_calc_ten_speed = calc_ten_speed.ToString();
-        string str_calc_age_speed = calc_age_speed.ToString();
-
-//        result_speed.Append( str_calc_ten_speed + "点　");
-//        result_speed.Append( str_calc_age_speed + "歳　");
-        result_speed.Append(str_calc_ten_speed + "　　　");
-        result_speed.Append(str_calc_age_speed + "　　　");
-        result_speed.Append( str_hantei_speed);
-
-        //以下の結果をInvokeで描画関数で実行してタメをもたせる
-        //ResultSpeed.text = result_speed.ToString();
-        rSpeed = result_speed.ToString();
-
-        //
-        //注意力
-        //注意力のスコア、順位など
-        //TMT1、TMT2を利用する
-        //回答総数に対する誤答数の数か
-        //回答総数が少ないかつ誤答数が少ない場合の扱いを考える
-        //TMT2の回答総数はTMT1の○％減まで認める
-        //それ以下だと注意力は低いとみなす
-        //ゆっくりの場合は注意力を発揮していないとと考える
-        //
-        //注意力は注意する対象を定義する必要があるため
-        //それが今提示のものであっても過去の経験記憶のものであっても
-        //作動記憶が必要となる
-        //
-
-        //注意力スコアを計算する
-        //この関数Start()で宣言した変数でグローバル変数を取得している
-
-        //暫定で72点を表示する
-        //      int calc_ten_attention = 72;
-
-        int calc_ten_attention = CalcScoreAttention();
-
-        if (calc_ten_attention > 99)
-        {
-            calc_ten_attention = 100;
-        }
-
-        //注意力年齢を取得する
-        int calc_age_attention = CalcAgeAttention(calc_ten_attention);
 
         /*
-         *○✕評価
-         * 自分の年齢+-10歳は○
-         * 自分の年齢+11歳以上は◎
-         * 自分の年齢-11歳以上は△
-         */
-
-        string str_hantei_attention = "";
-        if (getInputAge - calc_age_attention > 11)
+        // Es3TestLogSaveNameList
+        foreach (var key in ES3.GetKeys())
         {
-            str_hantei_attention = "◎";
+            Debug.Log("Show all es3 keys: "+ key);
         }
-        else if (getInputAge - calc_age_attention < - 11)
-        {
-            str_hantei_attention = "△";
-            resultDecline = "注意力　";
-            resultDeclines.Append(resultDecline);
-        }
-        else
-        {
-            str_hantei_attention = "○";
-        }
-
-
-        StringBuilder result_attention = new StringBuilder();
-        string str_calc_ten_attention = calc_ten_attention.ToString();
-        string str_calc_age_attention = calc_age_attention.ToString();
-
-//        result_attention.Append(str_calc_ten_attention + "点　");
-//        result_attention.Append(str_calc_age_attention + "歳　");
-        result_attention.Append(str_calc_ten_attention + "　　　");
-        result_attention.Append(str_calc_age_attention + "　　　");
-        result_attention.Append(str_hantei_attention);
-
-        //以下の結果をInvokeで描画関数で実行してタメをもたせる
-        //ResultAttention.text = result_attention.ToString();
-        rAttention = result_attention.ToString();
-
-
-        //
-        //脳活動
-        //脳活動のスコア、順位など
-        //
-
-        //脳活動スコアを計算する
-        //この関数Start()で宣言した変数でグローバル変数を取得している
-
-        //暫定で39点を表示する
-        int calc_ten_brain = 39;
-        if (calc_ten_brain > 99)
-        {
-            calc_ten_brain = 100;
-        }
-
-        //脳活動年齢を取得する
-        int calc_age_brain = CalcAgeBrain(calc_ten_brain);
-
-        /*
-         *○✕評価
-         * 自分の年齢+-10歳は○
-         * 自分の年齢+11歳以上は◎
-         * 自分の年齢-11歳以上は△
-         * 実年齢　- 計算年齢　＝　11以上なら若い
-         * 実年齢 - 計算年齢＝　－11以下なら老いてる
-         */
-
-
-        string str_hantei_brain = "";
-        if ( getInputAge - calc_age_brain > 11)
-        {
-            str_hantei_brain = "◎";
-        }
-        else if ( getInputAge - calc_age_brain < -11)
-        {
-            str_hantei_brain = "△";
-            resultDecline = "脳活動";
-            resultDeclines.Append(resultDecline);
-        }
-        else
-        {
-            str_hantei_brain = "○";
-        }
-
-
-        StringBuilder result_brain = new StringBuilder();
-        string str_calc_ten_brain = calc_ten_brain.ToString();
-        string str_calc_age_brain = calc_age_brain.ToString();
-
-//        result_brain.Append(str_calc_ten_brain + "点　");
-//        result_brain.Append(str_calc_age_brain + "歳　");
-        result_brain.Append(str_calc_ten_brain + "　　　");
-        result_brain.Append(str_calc_age_brain + "　　　");
-        result_brain.Append(str_hantei_brain);
-
-        //以下の結果をInvokeで描画関数で実行してタメをもたせる
-        //ResultBrainActivity.text = result_brain.ToString();
-        rBrain = result_brain.ToString();
-
-
-        /***************      リザルト表示前にもったいぶる         ************/
-
-        //別スレッドで○秒後に実施する
-        //Invokeで呼ばれる関数で後続処理を記載すればよい
-        //例えば画面描画とか
-        //○f秒後に実行される
-
-        Invoke("ShowResultSpeed", 3.5f);
-        Invoke("ShowResultAttention", 4.5f);
-        Invoke("ShowResultBrain", 5.5f);
-
-        //低下機能リストはここで文字列化
-        rDeclines = resultDeclines.ToString();
-        Invoke("ShowResultDeclines", 6.5f);
-
-        /***************      他シーン連携用         ************/
-
-        /*
-        //処理速度
-        public static int scoreSpeed;  //点
-        public static int ageSpeed; //年齢
-        public static string classSpeed; //◎○△
         */
 
-        scoreSpeed = calc_ten_speed;
-        ageSpeed = calc_age_speed;
-        classSpeed = str_hantei_speed;
 
-        /*
-        //注意力
-        public static int scoreAttention;  //点
-        public static int ageAttention; //年齢
-        public static string classAttention; //◎○△
-        */
 
-        scoreAttention = calc_ten_attention;
-        ageAttention = calc_age_attention;
-        classAttention = str_hantei_attention;
 
-        /*
-        //脳活動
-        public static int scoreBrainActivity;  //点
-        public static int ageBrainActivity; //年齢
-        public static string classBrainActivity; //◎○△
-        */
-
-        scoreBrain = calc_ten_brain;
-        ageBrain = calc_age_brain;
-        classBrain = str_hantei_brain;
-
+    }
         
-    }
 
 
-    int CalcScoreSpeed()
-    {
-        //返り値の宣言かつ初期化
-        int css = 0;
-
-        //速度スコアは　（TMT-Aタッチ総数＋TMT-Bタッチ総数）＊係数SP
-        //係数SPは既存データから最小値最大値を0-100に調整する
-
-        //TMT-Aタッチ総数
-        int tmtA_TouchCount = S522Test1GameManagerScript.GetPushDownTask1();
-
-        //TMT-Bタッチ総数
-        int tmtB_TouchCount = S524Test2GameManagerScript.GetPushDownTask1();
-
-        //係数SP
-        int sp = 1;
-
-        css = (tmtA_TouchCount + tmtB_TouchCount) * sp;
-
-        if (css > 100) css = 100;
-
-        return css;
-
-    }
-
-    int CalcScoreAttention()
-    {
-        //返り値の宣言かつ初期化
-        int csa = 0;
-
-        //注意力スコアは　（TMT-Bタッチ総数／TMT-Aタッチ総数）＊TMT-A正答数＊係数AT
-        //係数アルファは既存データから最小値最大値を0-100に調整する
-
-        //TMT-Aタッチ総数
-        int tmtA_TouchCount = 0;
-        tmtA_TouchCount = S522Test1GameManagerScript.GetPushDownTask1();
-        if (tmtA_TouchCount == 0)
-        {
-            csa = 0;
-            return csa;
-        }
-
-
-
-        //TMT-Bタッチ総数
-        int tmtB_TouchCount = 0;
-        tmtB_TouchCount = S524Test2GameManagerScript.GetPushDownTask1();
-        if (tmtB_TouchCount==0)
-        {
-            csa = 0;
-            return csa;
-        }
-
-        //TMT-A正答タッチ数
-        int tmtA_rightPushTask1 = 0;
-        tmtA_rightPushTask1 = S522Test1GameManagerScript.GetRightPushTask1();
-        if (tmtA_rightPushTask1==0)
-        {
-            csa = 0;
-            return csa;
-        }
-
-        //係数AT
-        int sp = 1;
-
-
-        csa = (tmtB_TouchCount / tmtA_TouchCount) * tmtA_rightPushTask1 * sp;
-        if (csa > 100) csa = 100;
-
-        return csa;
-
-    }
-
-    void ShowResultDeclines()
-    {
-        if (rDeclines == "") rDeclines = "特にありません";
-        ResultDeclines.text = rDeclines;
-        return;
-    }
-
-
-    void ShowResultSpeed()
-    {
-        ResultSpeed.text = rSpeed;
-        return;
-    }
-
-    void ShowResultAttention()
-    {
-        ResultAttention.text = rAttention;
-        return;
-    }
-
-    void ShowResultBrain()
-    {
-        ResultBrain.text = rBrain;
-        return;
-    }
-
-
-    int CalcAgeSpeed(int a)
-    {
-        //ここに年齢テーブル
-        //点数を入れたらその点を平均点にもつ
-        //年齢を返す
-
-        int calc_age;
-        calc_age = 50;
-        return calc_age;
-    }
-
-    int CalcAgeAttention(int a)
-    {
-        //ここに年齢テーブル
-        //点数を入れたらその点を平均点にもつ
-        //年齢を返す
-
-        int calc_age;
-        calc_age = 30;
-        return calc_age;
-    }
-
-    int CalcAgeBrain(int a)
-    {
-        //ここに年齢テーブル
-        //点数を入れたらその点を平均点にもつ
-        //年齢を返す
-
-        int calc_age;
-        calc_age = 25;
-        return calc_age;
-    }
 
 
     // Update is called once per frame
@@ -1200,9 +1926,257 @@ public class S526TestResultSummaryControllerScript : MonoBehaviour
     }
 
 
-    public void ChangeScene()
+    void MakeDummyXb01Value()
     {
-        SceneManager.LoadScene("120.詳細1－認知速度");
+
+        //Xb01ValueList format is
+        // Date&Time, data, onoff, testtype
+
+        // 10sec equals 100records
+        // 45sec equals 450records
+        // 10sec equals 100records
+        // 45sec equals 450records
+        // 10sec equals 100records
+        // 90+30=120sec 1200records
+
+        //                UnityEngine.Random.InitState(System.DateTime.Now.Millisecond);
+
+        for (int i = 0; i < 100; i++)
+        {
+            string str;
+            string dateandtimestr = "20200101" + "010101";
+            string datastr = UnityEngine.Random.Range(1, 100).ToString();
+            string onoff = "0";
+            string ttype = "Interval1";
+
+            str = dateandtimestr + "," + datastr + "," + onoff + "," + ttype;
+            Xb01ValueList.Add(str);
+
+        }
+
+        for (int i = 0; i < 450; i++)
+        {
+            string str;
+            string dateandtimestr = "20200101" + "010101";
+            string datastr = UnityEngine.Random.Range(1, 100).ToString();
+            string onoff = "1";
+            string ttype = "Test1";
+
+            str = dateandtimestr + "," + datastr + "," + onoff + "," + ttype;
+            Xb01ValueList.Add(str);
+
+        }
+        for (int i = 0; i < 100; i++)
+        {
+            string str;
+            string dateandtimestr = "20200101" + "010101";
+            string datastr = UnityEngine.Random.Range(1, 100).ToString();
+            string onoff = "0";
+            string ttype = "Interva2";
+
+            str = dateandtimestr + "," + datastr + "," + onoff + "," + ttype;
+            Xb01ValueList.Add(str);
+
+        }
+
+        for (int i = 0; i < 450; i++)
+        {
+            string str;
+            string dateandtimestr = "20200101" + "010101";
+            string datastr = UnityEngine.Random.Range(1, 100).ToString();
+            string onoff = "1";
+            string ttype = "Test2";
+
+            str = dateandtimestr + "," + datastr + "," + onoff + "," + ttype;
+            Xb01ValueList.Add(str);
+
+        }
+
+        for (int i = 0; i < 100; i++)
+        {
+            string str;
+            string dateandtimestr = "20200101" + "010101";
+            string datastr = UnityEngine.Random.Range(1, 100).ToString();
+            string onoff = "0";
+            string ttype = "Interval3";
+
+            str = dateandtimestr + "," + datastr + "," + onoff + "," + ttype;
+            Xb01ValueList.Add(str);
+
+        }
+
+
+
+    }
+
+
+
+
+    private List<string> GetSpeedAgeTable()
+    {
+        List<string> retList = new List<string>();
+
+        string[] provisionalSpeedTable = 
+        {
+            "65,20",
+            "64,21",
+            "63,22",
+            "62,23",
+            "61,24",
+            "60,25",
+            "59,26",
+            "58,27",
+            "57,28",
+            "56,29",
+            "55,30",
+            "54,31",
+            "53,32",
+            "52,33",
+            "51,34",
+            "50,35",
+            "49,36",
+            "48,37",
+            "47,38",
+            "46,39",
+            "45,40",
+            "44,41",
+            "43,42",
+            "42,43",
+            "41,44",
+            "40,45",
+            "39,46",
+            "38,47",
+            "37,48",
+            "36,49",
+            "35,50",
+            "34,51",
+            "33,52",
+            "32,53",
+            "31,54",
+            "30,55",
+            "29,56",
+            "28,57",
+            "27,58",
+            "26,59",
+            "25,60",
+            "24,61",
+            "23,62",
+            "22,63",
+            "21,64",
+            "20,65",
+            "19,66",
+            "18,67",
+            "17,68",
+            "16,69",
+            "15,70",
+            "14,71",
+            "13,72",
+            "12,73",
+            "11,74",
+            "10,75",
+            "9,76",
+            "8,77",
+            "7,78",
+            "6,79",
+            "5,80",
+            "4,81",
+            "3,82",
+            "2,83",
+            "1,84",
+            "0,85"
+        };
+
+        retList.AddRange(provisionalSpeedTable);
+
+        return retList;
+
+
+    }
+
+
+
+
+    private List<string> GetAttentionAgeTable()
+    {
+        List<string> retList = new List<string>();
+
+        string[] provisionalAttentionTable =
+        {
+
+            "65,20",
+            "64,20",
+            "63,20",
+            "62,21",
+            "61,21",
+            "60,21",
+            "59,22",
+            "58,22",
+            "57,22",
+            "56,23",
+            "55,23",
+            "54,23",
+            "53,24",
+            "52,24",
+            "51,24",
+            "50,25",
+            "49,25",
+            "48,25",
+            "47,26",
+            "46,26",
+            "45,26",
+            "44,27",
+            "43,27",
+            "42,27",
+            "41,28",
+            "40,28",
+            "39,29",
+            "38,29",
+            "37,30",
+            "36,30",
+            "35,31",
+            "34,32",
+            "33,33",
+            "32,34",
+            "31,35",
+            "30,36",
+            "29,37",
+            "28,38",
+            "27,39",
+            "26,40",
+            "25,41",
+            "24,42",
+            "23,43",
+            "22,44",
+            "21,45",
+            "20,46",
+            "19,47",
+            "18,48",
+            "17,49",
+            "16,50",
+            "15,51",
+            "14,52",
+            "13,53",
+            "12,54",
+            "11,55",
+            "10,56",
+            "9,57",
+            "8,58",
+            "7,59",
+            "6,60",
+            "5,61",
+            "4,62",
+            "3,63",
+            "2,64",
+            "1,65",
+            "0,66"
+
+        };
+
+        retList.AddRange(provisionalAttentionTable);
+
+        return retList;
+
+
     }
 
 

@@ -716,8 +716,8 @@ namespace ES3PlayMaker
 			EditField("fsmES3Spreadsheet");
 			EditField("col");
 			EditField("row");
-			EditField("value");
-		}
+            FsmVarField("value");
+        }
 	}
 
 	[CustomActionEditor(typeof(ES3PlayMaker.ES3SpreadsheetGetCell))]
@@ -753,6 +753,28 @@ namespace ES3PlayMaker
         }
     }
 
-#endregion
+    #endregion
+
+    #region Caching
+
+    [CustomActionEditor(typeof(ES3PlayMaker.CacheFile))]
+    public class CacheFileEditor : SettingsEditor
+    {
+        public override void DrawGUI()
+        {
+            EditField("filePath");
+        }
+    }
+
+    [CustomActionEditor(typeof(ES3PlayMaker.StoreCachedFile))]
+    public class StoreCachedFileEditor : SettingsEditor
+    {
+        public override void DrawGUI()
+        {
+            EditField("filePath");
+        }
+    }
+
+    #endregion
 }
 #endif
