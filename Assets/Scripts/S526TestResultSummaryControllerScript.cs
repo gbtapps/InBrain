@@ -505,132 +505,46 @@ public class S526TestResultSummaryControllerScript : MonoBehaviour
 
                 // Deviation value <- Standerd Deviation <- Variance <- Deviation <- Average
 
-
-                //----------- Average
-                float test1sum = 0;
-                for (int i = 0; i < test1Xb01RowData.Count; i++)
-                {
-                    test1sum += test1Xb01RowData[i];
-                }
-                float test1average = test1sum / test1Xb01RowData.Count;
+                
 
 
-                float test2sum = 0;
-                for (int i = 0; i < test2Xb01RowData.Count; i++)
-                {
-                    test2sum += test2Xb01RowData[i];
-                }
-                float test2average = test2sum / test2Xb01RowData.Count;
-
-
-                Debug.Log("test1average: " + test1average);
-                Debug.Log("test2average: " + test2average);
-
-
-
-
-                //---------- Deviation
-                List<float> test1Xb01DataDeviation = new List<float>();
-                List<float> test2Xb01DataDeviation = new List<float>();
-
-                for (int i = 0; i < test1Xb01RowData.Count; i++)
-                {
-                    test1Xb01DataDeviation.Add(test1Xb01RowData[i] - test1average);
-
-                }
-
-                for (int i = 0; i < test2Xb01RowData.Count; i++)
-                {
-                    test2Xb01DataDeviation.Add(test2Xb01RowData[i] - test2average);
-
-                }
-
-
-                Debug.Log("test1Xb01DataDeviation.Count: " + test1Xb01DataDeviation.Count);
-                Debug.Log("test2Xb01DataDeviation.Count: " + test2Xb01DataDeviation.Count);
-
-
-
-
-                //---------- Variance
-
-                float sumtest1devdev = 0;
-                foreach (float tmp in test1Xb01DataDeviation)
-                {
-                    sumtest1devdev += tmp * tmp;
-                }
-                float test1variance = sumtest1devdev / test1Xb01DataDeviation.Count;
-
-
-                float sumtest2devdev = 0;
-                foreach (float tmp in test2Xb01DataDeviation)
-                {
-                    sumtest2devdev += tmp * tmp;
-                }
-                float test2variance = sumtest2devdev / test2Xb01DataDeviation.Count;
-
-                Debug.Log("sumtest1devdev: " + sumtest1devdev);
-                Debug.Log("sumtest2devdev: " + sumtest2devdev);
-
-                Debug.Log("test1variance: " + test1variance);
-                Debug.Log("test2variance: " + test2variance);
-
-
-                //---------- Standard Deviation
-
-                float test1StandardDeviation = Mathf.Sqrt(test1variance);
-                float test2StandardDeviation = Mathf.Sqrt(test2variance);
-
-                Debug.Log("test1StandardDeviation: " + test1StandardDeviation);
-                Debug.Log("test2StandardDeviation: " + test2StandardDeviation);
-
-
-                //---------- Deviation Value (means hensa-chi in Japanese)
-
-                //自分の得点から平均値を引いた値を標準偏差（数値のばらつきの程度を示す値）で割って 10 倍し、それに 50 を加えます。
-
-                List<float> test1DeviationValue = new List<float>();
-                List<float> test2DeviationValue = new List<float>();
-
-
-                for (int i = 0; i < test1Xb01RowData.Count; i++)
-                {
-                    float tmp = (test1Xb01RowData[i] - test1average) / test1StandardDeviation * 10 + 50;
-                    test1DeviationValue.Add(tmp);
-                }
-
-                for (int i = 0; i < test2Xb01RowData.Count; i++)
-                {
-                    float tmp = (test2Xb01RowData[i] - test2average) / test2StandardDeviation * 10 + 50;
-                    test2DeviationValue.Add(tmp);
-                }
+                List<float> test1DeviationValue = GetStanderdValueList(test1Xb01RowData);
+                List<float> test2DeviationValue = GetStanderdValueList(test2Xb01RowData);
 
 
                 Debug.Log("test1DeviationValue.Count: " + test1DeviationValue.Count);
                 Debug.Log("test2DeviationValue.Count: " + test2DeviationValue.Count);
 
+                //                Debug.Log("test1DeviationValue2.Count: " + test1DeviationValue2.Count);
+                //                Debug.Log("test2DeviationValue2.Count: " + test2DeviationValue2.Count);
 
-                /*
-                foreach(float fl in test1DeviationValue)
-                {
-                    Debug.Log("test1DeviationValue: " + fl);
-                }
+
+
+
+                /*   recheck
+                
+                // List of Comparison with Intervals from here
+                List<float> test1ListCompareValueWithInterval = new List<float>();
+                List<float> test2ListCompareValueWithInterval = new List<float>();
+
+                test1ListCompareValueWithInterval = GetListCompareValueWithInterval("Test1", Xb01ValueList);
+                test2ListCompareValueWithInterval = GetListCompareValueWithInterval("Test2", Xb01ValueList);
+
+                Debug.Log("test1ListPlusValueCompareInterval.Count: " + test1ListCompareValueWithInterval.Count);
+                Debug.Log("test2ListPlusValueCompareInterval.Count: " + test2ListCompareValueWithInterval.Count);
+
+                List<float> tmpCompareList1 = GetStanderdValueList(test1ListCompareValueWithInterval);
+                List<float> tmpCompareList2 = GetStanderdValueList(test2ListCompareValueWithInterval);
+
+                test1DeviationValue = tmpCompareList1;
+                test2DeviationValue = tmpCompareList2;
+
+                test1DeviationValue = test1ListCompareValueWithInterval;
+                test2DeviationValue = test2ListCompareValueWithInterval;
+
+                // List of Comparison with Intervals until here
                 */
 
-
-
-                //--------------------------------------------------------------------------------
-
-
-                // List of Comparison with Intervals
-                List<float> test1ListPlusValueCompareInterval = new List<float>();
-                List<float> test2ListPlusValueCompareInterval = new List<float>();
-
-                test1ListPlusValueCompareInterval = GetListPlusValueCompareInterval("Test1", Xb01ValueList);
-                test2ListPlusValueCompareInterval = GetListPlusValueCompareInterval("Test2", Xb01ValueList);
-
-                Debug.Log("test1ListPlusValueCompareInterval.Count: " + test1ListPlusValueCompareInterval.Count);
-                Debug.Log("test2ListPlusValueCompareInterval.Count: " + test2ListPlusValueCompareInterval.Count);
 
 
 
@@ -641,13 +555,13 @@ public class S526TestResultSummaryControllerScript : MonoBehaviour
                 int test1GetDataInterval = 0;
                 int test2GetDataInterval = 0;
 
+
                 //common
                 List<float> test1Xb01DataForChart = new List<float>();
                 List<float> test2Xb01DataForChart = new List<float>();
 
 
                 
-                /*
                 // Partten 1
 
                 // 22 equals chart columns
@@ -657,8 +571,20 @@ public class S526TestResultSummaryControllerScript : MonoBehaviour
                 string test1StrP1 = "";
                 string test2StrP1 = "";
 
+                string debugStr1 = "";
+                string debugStr2 = "";
+
+                int test1BrainActivityScore = 0;
+                int test2BrainActivityScore = 0;
+
                 for (int i = 0; i < test1DeviationValue.Count; i++)
                 {
+                    if(test1DeviationValue[i] > 50)
+                    {
+                        test1BrainActivityScore++;
+                    }
+
+                    debugStr1 += test1DeviationValue[i]+",";
                     if (i % test1GetDataInterval == 0)
                     {
                         test1Xb01DataForChart.Add(test1DeviationValue[i]);
@@ -668,17 +594,58 @@ public class S526TestResultSummaryControllerScript : MonoBehaviour
 
                 for (int i = 0; i < test2DeviationValue.Count; i++)
                 {
+
+                    if (test2DeviationValue[i] > 50)
+                    {
+                        test2BrainActivityScore++;
+                    }
+
+
+                    //debug
+                    debugStr2 += test2DeviationValue[i] + ",";
+
                     if (i % test2GetDataInterval == 0)
                     {
                         test2Xb01DataForChart.Add(test2DeviationValue[i]);
                         test2StrP1 += test2DeviationValue[i] + ",";
                     }
                 }
-                */
 
 
 
+                Debug.Log("test1StrP1: " + test1StrP1);
+                Debug.Log("test2StrP1: " + test2StrP1);
 
+                Debug.Log("debugStr1: " + debugStr1);
+                Debug.Log("debugStr2: " + debugStr2);
+
+                Debug.Log("test1BrainActivityScore: " + test1BrainActivityScore);
+                Debug.Log("test2BrainActivityScore: " + test2BrainActivityScore);
+
+
+
+                int bmp = 20;
+                float amp = 15 / 30;
+                Debug.Log(amp);
+                Debug.Log(bmp);
+                Debug.Log(14 / 29);
+
+                int ttt1 = test1BrainActivityScore / test1DeviationValue.Count * 100;
+                int ttt2 = test2BrainActivityScore / test2DeviationValue.Count * 100;
+
+
+                Debug.Log(ttt1);
+                Debug.Log(ttt2);
+
+                Debug.Log(135 / 333);
+
+
+
+                //                Debug.Log("BrainScore1: " + test1BrainActivityScore / test1DeviationValue.Count*100);
+                //                Debug.Log("BrainScore2: " + test2BrainActivityScore / test2DeviationValue.Count*100);
+
+
+                /*
 
                 // Partten 2
 
@@ -712,12 +679,7 @@ public class S526TestResultSummaryControllerScript : MonoBehaviour
 
 
 
-                /*
-                Debug.Log(test1StrP1);
-                Debug.Log(test1StrP2);
-                Debug.Log(test2StrP1);
-                Debug.Log(test2StrP2);
-                */
+               */
 
 
 
@@ -1022,7 +984,7 @@ public class S526TestResultSummaryControllerScript : MonoBehaviour
 
 
 
-    private List<float> GetListPlusValueCompareInterval(string str, List<string> a)
+    private List<float> GetListCompareValueWithInterval(string str, List<string> a)
     {
 
         List<float> reTest1List = new List<float>();
@@ -2178,6 +2140,93 @@ public class S526TestResultSummaryControllerScript : MonoBehaviour
 
 
     }
+
+
+
+
+    private float GetListAverage(List<float> a)
+    {
+        float sum = 0;
+
+        for (int i = 0; i < a.Count; i++)
+        {
+            sum += a[i];
+        }
+
+        return sum / a.Count;
+
+
+    }
+
+
+    private List<float> GetDeviationList(List<float> a)
+    {
+        List<float> reList = new List<float>();
+
+        for (int i = 0; i < a.Count; i++)
+        {
+            reList.Add(a[i] - GetListAverage(a));
+
+        }
+
+        return reList;
+
+    }
+
+
+    private float GetVariance(List<float> a)
+    {
+
+        float variance = 0;
+
+        //Get deviation
+        List<float> tempList = GetDeviationList(a);
+
+        float sumtest1devdev = 0;
+
+        for(int i=0; i < tempList.Count; i++)
+        {
+            sumtest1devdev += tempList[i] * tempList[i];
+        }
+
+        variance = sumtest1devdev / tempList.Count;
+
+        return variance;
+
+    }
+
+    private float GetStanderdDeviation(List<float> a)
+    {
+        float standerdDeviation = 0f;
+        float variance = 0f;
+
+        variance = GetVariance(a);
+        standerdDeviation = Mathf.Sqrt(variance);
+
+        return standerdDeviation;
+
+    }
+
+
+    private List<float> GetStanderdValueList(List<float> a)
+    {
+        List<float> reList = new List<float>();
+
+        float average = GetListAverage(a);
+        float standerdDeviation = GetStanderdDeviation(a);
+
+        for (int i = 0; i < a.Count; i++)
+        {
+            float tmp = (a[i] - average) / standerdDeviation * 10 + 50;
+            reList.Add(tmp);
+        }
+
+        return reList;
+
+    }
+
+
+
 
 
 

@@ -546,6 +546,7 @@ public class Tr_TrainingNeuro : SceneBase
         //OnHead状態で5秒間に変更
         if (Hot2gApplication.Instance.state2 == Hot2gApplication.eState.OnHead)
         {
+
             //added by moritomi
             //eStateOnHead
             EstateText.text = "Onhead: Yes";

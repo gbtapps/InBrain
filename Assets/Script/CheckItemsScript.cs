@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class debug1script : MonoBehaviour
+public class CheckItemsScript : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -11,7 +11,7 @@ public class debug1script : MonoBehaviour
         foreach (var key in ES3.GetKeys())
         {
             Debug.Log(key);
-            ES3.DeleteKey(key);
+//            ES3.DeleteKey(key);
         }
 
 

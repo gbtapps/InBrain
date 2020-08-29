@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class T_TitleSelect : SceneBase
 {
+
+    [SerializeField] Text valueXbtext;
+
     ExButton btnNeuro;          //ニューロフィードバック
 
     //added by moritomi
@@ -84,6 +87,13 @@ public class T_TitleSelect : SceneBase
             Tr_TraningSetting.SetPlayTraining(ConstData.EnumScene.Tr_TrainingNeuroTest);
             SceneFunc.ChangeScene(ConstData.EnumScene.Tr_TrainingNeuroTest, true);
         }
+
+        if ( bleConnected)
+        {
+            float avgXbValue = (float)Hot2gApplication.Instance.m_nfb.calcActivenessFromBufferedUsingLastData(10);//- ave last 1 sec (10points)
+            valueXbtext.text = avgXbValue.ToString()+"\n"+ valueXbtext.text;
+        }
+
 
 
     }

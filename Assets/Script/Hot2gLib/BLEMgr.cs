@@ -366,6 +366,8 @@ public class BLEMgr : SingletonMonoBehaviour<BLEMgr>
 
     private void Update()
     {
+//        Debug.Log("BLEMgr.Update()");
+
         switch (m_Mode)
         {
             case eMode.ScanDevice:

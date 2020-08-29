@@ -96,12 +96,15 @@ public class BrainDataFeedbacker
             return;
         }
 
+
         //データの平滑化：データバッファの中央値を代表値にする＝平滑化。代表値をフィルタデータバッファに追加
         int len = store.l3Ac.Count;
         if (len < 12) {
             Debug.Log("6qqq:waiting");
             return;
         }
+
+
 
         //--------------------------------------------------------------------------------
         if (type == Type.NEURO)

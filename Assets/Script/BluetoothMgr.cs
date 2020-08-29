@@ -19,6 +19,7 @@ class BluetoothMgr : SingletonMonoBehaviour<BluetoothMgr>
 
     private void Start()
     {
+//        Debug.Log("BluetoothMgr.Start()");
         //m_BlueToothButtonSprite[0] = Resources.Load("Texture/btn_connect01", typeof(Sprite)) as Sprite;
         //m_BlueToothButtonSprite[1] = Resources.Load("Texture/btn_connect02", typeof(Sprite)) as Sprite;
         //m_BlueToothButtonSprite[2] = Resources.Load("Texture/btn_connect03", typeof(Sprite)) as Sprite;
@@ -34,6 +35,8 @@ class BluetoothMgr : SingletonMonoBehaviour<BluetoothMgr>
 
     private void Update()
     {
+//        Debug.Log("BluetoothMgr.Update()");
+
         switch (Hot2gApplication.Instance.mode)
         {
             case Hot2gApplication.eMode.None:
@@ -173,6 +176,7 @@ class BluetoothMgr : SingletonMonoBehaviour<BluetoothMgr>
 
     public void BLEConnect()
     {
+        Debug.Log("BluetoothMrg.cs.BLEConnect()");
         if (m_on && Hot2gApplication.Instance.mode >= Hot2gApplication.eMode.Connecting)
         {
             Hot2gApplication.Instance.DisConnect();
